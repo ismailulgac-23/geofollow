@@ -71,6 +71,47 @@ router.get('/:id', auth, async (req, res) => {
   }
 });
 
+// Arka planda native plugin'in gönderdiği (Killed / Terminated state) ham konumlar için
+router.post('/me/location', auth, async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { latitude, longitude, address, speed, accuracy, batteryLevel } = req.body;
+
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        latitude,
+        longitude,
+        ...(address && { address }),
+        ...(batteryLevel !== undefined && { batteryLevel }),
+        lastUpdated: new Date(),
+        isOnline: true,
+        isPremium: true
+      }
+    });
+
+    // Hareket takip algoritmasını çalıştır (async, ana akışı bloke etmez)
+    processLocationUpdate(userId, latitude, longitude, address, speed || 0, accuracy || 0)
+      .catch(err => console.error('[LocationUpdate] tracker error:', err.message));
+
+    const circleMembers = await prisma.circleMember.findMany({ where: { userId } });
+
+    if (req.io) {
+      circleMembers.forEach(cm => {
+        req.io.to(`circle-${cm.circleId}`).emit('member-location', {
+          userId, latitude, longitude, address, batteryLevel
+        });
+      });
+    }
+
+    console.log(`[Native Sync] KILLED STATE LOCATION UPDATED -> user: ${userId}`);
+    res.json({ success: true, code: 'LOCATION_UPDATED_NATIVE', data: user });
+  } catch (error) {
+    console.error('Update location native error:', error);
+    res.status(500).json({ success: false, code: 'INTERNAL_SERVER_ERROR' });
+  }
+});
+
 router.put('/:id/location', auth, async (req, res) => {
   try {
     const { id } = req.params;
