@@ -10,6 +10,7 @@
  */
 
 const prisma = require('../config/database');
+const { sendMulticastNotification } = require('./firebase');
 
 const EARTH_RADIUS_KM = 6371;
 
@@ -92,7 +93,11 @@ async function processLocationUpdate(userId, latitude, longitude, address, speed
                         where: { id: activeMovement.id },
                         data: { leftAt: now, durationMins }
                     });
+
+                    // Exit notification
+                    notifyCircles(userId, '📍 Place Exited', `User has left ${activeMovement.placeName || 'a place'}`, 'EXITED', { placeId: activeMovement.placeId });
                 }
+
             }
 
             // Bu yere daha önce gidilmiş mi kontrol et (bugün veya toplam)
@@ -120,6 +125,10 @@ async function processLocationUpdate(userId, latitude, longitude, address, speed
                 }
             });
 
+            // Entry notification
+            notifyCircles(userId, '📍 Place Entered', `User has entered ${nearbyPlace.name || 'a place'}`, 'ENTERED', { placeId: nearbyPlace.id });
+
+
             // LocationSnapshot'ı yakın yerle güncelle
             await prisma.locationSnapshot.updateMany({
                 where: {
@@ -142,6 +151,9 @@ async function processLocationUpdate(userId, latitude, longitude, address, speed
                     where: { id: activeMovement.id },
                     data: { leftAt: now, durationMins }
                 });
+
+                // Exit Notification
+                notifyCircles(userId, '📍 Place Exited', `User has left ${activeMovement.placeName || 'a place'}`, 'EXITED', { placeId: activeMovement.placeId });
             }
         }
     } catch (error) {
@@ -222,6 +234,56 @@ async function getTodayMovements(userId) {
     } catch (error) {
         console.error('[MovementTracker] getTodayMovements error:', error.message);
         return [];
+    }
+}
+
+/**
+ * Circle üyelerine place giriş/çıkış bildirimlerini atar
+ */
+async function notifyCircles(userId, title, body, type, data) {
+    try {
+        const currentUser = await prisma.user.findUnique({
+            where: { id: userId },
+            include: {
+                circles: { include: { circle: { include: { members: { include: { user: true } } } } } }
+            }
+        });
+        if (!currentUser) return;
+
+        const recipientTokens = [];
+        const notificationPromises = [];
+
+        for (const circleMember of currentUser.circles) {
+            for (const member of circleMember.circle.members) {
+                if (member.userId === userId) continue;
+                if (member.user.fcmToken && !recipientTokens.includes(member.user.fcmToken)) {
+                    recipientTokens.push(member.user.fcmToken);
+                }
+
+                notificationPromises.push(prisma.notification.create({
+                    data: {
+                        title: type === 'ENTERED' ? 'place_entered' : 'place_exited',
+                        message: `${currentUser.name || 'User'} ${type === 'ENTERED' ? 'entered' : 'exited'} ${body.replace('User has left ', '').replace('User has entered ', '')}`,
+                        type: 'place',
+                        userId: member.userId,
+                        avatarUrl: currentUser.avatarUrl,
+                        relatedUserId: currentUser.id
+                    }
+                }));
+            }
+        }
+
+        await Promise.all(notificationPromises);
+
+        if (recipientTokens.length > 0) {
+            await sendMulticastNotification(recipientTokens, {
+                title,
+                body: `${currentUser.name || 'User'} ${type === 'ENTERED' ? 'entered' : 'left'} ${body.split(' ').slice(3).join(' ')}`,
+                data: { ...data, type: 'place', relatedUserId: currentUser.id }
+            });
+        }
+    } catch (err) {
+        console.error("[MovementTracker] notifyCircles error", err);
     }
 }
 
