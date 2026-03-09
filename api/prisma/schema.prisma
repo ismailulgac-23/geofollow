@@ -1,0 +1,180 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User Model - Flutter UserModel'e göre
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  name         String
+  password     String? // For email/password auth (hashed)
+  avatarUrl    String?
+  provider     String   @default("google") // google, apple, email
+  providerId   String?
+  status       String?
+  statusEmoji  String?
+  batteryLevel Int      @default(100)
+  isOnline     Boolean  @default(false)
+  fcmToken     String?
+  latitude     Float?
+  longitude    Float?
+  address      String?
+  isPremium    Boolean  @default(false)
+  lastUpdated  DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  circles       CircleMember[]
+  places        PlaceMember[]
+  notifications Notification[]
+  movements     MovementHistory[]
+
+  createdPlaces     Place[]            @relation("PlaceCreator")
+  locationSnapshots LocationSnapshot[]
+
+  @@map("users")
+}
+
+// Circle Model - Aile/Arkadaş grupları
+model Circle {
+  id         String   @id @default(uuid())
+  name       String
+  emoji      String?
+  color      String?
+  inviteCode String   @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  members CircleMember[]
+  places  Place[]
+
+  @@map("circles")
+}
+
+// CircleMember - Circle-User many-to-many
+model CircleMember {
+  id       String   @id @default(uuid())
+  circleId String
+  userId   String
+  role     String   @default("member") // admin, member
+  joinedAt DateTime @default(now())
+
+  // Relations
+  circle Circle @relation(fields: [circleId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([circleId, userId])
+  @@map("circle_members")
+}
+
+// Place Model - Flutter PlaceModel'e göre
+model Place {
+  id          String   @id @default(uuid())
+  name        String
+  address     String?
+  latitude    Float
+  longitude   Float
+  radius      Float    @default(150.0)
+  emoji       String?
+  isActive    Boolean  @default(true)
+  circleId    String
+  createdById String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  circle    Circle            @relation(fields: [circleId], references: [id], onDelete: Cascade)
+  createdBy User              @relation("PlaceCreator", fields: [createdById], references: [id], onDelete: Cascade)
+  members   PlaceMember[]
+  movements MovementHistory[]
+
+  @@map("places")
+}
+
+// PlaceMember - Place-User many-to-many
+model PlaceMember {
+  id        String   @id @default(uuid())
+  placeId   String
+  userId    String
+  createdAt DateTime @default(now())
+
+  // Relations
+  place Place @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([placeId, userId])
+  @@map("place_members")
+}
+
+// Notification Model - Flutter NotificationModel'e göre
+model Notification {
+  id            String   @id @default(uuid())
+  title         String
+  message       String
+  type          String // battery_low, arrival, departure, sos, speed, member
+  isRead        Boolean  @default(false)
+  userId        String
+  avatarUrl     String?
+  relatedUserId String?
+  createdAt     DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+// MovementHistory - Yer bazlı hareket geçmişi
+model MovementHistory {
+  id           String    @id @default(uuid())
+  userId       String
+  placeId      String?
+  placeName    String
+  address      String?
+  emoji        String?   @default("📍")
+  latitude     Float
+  longitude    Float
+  arrivedAt    DateTime  @default(now())
+  leftAt       DateTime?
+  visitCount   Int       @default(1) // Bu yere toplam kaç kez gidildi
+  durationMins Int? // Kaç dakika kalındı
+
+  // Relations
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  place Place? @relation(fields: [placeId], references: [id], onDelete: SetNull)
+
+  @@map("movement_histories")
+}
+
+// LocationSnapshot - Her konum güncellemesinin ham kaydı
+model LocationSnapshot {
+  id                String   @id @default(uuid())
+  userId            String
+  latitude          Float
+  longitude         Float
+  address           String?
+  speed             Float?   @default(0)
+  heading           Float?   @default(0)
+  accuracy          Float?   @default(0)
+  placeId           String? // Yakında bir yer varsa set edilir
+  placeName         String?
+  geofenceEvent     String? // "ENTERED" | "EXITED" | null
+  geofencePlaceName String? // Geofence olayının yeri
+  timestamp         DateTime @default(now())
+  createdAt         DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("location_snapshots")
+}

@@ -1,0 +1,17 @@
+{
+    "errors": {
+        "auth": {
+            "unauthorized": "Unauthorized access",
+            "invalid_token": "Invalid or expired token",
+            "user_not_found": "User not found"
+        },
+        "generic": {
+            "something_went_wrong": "Something went wrong, please try again",
+            "forbidden": "You do not have permission for this action"
+        }
+    },
+    "messages": {
+        "sos_sent": "SOS alert sent to all members",
+        "location_updated": "Location successfully updated"
+    }
+}

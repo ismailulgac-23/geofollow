@@ -1,0 +1,17 @@
+{
+    "errors": {
+        "auth": {
+            "unauthorized": "Yetkisiz erişim",
+            "invalid_token": "Geçersiz veya süresi dolmuş token",
+            "user_not_found": "Kullanıcı bulunamadı"
+        },
+        "generic": {
+            "something_went_wrong": "Bir hata oluştu, lütfen tekrar deneyin",
+            "forbidden": "Bu işlem için yetkiniz bulunmamaktadır"
+        }
+    },
+    "messages": {
+        "sos_sent": "SOS uyarısı tüm üyelere gönderildi",
+        "location_updated": "Konum başarıyla güncellendi"
+    }
+}

@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GeoFollow: Konum Takip — Real-Time Family Safety App</title>
+    <meta name="description"
+        content="GeoFollow is a real-time family location tracking app. Stay connected with your loved ones, set geofence safe zones, and get instant alerts — all in one beautiful app." />
+    <meta name="keywords" content="family tracker, location sharing, geofence, real-time GPS, safety app, GeoFollow" />
+    <meta property="og:title" content="GeoFollow 2: Konum Takip — Real-Time Family Safety" />
+    <meta property="og:description"
+        content="Stay connected with your loved ones in real-time. GPS tracking, geofence alerts, and group sharing." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/png" href="assets/icon.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6C5CE7',
+                        primaryL: '#A29BFE',
+                        accent: '#00CEC9',
+                        pink: '#FF6B9D',
+                        bg: '#0D0D1E',
+                        surface: '#1A1A2E',
+                        card: '#1E1E32',
+                    },
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #0D0D1E;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #A29BFE, #6C5CE7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-text-accent {
+            background: linear-gradient(135deg, #00CEC9, #55EFC4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-text-pink {
+            background: linear-gradient(135deg, #FF6B9D, #FF9F43);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glow-primary {
+            box-shadow: 0 0 60px rgba(108, 92, 231, 0.35);
+        }
+
+        .glow-accent {
+            box-shadow: 0 0 60px rgba(0, 206, 201, 0.25);
+        }
+
+        .grid-bg {
+            background-image:
+                linear-gradient(rgba(108, 92, 231, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(108, 92, 231, 0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            transition: transform 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6C5CE7, #A29BFE);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(108, 92, 231, 0.4);
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        .float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: scale(1.4);
+                opacity: 0;
+            }
+        }
+
+        .pulse-ring {
+            animation: pulse-ring 2s infinite;
+        }
+    </style>
+</head>
+
+<body class="font-sans text-white antialiased">
+
+    <!-- ── NAV ──────────────────────────────────────────────────────────────── -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass border-b border-white/5">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-3">
+                <div
+                    class="w-9 h-9 rounded-xl bg-gradient-to-br from-primaryL to-primary flex items-center justify-center glow-primary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+                        <circle cx="12" cy="9" r="2.5" fill="white" stroke="none" />
+                    </svg>
+                </div>
+                <span class="text-lg font-bold tracking-tight">
+                    <span class="gradient-text font-black">Geo</span><span class="font-light">Follow</span>
+
+                </span>
+            </a>
+
+            <!-- Links -->
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-white/60">
+                <a href="#features" class="hover:text-white transition">Features</a>
+                <a href="#how-it-works" class="hover:text-white transition">How It Works</a>
+                <a href="#premium" class="hover:text-white transition">Premium</a>
+                <a href="privacy-policy.html" class="hover:text-white transition">Privacy</a>
+                <a href="terms-of-service.html" class="hover:text-white transition">Terms</a>
+            </div>
+
+            <!-- CTA -->
+            <a href="#download"
+                class="btn-primary text-sm font-semibold px-5 py-2.5 rounded-xl text-white no-underline">
+                Download Free
+            </a>
+        </div>
+    </nav>
+
+    <!-- ── HERO ──────────────────────────────────────────────────────────────── -->
+    <section class="relative min-h-screen flex items-center pt-24 pb-16 grid-bg overflow-hidden">
+        <!-- Orb backgrounds -->
+        <div
+            class="absolute -top-40 -left-40 w-[500px] h-[500px] rounded-full bg-primary/10 blur-[120px] pointer-events-none">
+        </div>
+        <div
+            class="absolute -bottom-40 -right-40 w-[600px] h-[600px] rounded-full bg-accent/8 blur-[120px] pointer-events-none">
+        </div>
+
+        <div class="max-w-6xl mx-auto px-6 w-full">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+
+                <!-- Text -->
+                <div>
+                    <div class="inline-flex items-center gap-2 glass px-4 py-2 rounded-full mb-8 text-sm">
+                        <span class="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
+                        <span class="text-white/70">Now available on iOS & Android</span>
+                    </div>
+
+                    <h1 class="text-5xl lg:text-6xl font-black leading-[1.05] tracking-tight mb-6">
+                        Keep your family<br />
+                        <span class="gradient-text">safe & connected</span><br />
+                        in real-time
+                    </h1>
+
+                    <p class="text-white/60 text-lg leading-relaxed mb-10 max-w-xl">
+                        GeoFollow lets you see exactly where your family members are, set smart geofence alerts for
+                        home, school, and work, and stay connected — all without draining their battery.
+                    </p>
+
+                    <div class="flex flex-wrap gap-4 mb-12">
+                        <!-- App Store -->
+                        <a href="#download"
+                            class="flex items-center gap-3 bg-white text-gray-900 font-semibold px-6 py-3.5 rounded-2xl hover:bg-gray-100 transition group">
+                            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
+                            </svg>
+                            <div>
+                                <div class="text-xs opacity-60">Download on the</div>
+                                <div class="text-sm">App Store</div>
+                            </div>
+                        </a>
+                        <!-- Google Play -->
+                        <a href="#download"
+                            class="flex items-center gap-3 bg-surface border border-white/10 font-semibold px-6 py-3.5 rounded-2xl hover:border-primary/50 transition">
+                            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                                <path d="M3.18 23.76c.3.17.63.24.97.19l12.56-7.13-2.71-2.72L3.18 23.76z"
+                                    fill="#EA4335" />
+                                <path d="M22.46 10.32l-2.99-1.7-3.04 3.04 3.04 3.04 3.01-1.7a1.52 1.52 0 000-2.68z"
+                                    fill="#FBBC04" />
+                                <path
+                                    d="M3.18.24C2.83.32 2.56.59 2.56 1.06v21.88c0 .47.27.74.62.82l12.84-12.84L3.18.24z"
+                                    fill="#4285F4" />
+                                <path
+                                    d="M4.15 23.95l11.7-6.65L13.14 14.6.31 23.13c.35.58.93.94 1.52.94.77 0 1.98-.53 2.32-.12z"
+                                    fill="#34A853" />
+                            </svg>
+                            <div>
+                                <div class="text-xs opacity-60">Get it on</div>
+                                <div class="text-sm">Google Play</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="flex gap-8">
+                        <div>
+                            <div class="text-3xl font-black gradient-text">50K+</div>
+                            <div class="text-white/50 text-sm mt-1">Families</div>
+                        </div>
+                        <div class="w-px bg-white/10"></div>
+                        <div>
+                            <div class="text-3xl font-black gradient-text">4.8 ★</div>
+                            <div class="text-white/50 text-sm mt-1">App Store</div>
+                        </div>
+                        <div class="w-px bg-white/10"></div>
+                        <div>
+                            <div class="text-3xl font-black gradient-text-accent">99.9%</div>
+                            <div class="text-white/50 text-sm mt-1">Uptime</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phone mockup -->
+                <div class="relative flex justify-center float">
+                    <div class="relative w-72">
+                        <!-- Pulse rings -->
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="pulse-ring absolute w-96 h-96 rounded-full border border-primary/20"></div>
+                            <div class="pulse-ring absolute w-80 h-80 rounded-full border border-primary/15"
+                                style="animation-delay:0.7s"></div>
+                        </div>
+
+                        <!-- Phone frame -->
+                        <div class="relative bg-card border border-white/10 rounded-[3rem] p-3 glow-primary">
+                            <div class="bg-bg rounded-[2.5rem] overflow-hidden" style="height:580px">
+                                <!-- Status bar -->
+                                <div class="flex items-center justify-between px-6 pt-4 pb-2">
+                                    <span class="text-white/50 text-xs">9:41</span>
+                                    <div class="w-24 h-5 bg-black rounded-full"></div>
+                                    <div class="flex gap-1 items-center">
+                                        <div class="w-4 h-2.5 border border-white/40 rounded-sm relative">
+                                            <div class="absolute inset-0.5 bg-accent rounded-sm w-2/3"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Map mockup -->
+                                <div class="mx-3 rounded-2xl overflow-hidden"
+                                    style="height:260px;background:linear-gradient(145deg,#0d1b2a 0%,#1a2744 100%);position:relative">
+                                    <!-- Grid -->
+                                    <div class="absolute inset-0 opacity-30"
+                                        style="background-image:linear-gradient(rgba(108,92,231,0.15) 1px,transparent 1px),linear-gradient(90deg,rgba(108,92,231,0.15) 1px,transparent 1px);background-size:24px 24px">
+                                    </div>
+                                    <!-- Roads -->
+                                    <svg class="absolute inset-0 w-full h-full opacity-25" viewBox="0 0 300 260">
+                                        <path d="M0 130 Q75 100 150 130 Q225 160 300 130" stroke="#6C5CE7"
+                                            stroke-width="3" fill="none" />
+                                        <path d="M150 0 Q130 65 150 130 Q170 195 150 260" stroke="#A29BFE"
+                                            stroke-width="2" fill="none" />
+                                        <path d="M0 60 Q100 80 200 50 Q260 35 300 60" stroke="#6C5CE7"
+                                            stroke-width="1.5" fill="none" />
+                                    </svg>
+                                    <!-- Pins -->
+                                    <div class="absolute" style="top:40%;left:48%">
+                                        <div
+                                            class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg border-2 border-primaryL">
+                                            <span class="text-xs">👩</span>
+                                        </div>
+                                        <div class="w-2 h-2 bg-primary rounded-full mx-auto mt-0.5"></div>
+                                    </div>
+                                    <div class="absolute" style="top:25%;left:22%">
+                                        <div
+                                            class="w-9 h-9 rounded-full bg-pink/80 flex items-center justify-center shadow-lg border-2 border-pink">
+                                            <span class="text-xs">👦</span>
+                                        </div>
+                                    </div>
+                                    <!-- Geofence ring -->
+                                    <div class="absolute rounded-full border-2 border-accent/40 bg-accent/5"
+                                        style="width:80px;height:80px;top:15%;left:40%"></div>
+                                    <!-- Safe zone label -->
+                                    <div class="absolute glass text-xs px-2 py-1 rounded-lg text-accent"
+                                        style="top:10%;left:42%">🏠 Home</div>
+                                </div>
+
+                                <!-- Bottom cards -->
+                                <div class="mx-3 mt-3 space-y-2">
+                                    <div class="glass rounded-2xl p-3 flex items-center gap-3">
+                                        <div
+                                            class="w-9 h-9 rounded-xl bg-primary/20 flex items-center justify-center text-sm">
+                                            👩</div>
+                                        <div class="flex-1">
+                                            <div class="text-white text-xs font-semibold">Mom</div>
+                                            <div class="text-white/50 text-xs">At home · 2 min ago</div>
+                                        </div>
+                                        <div class="text-xs text-accent font-medium">🔋 87%</div>
+                                    </div>
+                                    <div class="glass rounded-2xl p-3 flex items-center gap-3">
+                                        <div
+                                            class="w-9 h-9 rounded-xl bg-pink/20 flex items-center justify-center text-sm">
+                                            👦</div>
+                                        <div class="flex-1">
+                                            <div class="text-white text-xs font-semibold">Jake</div>
+                                            <div class="text-white/50 text-xs">Arriving at School</div>
+                                        </div>
+                                        <div class="text-xs text-primary font-medium">🔔</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── FEATURES ───────────────────────────────────────────────────────────── -->
+    <section id="features" class="py-28 relative">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-20">
+                <div class="inline-flex items-center gap-2 glass px-4 py-2 rounded-full mb-6 text-sm text-white/60">
+                    📍 Core Features
+                </div>
+                <h2 class="text-4xl lg:text-5xl font-black tracking-tight mb-5">
+                    Everything your family<br /><span class="gradient-text">needs to stay safe</span>
+                </h2>
+                <p class="text-white/50 text-lg max-w-xl mx-auto">
+                    Powerful location tools designed for families, built with privacy and simplicity in mind.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <!-- Feature cards -->
+                <div class="feature-card glass rounded-3xl p-7 cursor-default">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-primary/15 border border-primary/25 flex items-center justify-center text-2xl mb-5">
+                        📍</div>
+                    <h3 class="text-lg font-bold mb-2">Real-Time Tracking</h3>
+                    <p class="text-white/55 text-sm leading-relaxed">See your family members' exact location on a live
+                        map, updated every 15 seconds. Works in background without draining battery.</p>
+                </div>
+
+                <div class="feature-card glass rounded-3xl p-7 cursor-default">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-accent/15 border border-accent/25 flex items-center justify-center text-2xl mb-5">
+                        🛡️</div>
+                    <h3 class="text-lg font-bold mb-2">Smart Geofences</h3>
+                    <p class="text-white/55 text-sm leading-relaxed">Create custom safe zones around home, school, work
+                        or any place. Get instant push notifications when family members arrive or leave.</p>
+                </div>
+
+                <div class="feature-card glass rounded-3xl p-7 cursor-default">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-pink/15 border border-pink/25 flex items-center justify-center text-2xl mb-5">
+                        🚨</div>
+                    <h3 class="text-lg font-bold mb-2">SOS Emergency</h3>
+                    <p class="text-white/55 text-sm leading-relaxed">One-tap SOS button instantly alerts all group
+                        members with your real-time location. Critical for emergencies, works even on poor connections.
+                    </p>
+                </div>
+
+                <div class="feature-card glass rounded-3xl p-7 cursor-default">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-yellow-500/15 border border-yellow-500/25 flex items-center justify-center text-2xl mb-5">
+                        ⚡</div>
+                    <h3 class="text-lg font-bold mb-2">Battery Monitoring</h3>
+                    <p class="text-white/55 text-sm leading-relaxed">See your family members' battery levels at a
+                        glance. Never worry about a loved one going offline unexpectedly.</p>
+                </div>
+
+                <div class="feature-card glass rounded-3xl p-7 cursor-default">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-primary/15 border border-primary/25 flex items-center justify-center text-2xl mb-5">
+                        🕐</div>
+                    <h3 class="text-lg font-bold mb-2">Location History</h3>
+                    <p class="text-white/55 text-sm leading-relaxed">Review up to 30 days of location history. See where
+                        your family has been, when, and for how long — with a clear timeline view.</p>
+                </div>
+
+                <div class="feature-card glass rounded-3xl p-7 cursor-default">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-accent/15 border border-accent/25 flex items-center justify-center text-2xl mb-5">
+                        👥</div>
+                    <h3 class="text-lg font-bold mb-2">Group Sharing</h3>
+                    <p class="text-white/55 text-sm leading-relaxed">Create a private group, invite family members with
+                        a code, and share locations securely. Only people you invite can see your location.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ── HOW IT WORKS ───────────────────────────────────────────────────────── -->
+    <section id="how-it-works" class="py-28 relative grid-bg">
+        <div class="absolute inset-0 bg-gradient-to-b from-bg/0 via-surface/50 to-bg/0 pointer-events-none"></div>
+        <div class="max-w-4xl mx-auto px-6 relative">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl lg:text-5xl font-black tracking-tight mb-5">
+                    Up and running in<br /><span class="gradient-text-accent">3 simple steps</span>
+                </h2>
+            </div>
+
+            <div class="space-y-8">
+                <div class="flex gap-6 items-start glass rounded-3xl p-7">
+                    <div
+                        class="w-14 h-14 shrink-0 rounded-2xl bg-primary flex items-center justify-center font-black text-xl glow-primary">
+                        1</div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">Download & Sign In</h3>
+                        <p class="text-white/55 leading-relaxed">Download GeoFollow from the App Store or Google Play.
+                            Sign in securely with your Google or Apple account — no password needed. Your account is
+                            created automatically.</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-6 items-start glass rounded-3xl p-7">
+                    <div
+                        class="w-14 h-14 shrink-0 rounded-2xl bg-accent flex items-center justify-center font-black text-xl glow-accent text-bg">
+                        2</div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">Create or Join a Group</h3>
+                        <p class="text-white/55 leading-relaxed">Create a private group and share your unique invite
+                            code with family members. Or enter an invite code to join an existing group. Locations are
+                            only visible within your private group.</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-6 items-start glass rounded-3xl p-7">
+                    <div
+                        class="w-14 h-14 shrink-0 rounded-2xl bg-gradient-to-br from-pink to-orange-400 flex items-center justify-center font-black text-xl">
+                        3</div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">Add Places & Stay Connected</h3>
+                        <p class="text-white/55 leading-relaxed">Add important locations like home, school, and work as
+                            safe zones. Set your preferred notification radius and receive instant alerts whenever a
+                            family member arrives or leaves.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── PREMIUM ────────────────────────────────────────────────────────────── -->
+    <section id="premium" class="py-28">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-20">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 text-sm font-bold"
+                    style="background:linear-gradient(135deg,rgba(255,215,0,0.15),rgba(255,140,0,0.1));border:1px solid rgba(255,215,0,0.3);color:#FFD700">
+                    ⭐ GeoFollow Premium
+                </div>
+                <h2 class="text-4xl lg:text-5xl font-black tracking-tight mb-5">
+                    Unlock the full<br /><span class="gradient-text-pink">premium experience</span>
+                </h2>
+                <p class="text-white/50 text-lg max-w-xl mx-auto">
+                    Everything in the free tier, plus powerful PRO features for complete family safety.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Free -->
+                <div class="glass rounded-3xl p-8">
+                    <div class="text-white/50 text-sm font-semibold uppercase tracking-widest mb-4">Free</div>
+                    <div class="text-4xl font-black mb-1">$0</div>
+                    <div class="text-white/40 text-sm mb-8">Forever free</div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-3 text-sm"><span class="text-accent">✓</span> Up to 5 group
+                            members</li>
+                        <li class="flex items-center gap-3 text-sm"><span class="text-accent">✓</span> Real-time
+                            location sharing</li>
+                        <li class="flex items-center gap-3 text-sm"><span class="text-accent">✓</span> Up to 3 safe zone
+                            places</li>
+                        <li class="flex items-center gap-3 text-sm"><span class="text-accent">✓</span> 7-day location
+                            history</li>
+                        <li class="flex items-center gap-3 text-sm"><span class="text-accent">✓</span> Basic geofence
+                            alerts</li>
+                        <li class="flex items-center gap-3 text-sm text-white/30"><span>✗</span> SOS emergency button
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-white/30"><span>✗</span> 30-day history</li>
+                        <li class="flex items-center gap-3 text-sm text-white/30"><span>✗</span> Unlimited places</li>
+                    </ul>
+                    <a href="#download"
+                        class="block text-center glass border border-white/15 text-white/70 font-semibold py-3 rounded-2xl hover:border-white/30 transition">Get
+                        Started Free</a>
+                </div>
+
+                <!-- Premium -->
+                <div class="relative rounded-3xl p-8 overflow-hidden"
+                    style="background:linear-gradient(145deg,rgba(108,92,231,0.25),rgba(162,155,254,0.1));border:1px solid rgba(108,92,231,0.4)">
+                    <div class="absolute top-4 right-4 text-xs font-bold px-3 py-1 rounded-full"
+                        style="background:linear-gradient(135deg,#FFD700,#FF8C00);color:#000">BEST VALUE</div>
+                    <div class="text-primaryL text-sm font-semibold uppercase tracking-widest mb-4">Premium</div>
+                    <div class="text-4xl font-black mb-1">$4.99<span
+                            class="text-xl font-normal text-white/40">/mo</span></div>
+                    <div class="text-white/40 text-sm mb-8">or $29.99/year — Save 50%</div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-3 text-sm"><span class="text-accent">✓</span>
+                            <strong>Unlimited</strong> group members
+                        </li>
+                        <li class="flex items-center gap-3 text-sm"><span class="text-accent">✓</span> Real-time
+                            location sharing</li>
+                        <li class="flex items-center gap-3 text-sm"><span class="text-accent">✓</span>
+                            <strong>Unlimited</strong> safe zone places
+                        </li>
+                        <li class="flex items-center gap-3 text-sm"><span class="text-accent">✓</span>
+                            <strong>30-day</strong> location history
+                        </li>
+                        <li class="flex items-center gap-3 text-sm"><span class="text-accent">✓</span> Advanced geofence
+                            alerts</li>
+                        <li class="flex items-center gap-3 text-sm"><span class="text-accent">✓</span> SOS emergency
+                            button</li>
+                        <li class="flex items-center gap-3 text-sm"><span class="text-accent">✓</span> Frequency heatmap
+                            & analytics</li>
+                        <li class="flex items-center gap-3 text-sm"><span class="text-accent">✓</span> Priority support
+                        </li>
+                    </ul>
+                    <a href="#download"
+                        class="block text-center btn-primary text-white font-bold py-3.5 rounded-2xl">Upgrade to
+                        Premium</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── PRIVACY CALLOUT ─────────────────────────────────────────────────────── -->
+    <section class="py-20 relative">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="glass rounded-3xl p-10 text-center relative overflow-hidden">
+                <div class="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-accent/5 blur-3xl"></div>
+                <div class="text-4xl mb-4">🔒</div>
+                <h2 class="text-3xl font-black mb-4">Privacy First, Always</h2>
+                <p class="text-white/60 leading-relaxed max-w-2xl mx-auto mb-8">
+                    Your location data is encrypted end-to-end and is <strong class="text-white">never sold</strong> to
+                    third parties. Only the people in your private group can see your location. You can pause location
+                    sharing or delete your data at any time — instantly.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <div class="glass px-5 py-3 rounded-full text-sm text-white/70">🔐 End-to-end encrypted</div>
+                    <div class="glass px-5 py-3 rounded-full text-sm text-white/70">🚫 No data selling</div>
+                    <div class="glass px-5 py-3 rounded-full text-sm text-white/70">👁️ Private groups only</div>
+                    <div class="glass px-5 py-3 rounded-full text-sm text-white/70">🗑️ Delete anytime</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── DOWNLOAD ───────────────────────────────────────────────────────────── -->
+    <section id="download" class="py-28 relative grid-bg">
+        <div class="max-w-2xl mx-auto px-6 text-center">
+            <h2 class="text-4xl lg:text-5xl font-black tracking-tight mb-5">
+                Ready to get<br /><span class="gradient-text">started for free?</span>
+            </h2>
+            <p class="text-white/50 text-lg mb-12">Download GeoFollow today and connect your family in minutes.</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#"
+                    class="flex items-center gap-3 bg-white text-gray-900 font-semibold px-8 py-4 rounded-2xl hover:bg-gray-100 transition hover:-translate-y-1">
+                    <svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
+                    </svg>
+                    <div class="text-left">
+                        <div class="text-xs opacity-60">Download on the</div>
+                        <div>App Store</div>
+                    </div>
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 bg-surface border border-white/15 font-semibold px-8 py-4 rounded-2xl hover:border-primary/40 transition hover:-translate-y-1">
+                    <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none">
+                        <path d="M3.18 23.76c.3.17.63.24.97.19l12.56-7.13-2.71-2.72L3.18 23.76z" fill="#EA4335" />
+                        <path d="M22.46 10.32l-2.99-1.7-3.04 3.04 3.04 3.04 3.01-1.7a1.52 1.52 0 000-2.68z"
+                            fill="#FBBC04" />
+                        <path d="M3.18.24C2.83.32 2.56.59 2.56 1.06v21.88c0 .47.27.74.62.82l12.84-12.84L3.18.24z"
+                            fill="#4285F4" />
+                        <path d="M4.15 23.95l11.7-6.65L13.14 14.6.31 23.13c.35.58.93.94 1.52.94.77 0 1.98-.53 2.32-.12z"
+                            fill="#34A853" />
+                    </svg>
+                    <div class="text-left">
+                        <div class="text-xs opacity-60">Get it on</div>
+                        <div>Google Play</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── FOOTER ─────────────────────────────────────────────────────────────── -->
+    <footer class="border-t border-white/5 py-10">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-2">
+                    <div
+                        class="w-8 h-8 rounded-xl bg-gradient-to-br from-primaryL to-primary flex items-center justify-center">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+                            <circle cx="12" cy="9" r="2.5" fill="white" stroke="none" />
+                        </svg>
+                    </div>
+                    <span class="font-bold"><span class="gradient-text">Geo</span>Follow<span
+                            class="gradient-text-accent text-xs font-black ml-0.5">2</span></span>
+                </div>
+                <div class="flex gap-6 text-sm text-white/40">
+                    <a href="privacy-policy.html" class="hover:text-white/70 transition">Privacy Policy</a>
+                    <a href="terms-of-service.html" class="hover:text-white/70 transition">Terms of Service</a>
+                    <a href="mailto:support@geofollow.xyz" class="hover:text-white/70 transition">Support</a>
+                </div>
+                <div class="text-white/30 text-sm">© 2025 GeoFollow. All rights reserved.</div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>
