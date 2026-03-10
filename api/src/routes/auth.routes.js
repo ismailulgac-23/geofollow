@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const prisma = require('../config/database');
+const { startSimulation } = require('../utils/simulation');
 
 // Helper function to generate JWT
 const generateToken = (userId) => {
@@ -80,18 +81,77 @@ router.post('/login', async (req, res) => {
     const token = generateToken(user.id);
     const testMode = testModeSetting?.value === '1';
 
-    // Proximity Simulation for Apple Review
+    // Proximity Simulation for Apple Review (Hyper-Realistic Mode)
     if (testMode && loginEmail === 'apple_review_1@geofollow.xyz') {
-      const { lat, lng } = req.body; // Frontend can send initial lat/lng
+      const { lat, lng } = req.body;
       if (lat && lng) {
-        await prisma.user.update({
-          where: { email: 'apple_review_2@geofollow.xyz' },
-          data: {
-            latitude: lat + 0.002,
-            longitude: lng + 0.002,
-            lastUpdated: new Date()
+        // 1. Get Review Users and Circle
+        const reviewer2 = await prisma.user.findUnique({ where: { email: 'apple_review_2@geofollow.xyz' } });
+        const reviewCircle = await prisma.circle.findUnique({ where: { id: 'circle-apple-review' } });
+
+        if (reviewer2 && reviewCircle) {
+          // 2. Clean old Review Data
+          await prisma.movementHistory.deleteMany({ where: { userId: reviewer2.id } });
+          await prisma.place.deleteMany({ where: { circleId: reviewCircle.id } });
+
+          // 3. Create 4 New Mock Places around Reviewer
+          const mockPlaces = [
+            { name: 'Reviewer Home', lat: lat + 0.001, lng: lng + 0.001, emoji: '🏠' },
+            { name: 'Reviewer Office', lat: lat - 0.003, lng: lng + 0.002, emoji: '🏢' },
+            { name: 'Reviewer Gym', lat: lat - 0.002, lng: lng - 0.004, emoji: '💪' },
+            { name: 'Reviewer Cafe', lat: lat + 0.002, lng: lng - 0.003, emoji: '☕' }
+          ];
+
+          const createdPlaces = [];
+          for (const p of mockPlaces) {
+            const place = await prisma.place.create({
+              data: {
+                name: p.name,
+                latitude: p.lat,
+                longitude: p.lng,
+                radius: 120 + Math.random() * 50,
+                emoji: p.emoji,
+                circleId: reviewCircle.id,
+                createdById: user.id // Reviewer 1 created these
+              }
+            });
+            createdPlaces.push(place);
+            // Link Reviewer 2 to these places
+            await prisma.placeMember.upsert({
+              where: { placeId_userId: { placeId: place.id, userId: reviewer2.id } },
+              update: {},
+              create: { placeId: place.id, userId: reviewer2.id }
+            });
           }
-        });
+
+          // 4. Update Partner Initial Position
+          await prisma.user.update({
+            where: { id: reviewer2.id },
+            data: {
+              latitude: createdPlaces[0].latitude,
+              longitude: createdPlaces[0].longitude,
+              status: 'Simülasyon Başladı',
+              statusEmoji: '🤖',
+              lastUpdated: new Date()
+            }
+          });
+
+          // 5. Generate Initial History
+          const now = new Date();
+          await prisma.movementHistory.create({
+            data: {
+              userId: reviewer2.id,
+              placeId: createdPlaces[0].id,
+              placeName: createdPlaces[0].name,
+              latitude: createdPlaces[0].latitude,
+              longitude: createdPlaces[0].longitude,
+              arrivedAt: new Date(now.getTime() - 1000 * 60 * 30), // 30 min ago
+            }
+          });
+
+          // 6. START REAL-TIME MOVEMENT SIMULATION
+          startSimulation(reviewer2.id, user.id, createdPlaces);
+        }
       }
     }
 

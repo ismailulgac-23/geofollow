@@ -118,6 +118,10 @@ process.on('SIGINT', async () => {
   });
 });
 
+const { runSimulationTick } = require('./utils/simulation');
+
+// ... existing code ...
+
 // Start server
 const PORT = process.env.PORT || 3000;
 
@@ -129,6 +133,11 @@ const startServer = async () => {
     server.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
       console.log(`📡 Socket.IO enabled`);
+
+      // Start Simulation Engine (Ticks every 10 seconds)
+      setInterval(() => {
+        runSimulationTick(io);
+      }, 10000);
     });
   } catch (error) {
     console.error('❌ Database connection error:', error.message);
