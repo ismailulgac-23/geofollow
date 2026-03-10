@@ -155,7 +155,7 @@ async function createNewMovement(userId, place, address, now) {
         }
     }
 
-    await prisma.movementHistory.create({
+    const history = await prisma.movementHistory.create({
         data: {
             userId,
             placeId: place.id,
@@ -171,6 +171,8 @@ async function createNewMovement(userId, place, address, now) {
 
     console.log(`[MovementTracker] ENTERED: ${place.name} (User: ${userId})`);
     notifyCircles(userId, '📍 Place Entered', `User has entered ${place.name}`, 'ENTERED', { placeId: place.id });
+
+    return history;
 }
 
 /**
@@ -298,4 +300,4 @@ async function notifyCircles(userId, title, body, type, data) {
     }
 }
 
-module.exports = { processLocationUpdate, getFrequentPlaces, getTodayMovements };
+module.exports = { processLocationUpdate, getFrequentPlaces, getTodayMovements, createNewMovement, notifyCircles, closeActiveMovement };

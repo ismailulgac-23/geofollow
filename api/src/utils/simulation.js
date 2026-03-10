@@ -73,9 +73,9 @@ const runSimulationTick = async (io) => {
                     sim.currentLat = Number(targetPlace.latitude) + (Math.random() - 0.5) * (radiusInDegrees * 0.4);
                     sim.currentLng = Number(targetPlace.longitude) + (Math.random() - 0.5) * (radiusInDegrees * 0.4);
 
-                    await createNewMovement(userId, targetPlace, targetPlace.address, new Date());
+                    const hist = await createNewMovement(userId, targetPlace, targetPlace.address, new Date());
+                    sim.currentHistoryId = hist?.id;
 
-                    // Note: sim.currentHistoryId might not be returned directly, but movementTracker handles the DB logging!
                     await notifyFollower(sim.followerId, `Arkadaşın ${targetPlace.name} konumuna girdi!`, targetPlace.name);
 
                     sim.dwellTicks = Math.floor(Math.random() * 2);
