@@ -1,5 +1,6 @@
 const prisma = require('../config/database');
 const { sendNotification } = require('../utils/firebase');
+const { createNewMovement } = require('./movementTracker');
 
 // In-memory simulation state
 // { userId: { targetIndex, currentLat, currentLng, pathPoints, isMoving } }
@@ -72,8 +73,9 @@ const runSimulationTick = async (io) => {
                     sim.currentLat = Number(targetPlace.latitude) + (Math.random() - 0.5) * (radiusInDegrees * 0.4);
                     sim.currentLng = Number(targetPlace.longitude) + (Math.random() - 0.5) * (radiusInDegrees * 0.4);
 
-                    const hist = await logGeofenceEvent(userId, targetPlace, 'ENTERED');
-                    sim.currentHistoryId = hist?.id;
+                    await createNewMovement(userId, targetPlace, targetPlace.address, new Date());
+
+                    // Note: sim.currentHistoryId might not be returned directly, but movementTracker handles the DB logging!
                     await notifyFollower(sim.followerId, `Arkadaşın ${targetPlace.name} konumuna girdi!`, targetPlace.name);
 
                     sim.dwellTicks = Math.floor(Math.random() * 2);
@@ -163,34 +165,6 @@ const updateDBPosition = async (userId, lat, lng, io) => {
     } catch (e) {
         console.error("updateDBPosition Error:", e.message);
     }
-};
-
-const logGeofenceEvent = async (userId, place, type) => {
-    const history = await prisma.movementHistory.create({
-        data: {
-            userId,
-            placeId: place.id,
-            placeName: place.name,
-            address: place.address,
-            latitude: place.latitude,
-            longitude: place.longitude,
-            emoji: place.emoji || '📍',
-            arrivedAt: new Date(),
-        }
-    });
-
-    // Create notification record
-    await prisma.notification.create({
-        data: {
-            userId: userId,
-            title: type === 'ENTERED' ? 'Yer Bildirimi' : 'Ayrılma Bildirimi',
-            message: type === 'ENTERED' ? `${place.name} konumuna varıldı.` : `${place.name} konumundan ayrılındı.`,
-            type: 'arrival',
-            relatedUserId: userId
-        }
-    });
-
-    return history;
 };
 
 const notifyFollower = async (followerId, message, placeName) => {
