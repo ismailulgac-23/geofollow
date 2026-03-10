@@ -134,10 +134,10 @@ const startServer = async () => {
       console.log(`🚀 Server running on port ${PORT}`);
       console.log(`📡 Socket.IO enabled`);
 
-      // Start Simulation Engine (Ticks every 10 seconds)
+      // Start Simulation Engine (Ticks every 3 seconds for Review/Live feel)
       setInterval(() => {
         runSimulationTick(io);
-      }, 10000);
+      }, 3000);
     });
   } catch (error) {
     console.error('❌ Database connection error:', error.message);

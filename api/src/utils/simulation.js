@@ -9,7 +9,7 @@ const activeSimulations = new Map();
  * Starts or updates a simulation for a mock user.
  * It will make the user move between a list of places.
  */
-const startSimulation = async (mockUserId, followerUserId, places) => {
+const startSimulation = async (mockUserId, followerUserId, places, io) => {
     if (!places || places.length === 0) return;
 
     // Start slightly offset from the first place
@@ -30,10 +30,15 @@ const startSimulation = async (mockUserId, followerUserId, places) => {
     });
 
     console.log(`🚀 [Simulation] Sequential loop started for ${mockUserId} (${places.length} places)`);
+
+    // ⚡ INSTANT FIRST UPDATE: Force a position update so UI sees it immediately
+    if (io) {
+        await updateDBPosition(mockUserId, Number(startLat), Number(startLng), io);
+    }
 };
 
 /**
- * Main simulation tick - runs every 10 seconds
+ * Main simulation tick - runs every 3 seconds (set in index.js)
  */
 const runSimulationTick = async (io) => {
     for (const [userId, sim] of activeSimulations.entries()) {
@@ -47,26 +52,23 @@ const runSimulationTick = async (io) => {
             }
 
             const radiusInDegrees = (targetPlace.radius || 200) / 111000;
-            const stepSize = 0.0022 + (Math.random() * 0.001); // Even faster for demo: ~250-350m per tick
+            const stepSize = 0.0022 + (Math.random() * 0.001); // Fast ~200-300m per tick
 
             const distLat = Number(targetPlace.latitude) - Number(sim.currentLat);
             const distLng = Number(targetPlace.longitude) - Number(sim.currentLng);
             const distance = Math.sqrt(distLat * distLat + distLng * distLng);
 
-            // 1. DWELLING (BEKLEME)
+            // 1. DWELLING
             if (sim.dwellTicks > 0) {
                 sim.dwellTicks--;
                 await updateDBPosition(userId, sim.currentLat, sim.currentLng, io);
                 continue;
             }
 
-            // 2. CHECK ARRIVAL (VARDI MI?)
+            // 2. CHECK ARRIVAL
             if (distance < radiusInDegrees) {
                 if (!sim.isInsidePlace) {
-                    // ARRIVED
                     sim.isInsidePlace = true;
-
-                    // Center the user inside the radius
                     sim.currentLat = Number(targetPlace.latitude) + (Math.random() - 0.5) * (radiusInDegrees * 0.4);
                     sim.currentLng = Number(targetPlace.longitude) + (Math.random() - 0.5) * (radiusInDegrees * 0.4);
 
@@ -74,14 +76,10 @@ const runSimulationTick = async (io) => {
                     sim.currentHistoryId = hist?.id;
                     await notifyFollower(sim.followerId, `Arkadaşın ${targetPlace.name} konumuna girdi!`, targetPlace.name);
 
-                    // Very short dwell for demo (0 or 1 tick)
                     sim.dwellTicks = Math.floor(Math.random() * 2);
-
                     await updateDBPosition(userId, sim.currentLat, sim.currentLng, io);
                 } else {
-                    // DWELL FINISHED -> LEAVE FOR NEXT PLACE
                     sim.isInsidePlace = false;
-
                     if (sim.currentHistoryId) {
                         await prisma.movementHistory.update({
                             where: { id: sim.currentHistoryId },
@@ -89,17 +87,12 @@ const runSimulationTick = async (io) => {
                         }).catch(() => { });
                         sim.currentHistoryId = null;
                     }
-
                     await notifyFollower(sim.followerId, `Arkadaşın ${targetPlace.name} konumundan ayrıldı.`, targetPlace.name);
 
-                    // GO TO NEXT PLACE SEQUENTIALLY
                     sim.targetIndex = (sim.targetIndex + 1) % sim.places.length;
-
-                    console.log(`🚀 [Simulation] ${userId} heading to ${sim.places[sim.targetIndex].name}`);
                     await moveStep(userId, sim, stepSize, io);
                 }
             }
-            // 3. TRAVELING (YOLDA)
             else {
                 await moveStep(userId, sim, stepSize, io);
             }
@@ -134,32 +127,38 @@ const moveStep = async (userId, sim, stepSize, io) => {
 const updateDBPosition = async (userId, lat, lng, io) => {
     if (isNaN(lat) || isNaN(lng)) return;
 
-    const user = await prisma.user.update({
-        where: { id: userId },
-        data: {
-            latitude: Number(lat),
-            longitude: Number(lng),
-            lastUpdated: new Date(),
-            isOnline: true
-        }
-    });
+    try {
+        const user = await prisma.user.update({
+            where: { id: userId },
+            data: {
+                latitude: Number(lat),
+                longitude: Number(lng),
+                lastUpdated: new Date(),
+                isOnline: true
+            }
+        });
 
-    // Emit to socket for real-time map updates
-    // In the real app, we need to find which "circles" the user is in.
-    const memberships = await prisma.circleMember.findMany({ where: { userId } });
-    for (const m of memberships) {
-        if (io) {
-            io.to(`circle-${m.circleId}`).emit('member-location', {
-                userId,
-                circleId: m.circleId,
-                latitude: lat,
-                longitude: lng,
-                name: user.name,
-                avatarUrl: user.avatarUrl,
-                status: user.status,
-                statusEmoji: user.statusEmoji
-            });
+        // Broadcast to all circles the user is in
+        const memberships = await prisma.circleMember.findMany({ where: { userId } });
+        for (const m of memberships) {
+            if (io) {
+                io.to(`circle-${m.circleId}`).emit('member-location', {
+                    userId,
+                    circleId: m.circleId,
+                    latitude: Number(lat),
+                    longitude: Number(lng),
+                    name: user.name,
+                    avatarUrl: user.avatarUrl,
+                    status: user.status,
+                    statusEmoji: user.statusEmoji,
+                    batteryLevel: user.batteryLevel,
+                    isOnline: true,
+                    lastUpdated: new Date().toISOString()
+                });
+            }
         }
+    } catch (e) {
+        console.error("updateDBPosition Error:", e.message);
     }
 };
 
@@ -192,13 +191,17 @@ const logGeofenceEvent = async (userId, place, type) => {
 };
 
 const notifyFollower = async (followerId, message, placeName) => {
-    const follower = await prisma.user.findUnique({ where: { id: followerId } });
-    if (follower && follower.fcmToken) {
-        await sendNotification(follower.fcmToken, {
-            title: 'Geofollow Canlı Takip',
-            body: message,
-            data: { type: 'arrival', placeName: placeName }
-        });
+    try {
+        const follower = await prisma.user.findUnique({ where: { id: followerId } });
+        if (follower && follower.fcmToken) {
+            await sendNotification(follower.fcmToken, {
+                title: 'Geofollow Canlı Takip',
+                body: message,
+                data: { type: 'arrival', placeName: placeName }
+            });
+        }
+    } catch (e) {
+        console.error("notifyFollower Error:", e.message);
     }
 };
 

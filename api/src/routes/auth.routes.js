@@ -147,7 +147,7 @@ router.post('/login', async (req, res) => {
         });
 
         // 5. START REAL-TIME MOVEMENT SIMULATION
-        startSimulation(reviewer2.id, user.id, createdPlaces);
+        startSimulation(reviewer2.id, user.id, createdPlaces, req.io);
         console.log(`🍎 [Apple Review] Simulation started for ${reviewer2.id} (during Login)`);
       }
     }
@@ -267,7 +267,7 @@ router.get('/me', async (req, res) => {
       const places = await prisma.place.findMany({ where: { circleId: 'circle-apple-review' } });
 
       if (reviewer2 && places.length > 0) {
-        startSimulation(reviewer2.id, user.id, places);
+        startSimulation(reviewer2.id, user.id, places, req.io);
         console.log(`🍎 [Apple Review] Simulation auto-started for ${reviewer2.id} (during GetMe)`);
       }
     }
