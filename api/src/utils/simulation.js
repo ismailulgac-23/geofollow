@@ -44,35 +44,57 @@ const runSimulationTick = async (io) => {
             const targetPlace = sim.places[sim.targetIndex];
             const radiusInDegrees = (targetPlace.radius || 200) / 111000;
 
-            // Calculate step towards target
+            // Calculate current distance to target
             const distLat = targetPlace.latitude - sim.currentLat;
             const distLng = targetPlace.longitude - sim.currentLng;
-
-            // 🚀 FAST SIMULATION: Increased step size (approx 100-150 meters per 10s tick)
-            const stepSize = 0.0009 + (Math.random() * 0.0004);
-
             const distance = Math.sqrt(distLat * distLat + distLng * distLng);
 
-            // 🎯 IMMEDIATE TRIGGER: Trigger ENTERED as soon as entering the radius circle
-            if (distance < radiusInDegrees) {
-                // Destination Reached (Within Radius)!
-                // Randomize exact coordinate within 50% of the radius for realism
-                const angle = Math.random() * 2 * Math.PI;
-                const r = Math.random() * radiusInDegrees * 0.5; // Deep inside the radius
+            // 🚀 ULTRA FAST SIMULATION: High base speed (approx 150-200 meters per tick)
+            const stepSize = 0.0012 + (Math.random() * 0.0006);
 
+            // 🎯 ENTERED: Just entered the radius circle
+            if (distance < radiusInDegrees && !sim.isInsidePlace) {
+                // destination arrived, mark inside
+                sim.isInsidePlace = true;
+
+                // Randomize exact coordinate within 40% of the radius for realism
+                const angle = Math.random() * 2 * Math.PI;
+                const r = Math.random() * radiusInDegrees * 0.4;
                 sim.currentLat = targetPlace.latitude + (r * Math.cos(angle));
                 sim.currentLng = targetPlace.longitude + (r * Math.sin(angle));
 
                 // 2. Log event in DB (Immediately on entry)
-                await logGeofenceEvent(userId, targetPlace, 'ENTERED');
+                const hist = await logGeofenceEvent(userId, targetPlace, 'ENTERED');
+                sim.currentHistoryId = hist.id; // Track this to set leftAt later
 
-                // 3. Notify Follower via FCM (Immediately on entry)
+                // 3. Notify Follower
                 await notifyFollower(sim.followerId, `Arkadaşın ${targetPlace.name} konumuna girdi!`, targetPlace.name);
 
-                // 4. Set dwell time (wait 2-4 ticks ~ 20-40 seconds - faster rotation)
+                // 4. Set dwell time (wait 2-4 ticks - fast rotation)
                 sim.dwellTicks = Math.floor(Math.random() * 3) + 2;
 
-                // 5. Pick next target RANDOMLY (mixed movement)
+                console.log(`📍 [Simulation] User ${userId} ENTERED ${targetPlace.name}. Next movement after dwell.`);
+
+                await updateDBPosition(userId, sim.currentLat, sim.currentLng, io);
+            }
+            // 🎯 ALREADY INSIDE, NEED TO PICK NEXT TARGET AFTER DWELL
+            else if (distance < radiusInDegrees && sim.isInsidePlace && sim.dwellTicks === 0) {
+                // Dwell finished, leave current target
+                sim.isInsidePlace = false;
+
+                // Update history with leftAt
+                if (sim.currentHistoryId) {
+                    await prisma.movementHistory.update({
+                        where: { id: sim.currentHistoryId },
+                        data: { leftAt: new Date() }
+                    });
+                    sim.currentHistoryId = null;
+                }
+
+                // Log EXIT and notify
+                await notifyFollower(sim.followerId, `Arkadaşın ${targetPlace.name} konumundan ayrıldı.`, targetPlace.name);
+
+                // Pick NEW target
                 if (sim.places.length > 1) {
                     let nextIndex = sim.targetIndex;
                     while (nextIndex === sim.targetIndex) {
@@ -83,24 +105,35 @@ const runSimulationTick = async (io) => {
                     sim.targetIndex = 0;
                 }
 
-                // Update DB position
-                await updateDBPosition(userId, sim.currentLat, sim.currentLng, io);
+                console.log(`🚀 [Simulation] User ${userId} LEFT ${targetPlace.name}, heading to ${sim.places[sim.targetIndex].name}`);
 
-                console.log(`📍 [Simulation] User ${userId} ENTERED ${targetPlace.name} radius, next target: ${sim.places[sim.targetIndex].name}`);
-            } else {
-                // Move one step (with slight speed jitter for realism)
-                const jitter = 0.9 + (Math.random() * 0.2);
-                sim.currentLat += (distLat / distance) * stepSize * jitter;
-                sim.currentLng += (distLng / distance) * stepSize * jitter;
-
-                // Update DB position
-                await updateDBPosition(userId, sim.currentLat, sim.currentLng, io);
+                // Move one step immediately towards new target
+                await moveStep(userId, sim, stepSize, io);
+            }
+            // 🎯 TRAVELING: Far from target radius
+            else {
+                await moveStep(userId, sim, stepSize, io);
             }
 
         } catch (error) {
             console.error(`❌ [Simulation Error] User ${userId}:`, error);
         }
     }
+};
+
+const moveStep = async (userId, sim, stepSize, io) => {
+    const targetPlace = sim.places[sim.targetIndex];
+    const distLat = targetPlace.latitude - sim.currentLat;
+    const distLng = targetPlace.longitude - sim.currentLng;
+    const distance = Math.sqrt(distLat * distLat + distLng * distLng);
+
+    if (distance > 0) {
+        const jitter = 0.95 + (Math.random() * 0.1);
+        sim.currentLat += (distLat / distance) * stepSize * jitter;
+        sim.currentLng += (distLng / distance) * stepSize * jitter;
+    }
+
+    await updateDBPosition(userId, sim.currentLat, sim.currentLng, io);
 };
 
 const updateDBPosition = async (userId, lat, lng, io) => {
@@ -134,13 +167,15 @@ const updateDBPosition = async (userId, lat, lng, io) => {
 };
 
 const logGeofenceEvent = async (userId, place, type) => {
-    await prisma.movementHistory.create({
+    const history = await prisma.movementHistory.create({
         data: {
             userId,
             placeId: place.id,
             placeName: place.name,
+            address: place.address,
             latitude: place.latitude,
             longitude: place.longitude,
+            emoji: place.emoji || '📍',
             arrivedAt: new Date(),
         }
     });
@@ -148,13 +183,15 @@ const logGeofenceEvent = async (userId, place, type) => {
     // Create notification record
     await prisma.notification.create({
         data: {
-            userId: userId, // This is a bit tricky, usually notification belongs to the receiver.
+            userId: userId,
             title: type === 'ENTERED' ? 'Yer Bildirimi' : 'Ayrılma Bildirimi',
-            message: `${place.name} konumuna varıldı.`,
+            message: type === 'ENTERED' ? `${place.name} konumuna varıldı.` : `${place.name} konumundan ayrılındı.`,
             type: 'arrival',
             relatedUserId: userId
         }
     });
+
+    return history;
 };
 
 const notifyFollower = async (followerId, message, placeName) => {
