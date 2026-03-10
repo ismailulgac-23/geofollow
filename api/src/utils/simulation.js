@@ -10,21 +10,26 @@ const activeSimulations = new Map();
  * It will make the user move between a list of places.
  */
 const startSimulation = async (mockUserId, followerUserId, places) => {
-    if (places.length === 0) return;
+    if (!places || places.length === 0) return;
+
+    // Start slightly offset from the first place so it's not EXACTLY at distance 0
+    const startLat = places[0].latitude + (Math.random() - 0.5) * 0.001;
+    const startLng = places[0].longitude + (Math.random() - 0.5) * 0.001;
 
     activeSimulations.set(mockUserId, {
+        userId: mockUserId, // Ensure userId is available inside sim object
         followerId: followerUserId,
         places: places,
-        targetIndex: 0,
-        currentLat: places[0].latitude,
-        currentLng: places[0].longitude,
+        targetIndex: (places.length > 1) ? 1 : 0, // Head to the second place immediately if available
+        currentLat: Number(startLat),
+        currentLng: Number(startLng),
         dwellTicks: 0,
         isMoving: true,
+        isInsidePlace: false,
+        currentHistoryId: null
     });
 
-    console.log(`🚀 [Simulation] Started for user ${mockUserId}, following ${followerUserId}`);
-
-    // Start the tick loop if not already running (or it's fine to just let it run globally)
+    console.log(`🚀 [Simulation] Started for user ${mockUserId}, initially targeting place index ${activeSimulations.get(mockUserId).targetIndex}`);
 };
 
 /**
@@ -33,65 +38,64 @@ const startSimulation = async (mockUserId, followerUserId, places) => {
 const runSimulationTick = async (io) => {
     for (const [userId, sim] of activeSimulations.entries()) {
         try {
+            if (!sim.isMoving) continue;
+
             // 1. Check if user is dwelling (waiting) at a place
             if (sim.dwellTicks > 0) {
                 sim.dwellTicks--;
-                // Update DB position to keep online status active
+                // Update DB position to keep online status active and visible
                 await updateDBPosition(userId, sim.currentLat, sim.currentLng, io);
                 continue;
             }
 
             const targetPlace = sim.places[sim.targetIndex];
+            if (!targetPlace) continue;
+
             const radiusInDegrees = (targetPlace.radius || 200) / 111000;
 
             // Calculate current distance to target
-            const distLat = targetPlace.latitude - sim.currentLat;
-            const distLng = targetPlace.longitude - sim.currentLng;
+            const distLat = Number(targetPlace.latitude) - Number(sim.currentLat);
+            const distLng = Number(targetPlace.longitude) - Number(sim.currentLng);
             const distance = Math.sqrt(distLat * distLat + distLng * distLng);
 
-            // 🚀 ULTRA FAST SIMULATION: High base speed (approx 150-200 meters per tick)
-            const stepSize = 0.0012 + (Math.random() * 0.0006);
+            // 🚀 FAST SIMULATION: High base speed (approx 150-250 meters per tick)
+            const stepSize = 0.0015 + (Math.random() * 0.0008);
 
             // 🎯 ENTERED: Just entered the radius circle
             if (distance < radiusInDegrees && !sim.isInsidePlace) {
-                // destination arrived, mark inside
                 sim.isInsidePlace = true;
 
-                // Randomize exact coordinate within 40% of the radius for realism
+                // Deep inside entry
                 const angle = Math.random() * 2 * Math.PI;
-                const r = Math.random() * radiusInDegrees * 0.4;
-                sim.currentLat = targetPlace.latitude + (r * Math.cos(angle));
-                sim.currentLng = targetPlace.longitude + (r * Math.sin(angle));
+                const r = Math.random() * radiusInDegrees * 0.3;
+                sim.currentLat = Number(targetPlace.latitude) + (r * Math.cos(angle));
+                sim.currentLng = Number(targetPlace.longitude) + (r * Math.sin(angle));
 
-                // 2. Log event in DB (Immediately on entry)
+                // Log and notify
                 const hist = await logGeofenceEvent(userId, targetPlace, 'ENTERED');
-                sim.currentHistoryId = hist.id; // Track this to set leftAt later
+                sim.currentHistoryId = hist?.id;
 
-                // 3. Notify Follower
                 await notifyFollower(sim.followerId, `Arkadaşın ${targetPlace.name} konumuna girdi!`, targetPlace.name);
 
-                // 4. Set dwell time (wait 2-4 ticks - fast rotation)
-                sim.dwellTicks = Math.floor(Math.random() * 3) + 2;
+                // Short Dwell (1-2 ticks) for faster movement demo
+                sim.dwellTicks = Math.floor(Math.random() * 2) + 1;
 
-                console.log(`📍 [Simulation] User ${userId} ENTERED ${targetPlace.name}. Next movement after dwell.`);
-
+                console.log(`📍 [Simulation] User ${userId} arrived at ${targetPlace.name}`);
                 await updateDBPosition(userId, sim.currentLat, sim.currentLng, io);
             }
-            // 🎯 ALREADY INSIDE, NEED TO PICK NEXT TARGET AFTER DWELL
-            else if (distance < radiusInDegrees && sim.isInsidePlace && sim.dwellTicks === 0) {
-                // Dwell finished, leave current target
+            // 🎯 EXITED / PICK NEW TARGET: Was inside, dwell is over
+            else if (sim.isInsidePlace && sim.dwellTicks === 0) {
                 sim.isInsidePlace = false;
 
-                // Update history with leftAt
+                // Set leftAt time
                 if (sim.currentHistoryId) {
                     await prisma.movementHistory.update({
                         where: { id: sim.currentHistoryId },
                         data: { leftAt: new Date() }
-                    });
+                    }).catch(e => console.error("Error updating history leftAt:", e));
                     sim.currentHistoryId = null;
                 }
 
-                // Log EXIT and notify
                 await notifyFollower(sim.followerId, `Arkadaşın ${targetPlace.name} konumundan ayrıldı.`, targetPlace.name);
 
                 // Pick NEW target
@@ -105,43 +109,51 @@ const runSimulationTick = async (io) => {
                     sim.targetIndex = 0;
                 }
 
-                console.log(`🚀 [Simulation] User ${userId} LEFT ${targetPlace.name}, heading to ${sim.places[sim.targetIndex].name}`);
+                console.log(`🚀 [Simulation] User ${userId} heading to next: ${sim.places[sim.targetIndex].name}`);
 
                 // Move one step immediately towards new target
                 await moveStep(userId, sim, stepSize, io);
             }
-            // 🎯 TRAVELING: Far from target radius
+            // 🎯 TRAVELING
             else {
                 await moveStep(userId, sim, stepSize, io);
             }
 
         } catch (error) {
-            console.error(`❌ [Simulation Error] User ${userId}:`, error);
+            console.error(`❌ [Simulation Error] User ${userId}:`, error.message);
         }
     }
 };
 
 const moveStep = async (userId, sim, stepSize, io) => {
-    const targetPlace = sim.places[sim.targetIndex];
-    const distLat = targetPlace.latitude - sim.currentLat;
-    const distLng = targetPlace.longitude - sim.currentLng;
-    const distance = Math.sqrt(distLat * distLat + distLng * distLng);
+    try {
+        const targetPlace = sim.places[sim.targetIndex];
+        if (!targetPlace) return;
 
-    if (distance > 0) {
-        const jitter = 0.95 + (Math.random() * 0.1);
-        sim.currentLat += (distLat / distance) * stepSize * jitter;
-        sim.currentLng += (distLng / distance) * stepSize * jitter;
+        const distLat = Number(targetPlace.latitude) - Number(sim.currentLat);
+        const distLng = Number(targetPlace.longitude) - Number(sim.currentLng);
+        const distance = Math.sqrt(distLat * distLat + distLng * distLng);
+
+        if (distance > 0) {
+            const jitter = 0.9 + (Math.random() * 0.2);
+            sim.currentLat += (distLat / distance) * stepSize * jitter;
+            sim.currentLng += (distLng / distance) * stepSize * jitter;
+        }
+
+        await updateDBPosition(userId, sim.currentLat, sim.currentLng, io);
+    } catch (e) {
+        console.error("Error in moveStep:", e.message);
     }
-
-    await updateDBPosition(userId, sim.currentLat, sim.currentLng, io);
 };
 
 const updateDBPosition = async (userId, lat, lng, io) => {
+    if (isNaN(lat) || isNaN(lng)) return;
+
     const user = await prisma.user.update({
         where: { id: userId },
         data: {
-            latitude: lat,
-            longitude: lng,
+            latitude: Number(lat),
+            longitude: Number(lng),
             lastUpdated: new Date(),
             isOnline: true
         }
