@@ -11,7 +11,7 @@ const initializeFirebase = () => {
     if (isFirebaseInitialized) return;
 
     try {
-        const serviceAccountPath = path.resolve("./src/config/service-account.json");
+        const serviceAccountPath = path.join(__dirname, '..', 'config', 'service-account.json');
 
         let serviceAccount = require(serviceAccountPath);
         admin.initializeApp({

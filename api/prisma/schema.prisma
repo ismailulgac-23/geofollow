@@ -178,3 +178,11 @@ model LocationSnapshot {
 
   @@map("location_snapshots")
 }
+
+// System Settings - API configs
+model SystemSetting {
+  key   String @id
+  value String
+
+  @@map("system_settings")
+}

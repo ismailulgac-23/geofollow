@@ -30,25 +30,28 @@ const formatUserResponse = (user) => ({
 // POST /auth/login
 router.post('/login', async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email, password } = req.body;
     const loginEmail = email || 'demo@demo.com';
 
-    const user = await prisma.user.findUnique({
-      where: { email: loginEmail },
-      include: {
-        circles: {
-          include: {
-            circle: {
-              include: {
-                members: {
-                  include: { user: true }
+    const [user, testModeSetting] = await Promise.all([
+      prisma.user.findUnique({
+        where: { email: loginEmail },
+        include: {
+          circles: {
+            include: {
+              circle: {
+                include: {
+                  members: {
+                    include: { user: true }
+                  }
                 }
               }
             }
           }
         }
-      }
-    });
+      }),
+      prisma.systemSetting.findUnique({ where: { key: 'testMode' } })
+    ]);
 
     if (!user) {
       return res.status(404).json({
@@ -57,17 +60,49 @@ router.post('/login', async (req, res) => {
       });
     }
 
+    // Password check for review accounts (if password is provided)
+    if (password && user.password) {
+      const bcrypt = require('bcryptjs');
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return res.status(401).json({
+          success: false,
+          code: 'INVALID_CREDENTIALS'
+        });
+      }
+    }
+
     await prisma.user.update({
       where: { id: user.id },
       data: { isOnline: true, isPremium: true, lastUpdated: new Date() }
     });
 
     const token = generateToken(user.id);
+    const testMode = testModeSetting?.value === '1';
+
+    // Proximity Simulation for Apple Review
+    if (testMode && loginEmail === 'apple_review_1@geofollow.xyz') {
+      const { lat, lng } = req.body; // Frontend can send initial lat/lng
+      if (lat && lng) {
+        await prisma.user.update({
+          where: { email: 'apple_review_2@geofollow.xyz' },
+          data: {
+            latitude: lat + 0.002,
+            longitude: lng + 0.002,
+            lastUpdated: new Date()
+          }
+        });
+      }
+    }
 
     res.json({
       success: true,
       code: 'LOGIN_SUCCESS',
-      data: { user: formatUserResponse(user), token }
+      data: {
+        user: formatUserResponse(user),
+        token,
+        testMode
+      }
     });
   } catch (error) {
     console.error('Login error:', error);

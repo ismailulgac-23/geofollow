@@ -602,6 +602,93 @@ async function main() {
   console.log(`✅ Created ${movements.length} movement records`);
 
   // ============================================
+  // 9. CREATE SYSTEM SETTINGS
+  // ============================================
+  console.log("⚙️ Creating system settings...");
+
+  await prisma.systemSetting.upsert({
+    where: { key: 'testMode' },
+    update: { value: '1' },
+    create: { key: 'testMode', value: '1' }
+  });
+
+  // ============================================
+  // 10. CREATE APPLE REVIEW ACCOUNTS
+  // ============================================
+  console.log("🍎 Creating Apple Review accounts...");
+
+  const bcrypt = require('bcryptjs');
+  const reviewPassword = await bcrypt.hash('ReviewTest2026!', 10);
+
+  // Reviewer account
+  const reviewer = await prisma.user.upsert({
+    where: { email: 'apple_review_1@geofollow.xyz' },
+    update: { password: reviewPassword },
+    create: {
+      id: "apple-reviewer-1",
+      email: "apple_review_1@geofollow.xyz",
+      name: "Apple Reviewer",
+      password: reviewPassword,
+      provider: "email",
+      avatarUrl: "https://i.pravatar.cc/150?u=apple1",
+      status: "Haritada",
+      batteryLevel: 98,
+      isOnline: true,
+      latitude: 41.0082,
+      longitude: 28.9784,
+      isPremium: true
+    }
+  });
+
+  // Partner for reviewer to follow
+  const mockPartner = await prisma.user.upsert({
+    where: { email: 'apple_review_2@geofollow.xyz' },
+    update: { password: reviewPassword },
+    create: {
+      id: "apple-reviewer-2",
+      email: "apple_review_2@geofollow.xyz",
+      name: "Review Test Partner",
+      password: reviewPassword,
+      provider: "email",
+      avatarUrl: "https://i.pravatar.cc/150?u=apple2",
+      status: "Yolda",
+      statusEmoji: "🚗",
+      batteryLevel: 75,
+      isOnline: true,
+      latitude: 41.0124,
+      longitude: 28.9856,
+      isPremium: true
+    }
+  });
+
+  // Specialized Review Circle
+  const reviewCircle = await prisma.circle.upsert({
+    where: { inviteCode: 'TEST-8492' },
+    update: {},
+    create: {
+      id: "circle-apple-review",
+      name: "İnceleme Grubu",
+      emoji: "🛡️",
+      inviteCode: "TEST-8492"
+    }
+  });
+
+  // Link them
+  await prisma.circleMember.upsert({
+    where: { circleId_userId: { circleId: reviewCircle.id, userId: reviewer.id } },
+    update: {},
+    create: { circleId: reviewCircle.id, userId: reviewer.id, role: "admin" }
+  });
+
+  await prisma.circleMember.upsert({
+    where: { circleId_userId: { circleId: reviewCircle.id, userId: mockPartner.id } },
+    update: {},
+    create: { circleId: reviewCircle.id, userId: mockPartner.id, role: "member" }
+  });
+
+  console.log("✅ Apple review setup completed");
+
+  // ============================================
   // SUMMARY
   // ============================================
   console.log("\n🎉 Seed completed successfully!");
