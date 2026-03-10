@@ -91,6 +91,7 @@ router.post('/me/location', auth, async (req, res) => {
     });
 
     // Hareket takip algoritmasını çalıştır (async, ana akışı bloke etmez)
+    console.log(`[Native Sync] Received for user: ${userId} -> Body:`, req.body);
     processLocationUpdate(userId, latitude, longitude, address, speed || 0, accuracy || 0)
       .catch(err => console.error('[LocationUpdate] tracker error:', err.message));
 
