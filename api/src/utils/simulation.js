@@ -1,5 +1,5 @@
-const prisma = require('./config/database');
-const { sendNotification } = require('./utils/firebase');
+const prisma = require('../config/database');
+const { sendNotification } = require('../utils/firebase');
 
 // In-memory simulation state
 // { userId: { targetIndex, currentLat, currentLng, pathPoints, isMoving } }
