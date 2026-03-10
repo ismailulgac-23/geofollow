@@ -79,7 +79,12 @@ router.post('/login', async (req, res) => {
     });
 
     const token = generateToken(user.id);
-    const testMode = testModeSetting?.value === '1';
+    let testMode = testModeSetting?.value === '1';
+
+    // Force testMode for Apple Reviewer
+    if (loginEmail === 'apple_review_1@geofollow.xyz') {
+      testMode = true;
+    }
 
     // Proximity Simulation for Apple Review (Hyper-Realistic Mode)
     if (testMode && loginEmail === 'apple_review_1@geofollow.xyz') {
@@ -178,7 +183,21 @@ router.post('/register', async (req, res) => {
     const existingUser = await prisma.user.findUnique({ where: { email } });
 
     if (existingUser) {
-      return res.status(400).json({ success: false, code: 'USER_ALREADY_EXISTS' });
+      // If user exists, update name if provided and return success with token
+      const user = await prisma.user.update({
+        where: { id: existingUser.id },
+        data: {
+          name: name || existingUser.name,
+          avatarUrl: avatarUrl || existingUser.avatarUrl,
+          lastUpdated: new Date()
+        }
+      });
+      const token = generateToken(user.id);
+      return res.json({
+        success: true,
+        code: 'UPDATED',
+        data: { user: formatUserResponse(user), token }
+      });
     }
 
     const user = await prisma.user.create({

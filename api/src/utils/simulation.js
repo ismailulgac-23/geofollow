@@ -18,6 +18,7 @@ const startSimulation = async (mockUserId, followerUserId, places) => {
         targetIndex: 0,
         currentLat: places[0].latitude,
         currentLng: places[0].longitude,
+        dwellTicks: 0,
         isMoving: true,
     });
 
@@ -32,12 +33,22 @@ const startSimulation = async (mockUserId, followerUserId, places) => {
 const runSimulationTick = async (io) => {
     for (const [userId, sim] of activeSimulations.entries()) {
         try {
+            // 1. Check if user is dwelling (waiting) at a place
+            if (sim.dwellTicks > 0) {
+                sim.dwellTicks--;
+                // Update DB position to keep online status active
+                await updateDBPosition(userId, sim.currentLat, sim.currentLng, io);
+                continue;
+            }
+
             const targetPlace = sim.places[sim.targetIndex];
 
             // Calculate step towards target
             const distLat = targetPlace.latitude - sim.currentLat;
             const distLng = targetPlace.longitude - sim.currentLng;
-            const stepSize = 0.0003; // ~30 meters per tick
+
+            // Randomize speed slightly for realism (30-45 meters per tick)
+            const stepSize = 0.0003 + (Math.random() * 0.00015);
 
             const distance = Math.sqrt(distLat * distLat + distLng * distLng);
 
@@ -46,19 +57,22 @@ const runSimulationTick = async (io) => {
                 sim.currentLat = targetPlace.latitude;
                 sim.currentLng = targetPlace.longitude;
 
-                // 1. Log event in DB
+                // 2. Log event in DB
                 await logGeofenceEvent(userId, targetPlace, 'ENTERED');
 
-                // 2. Notify Follower via FCM
+                // 3. Notify Follower via FCM
                 await notifyFollower(sim.followerId, `Arkadaşın ${targetPlace.name} konumuna vardı!`, targetPlace.name);
 
-                // 3. Pick next target after a small wait
+                // 4. Set dwell time (e.g., wait 3-6 ticks ~ 30-60 seconds)
+                sim.dwellTicks = Math.floor(Math.random() * 4) + 3;
+
+                // 5. Pick next target in rotation
                 sim.targetIndex = (sim.targetIndex + 1) % sim.places.length;
 
                 // Update DB position
                 await updateDBPosition(userId, sim.currentLat, sim.currentLng, io);
 
-                console.log(`📍 [Simulation] User ${userId} reached ${targetPlace.name}`);
+                console.log(`📍 [Simulation] User ${userId} reached ${targetPlace.name}, dwelling for ${sim.dwellTicks} ticks.`);
             } else {
                 // Move one step
                 sim.currentLat += (distLat / distance) * stepSize;
