@@ -42,34 +42,35 @@ const runSimulationTick = async (io) => {
             }
 
             const targetPlace = sim.places[sim.targetIndex];
+            const radiusInDegrees = (targetPlace.radius || 200) / 111000;
 
             // Calculate step towards target
             const distLat = targetPlace.latitude - sim.currentLat;
             const distLng = targetPlace.longitude - sim.currentLng;
 
-            // Randomize speed slightly for realism (30-45 meters per tick)
-            const stepSize = 0.0003 + (Math.random() * 0.00015);
+            // 🚀 FAST SIMULATION: Increased step size (approx 100-150 meters per 10s tick)
+            const stepSize = 0.0009 + (Math.random() * 0.0004);
 
             const distance = Math.sqrt(distLat * distLat + distLng * distLng);
 
-            if (distance < stepSize) {
+            // 🎯 IMMEDIATE TRIGGER: Trigger ENTERED as soon as entering the radius circle
+            if (distance < radiusInDegrees) {
                 // Destination Reached (Within Radius)!
-                // Randomize exact coordinate within 70% of the radius for realism
-                const radiusInDegrees = (targetPlace.radius || 200) / 111000;
+                // Randomize exact coordinate within 50% of the radius for realism
                 const angle = Math.random() * 2 * Math.PI;
-                const r = Math.random() * radiusInDegrees * 0.7; // Inner 70% of radius
+                const r = Math.random() * radiusInDegrees * 0.5; // Deep inside the radius
 
                 sim.currentLat = targetPlace.latitude + (r * Math.cos(angle));
                 sim.currentLng = targetPlace.longitude + (r * Math.sin(angle));
 
-                // 2. Log event in DB
+                // 2. Log event in DB (Immediately on entry)
                 await logGeofenceEvent(userId, targetPlace, 'ENTERED');
 
-                // 3. Notify Follower via FCM
-                await notifyFollower(sim.followerId, `Arkadaşın ${targetPlace.name} konumuna vardı!`, targetPlace.name);
+                // 3. Notify Follower via FCM (Immediately on entry)
+                await notifyFollower(sim.followerId, `Arkadaşın ${targetPlace.name} konumuna girdi!`, targetPlace.name);
 
-                // 4. Set dwell time (wait 4-8 ticks ~ 40-80 seconds)
-                sim.dwellTicks = Math.floor(Math.random() * 5) + 4;
+                // 4. Set dwell time (wait 2-4 ticks ~ 20-40 seconds - faster rotation)
+                sim.dwellTicks = Math.floor(Math.random() * 3) + 2;
 
                 // 5. Pick next target RANDOMLY (mixed movement)
                 if (sim.places.length > 1) {
@@ -79,17 +80,16 @@ const runSimulationTick = async (io) => {
                     }
                     sim.targetIndex = nextIndex;
                 } else {
-                    // Only one place, just keep targetting it but maybe move slightly
                     sim.targetIndex = 0;
                 }
 
                 // Update DB position
                 await updateDBPosition(userId, sim.currentLat, sim.currentLng, io);
 
-                console.log(`📍 [Simulation] User ${userId} arrived at ${targetPlace.name} (inside radius), next target: ${sim.places[sim.targetIndex].name}`);
+                console.log(`📍 [Simulation] User ${userId} ENTERED ${targetPlace.name} radius, next target: ${sim.places[sim.targetIndex].name}`);
             } else {
                 // Move one step (with slight speed jitter for realism)
-                const jitter = 0.8 + (Math.random() * 0.4); // 80% to 120% of base speed
+                const jitter = 0.9 + (Math.random() * 0.2);
                 sim.currentLat += (distLat / distance) * stepSize * jitter;
                 sim.currentLng += (distLng / distance) * stepSize * jitter;
 
