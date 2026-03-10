@@ -31,135 +31,138 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
 }
 
 /**
- * Ana algoritma: Konum güncellemesini işle
+ * Ana algoritma: Konum güncellemesini işle (Tamamen API Tarafında)
  */
 async function processLocationUpdate(userId, latitude, longitude, address, speed = 0, accuracy = 0) {
     try {
-        // 1. Ham konumu kaydet
+        const now = new Date();
+
+        // 1. Ham konumu kaydet (Snapshot)
         await prisma.locationSnapshot.create({
-            data: {
-                userId,
-                latitude,
-                longitude,
-                address,
-                speed,
-                accuracy,
-            }
+            data: { userId, latitude, longitude, address, speed, accuracy }
         });
 
         // 2. Kullanıcının üye olduğu çemberlerdeki yerleri çek
         const memberships = await prisma.circleMember.findMany({
             where: { userId },
-            include: {
-                circle: {
-                    include: {
-                        places: {
-                            where: { isActive: true }
-                        }
-                    }
-                }
-            }
+            include: { circle: { include: { places: { where: { isActive: true } } } } }
         });
 
         const allPlaces = memberships.flatMap(m => m.circle.places);
-        if (allPlaces.length === 0) return;
+        if (allPlaces.length === 0) {
+            // Hiç yer yoksa ve aktif bir hareket varsa kapat (User "temiz" alana çıktı)
+            await closeActiveMovement(userId, now);
+            return;
+        }
 
-        // 3. Hangi yerlere yakın olduğunu bul
-        const ARRIVAL_THRESHOLD = 1.2; // placeRadius * bu katsayı = varış eşiği
-        const nearbyPlace = allPlaces.find(place => {
+        // 3. Mesafe bazlı analiz
+        // Hysteresis (Gecikme/Tolerans): Giriş için tam radius, çıkış için %20 daha geniş alan
+        const EXIT_THRESHOLD_MULTIPLIER = 1.2;
+
+        let bestPlace = null;
+        let minRatio = 1.0; // ratiosu en küçük olan (merkeze en yakın olan) kazanır
+
+        for (const place of allPlaces) {
             const dist = haversineDistance(latitude, longitude, place.latitude, place.longitude);
-            return dist <= (place.radius * ARRIVAL_THRESHOLD);
-        });
+            const ratio = dist / place.radius;
 
-        // 4. Aktif açık hareketi bul
+            if (ratio <= 1.0) {
+                // İçeride
+                if (ratio < minRatio) {
+                    minRatio = ratio;
+                    bestPlace = place;
+                }
+            }
+        }
+
+        // 4. Aktif durumu kontrol et
         const activeMovement = await prisma.movementHistory.findFirst({
             where: { userId, leftAt: null },
             orderBy: { arrivedAt: 'desc' }
         });
 
-        const now = new Date();
-
-        if (nearbyPlace) {
-            // Kullanıcı bir yerin yakınında
-
+        if (bestPlace) {
+            // Kullanıcı bir yerin içinde
             if (activeMovement) {
-                if (activeMovement.placeId === nearbyPlace.id) {
-                    // Aynı yerde → güncelleme gerekmez
+                if (activeMovement.placeId === bestPlace.id) {
+                    // ZATEN BURADA: Hiçbir şey yapma (Duplicate engellendi)
                     return;
                 } else {
-                    // Farklı bir yere geçti → eskiyi kapat
-                    const durationMins = Math.round((now - activeMovement.arrivedAt) / 60000);
-                    await prisma.movementHistory.update({
-                        where: { id: activeMovement.id },
-                        data: { leftAt: now, durationMins }
-                    });
-
-                    // Exit notification
-                    notifyCircles(userId, '📍 Place Exited', `User has left ${activeMovement.placeName || 'a place'}`, 'EXITED', { placeId: activeMovement.placeId });
+                    // BAŞKA BİR YERE GEÇTİ: Eski yeri kapat, yeniyi aç
+                    await closeActiveMovement(userId, now, activeMovement);
+                    await createNewMovement(userId, bestPlace, address || bestPlace.address, now);
                 }
-
+            } else {
+                // YENİ GİRİŞ: Hiçbir yerde değildi, şimdi bir yere girdi
+                await createNewMovement(userId, bestPlace, address || bestPlace.address, now);
             }
-
-            // Bu yere daha önce gidilmiş mi kontrol et (bugün veya toplam)
-            const existingHistory = await prisma.movementHistory.findFirst({
-                where: {
-                    userId,
-                    placeId: nearbyPlace.id,
-                    leftAt: { not: null }
-                },
-                orderBy: { arrivedAt: 'desc' }
-            });
-
-            // Yeni varış kaydı oluştur
-            await prisma.movementHistory.create({
-                data: {
-                    userId,
-                    placeId: nearbyPlace.id,
-                    placeName: nearbyPlace.name,
-                    address: nearbyPlace.address || address,
-                    emoji: nearbyPlace.emoji || '📍',
-                    latitude: nearbyPlace.latitude,
-                    longitude: nearbyPlace.longitude,
-                    arrivedAt: now,
-                    visitCount: existingHistory ? existingHistory.visitCount + 1 : 1
-                }
-            });
-
-            // Entry notification
-            notifyCircles(userId, '📍 Place Entered', `User has entered ${nearbyPlace.name || 'a place'}`, 'ENTERED', { placeId: nearbyPlace.id });
-
-
-            // LocationSnapshot'ı yakın yerle güncelle
-            await prisma.locationSnapshot.updateMany({
-                where: {
-                    userId,
-                    placeId: null,
-                    createdAt: { gte: new Date(now.getTime() - 5000) } // son 5 sn
-                },
-                data: {
-                    placeId: nearbyPlace.id,
-                    placeName: nearbyPlace.name
-                }
-            });
-
         } else {
-            // Kullanıcı herhangi bir yerin yakınında değil
+            // Kullanıcı hiçbir yerin (tam) içinde değil
             if (activeMovement) {
-                // Yeri terk etti → kaydı kapat
-                const durationMins = Math.round((now - activeMovement.arrivedAt) / 60000);
-                await prisma.movementHistory.update({
-                    where: { id: activeMovement.id },
-                    data: { leftAt: now, durationMins }
-                });
-
-                // Exit Notification
-                notifyCircles(userId, '📍 Place Exited', `User has left ${activeMovement.placeName || 'a place'}`, 'EXITED', { placeId: activeMovement.placeId });
+                // ÇIKTI MI? %20 toleransı kontrol et (Hysteresis)
+                const currentPlace = allPlaces.find(p => p.id === activeMovement.placeId);
+                if (currentPlace) {
+                    const dist = haversineDistance(latitude, longitude, currentPlace.latitude, currentPlace.longitude);
+                    if (dist > (currentPlace.radius * EXIT_THRESHOLD_MULTIPLIER)) {
+                        // Tolerans dışına çıktı, gerçekten ayrıldı
+                        await closeActiveMovement(userId, now, activeMovement);
+                    } else {
+                        // Tolerans içinde, hâlâ orada sayılır (Log duplicate etmiyoruz)
+                        return;
+                    }
+                } else {
+                    // Yer silinmiş veya pasif, kapat
+                    await closeActiveMovement(userId, now, activeMovement);
+                }
             }
         }
     } catch (error) {
         console.error('[MovementTracker] Error:', error.message);
-        // Algoritma hatası ana akışı bloke etmez
     }
+}
+
+async function closeActiveMovement(userId, now, activeMovement = null) {
+    if (!activeMovement) {
+        activeMovement = await prisma.movementHistory.findFirst({
+            where: { userId, leftAt: null }
+        });
+    }
+    if (!activeMovement) return;
+
+    const durationMins = Math.round((now - new Date(activeMovement.arrivedAt)) / 60000);
+
+    await prisma.movementHistory.update({
+        where: { id: activeMovement.id },
+        data: { leftAt: now, durationMins }
+    });
+
+    console.log(`[MovementTracker] EXITED: ${activeMovement.placeName} (User: ${userId})`);
+    notifyCircles(userId, '📍 Place Exited', `User has left ${activeMovement.placeName}`, 'EXITED', { placeId: activeMovement.placeId });
+}
+
+async function createNewMovement(userId, place, address, now) {
+    // Aynı yeri bugün ziyaret edip etmediğini kontrol et (visitCount için)
+    const lastHistory = await prisma.movementHistory.findFirst({
+        where: { userId, placeId: place.id },
+        orderBy: { arrivedAt: 'desc' }
+    });
+
+    await prisma.movementHistory.create({
+        data: {
+            userId,
+            placeId: place.id,
+            placeName: place.name,
+            address: address || place.address || '',
+            emoji: place.emoji || '📍',
+            latitude: place.latitude,
+            longitude: place.longitude,
+            arrivedAt: now,
+            visitCount: lastHistory ? lastHistory.visitCount + 1 : 1
+        }
+    });
+
+    console.log(`[MovementTracker] ENTERED: ${place.name} (User: ${userId})`);
+    notifyCircles(userId, '📍 Place Entered', `User has entered ${place.name}`, 'ENTERED', { placeId: place.id });
 }
 
 /**
