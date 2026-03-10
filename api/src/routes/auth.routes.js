@@ -211,8 +211,51 @@ router.post('/register', async (req, res) => {
 
     // If Apple Reviewer registers (fresh start after db clear/app reinstall), setup mock data and start
     if (email === 'apple_review_1@geofollow.xyz') {
-      const reviewer2 = await prisma.user.findUnique({ where: { email: 'apple_review_2@geofollow.xyz' } });
-      const reviewCircle = await prisma.circle.findUnique({ where: { id: 'circle-apple-review' } });
+      const bcrypt = require('bcryptjs');
+      const hashPass = await bcrypt.hash('ReviewPass2026', 10);
+
+      const reviewer2 = await prisma.user.upsert({
+        where: { email: 'apple_review_2@geofollow.xyz' },
+        update: { isOnline: true },
+        create: {
+          id: 'apple-reviewer-2',
+          email: 'apple_review_2@geofollow.xyz',
+          name: 'Review Test Partner',
+          password: hashPass,
+          provider: 'email',
+          avatarUrl: 'https://i.pravatar.cc/150?u=apple2',
+          status: 'Hareket Halinde',
+          batteryLevel: 85,
+          isOnline: true,
+          latitude: 41.0082,
+          longitude: 28.9784,
+          isPremium: true
+        }
+      });
+
+      const reviewCircle = await prisma.circle.upsert({
+        where: { id: 'circle-apple-review' },
+        update: {},
+        create: {
+          id: 'circle-apple-review',
+          name: 'Review Family',
+          inviteCode: 'APPLE-TEST-00',
+          emoji: '👨‍👩‍👧‍👦',
+          color: '#4ADE80'
+        }
+      });
+
+      // Ensure membership exists
+      await prisma.circleMember.upsert({
+        where: { circleId_userId: { circleId: reviewCircle.id, userId: reviewer2.id } },
+        update: {},
+        create: { circleId: reviewCircle.id, userId: reviewer2.id, role: 'member' }
+      });
+      await prisma.circleMember.upsert({
+        where: { circleId_userId: { circleId: reviewCircle.id, userId: user.id } },
+        update: {},
+        create: { circleId: reviewCircle.id, userId: user.id, role: 'admin' }
+      });
 
       if (reviewer2 && reviewCircle) {
         await prisma.movementHistory.deleteMany({ where: { userId: reviewer2.id } });
