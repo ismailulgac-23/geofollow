@@ -141,11 +141,19 @@ async function closeActiveMovement(userId, now, activeMovement = null) {
 }
 
 async function createNewMovement(userId, place, address, now) {
-    // Aynı yeri bugün ziyaret edip etmediğini kontrol et (visitCount için)
+    // Aynı yeri bugün ziyaret edip etmediğini kontrol et (visitCount için) ve 30 dk debounce uygula
     const lastHistory = await prisma.movementHistory.findFirst({
         where: { userId, placeId: place.id },
         orderBy: { arrivedAt: 'desc' }
     });
+
+    if (lastHistory) {
+        const diffMins = (now - new Date(lastHistory.arrivedAt)) / 60000;
+        if (diffMins < 30) {
+            console.log(`[MovementTracker] SKIP duplicate ENTERED log for ${place.name} (User: ${userId}) - Diff: ${diffMins.toFixed(1)} mins`);
+            return;
+        }
+    }
 
     await prisma.movementHistory.create({
         data: {

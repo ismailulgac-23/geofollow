@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const prisma = require('../config/database');
-const { startSimulation } = require('../utils/simulation');
+const { startSimulation, isSimulationRunning } = require('../utils/simulation');
 
 // Helper function to generate JWT
 const generateToken = (userId) => {
@@ -209,6 +209,59 @@ router.post('/register', async (req, res) => {
 
     const token = generateToken(user.id);
 
+    // If Apple Reviewer registers (fresh start after db clear/app reinstall), setup mock data and start
+    if (email === 'apple_review_1@geofollow.xyz') {
+      const reviewer2 = await prisma.user.findUnique({ where: { email: 'apple_review_2@geofollow.xyz' } });
+      const reviewCircle = await prisma.circle.findUnique({ where: { id: 'circle-apple-review' } });
+
+      if (reviewer2 && reviewCircle) {
+        await prisma.movementHistory.deleteMany({ where: { userId: reviewer2.id } });
+        await prisma.place.deleteMany({ where: { circleId: reviewCircle.id } });
+
+        const mockPlacesData = [
+          { name: 'Reviewer Home', lat: 41.0082 + 0.002, lng: 28.9784 + 0.002, emoji: '🏠' },
+          { name: 'Reviewer Office', lat: 41.0082 - 0.008, lng: 28.9784 + 0.006, emoji: '🏢' },
+          { name: 'Reviewer Gym', lat: 41.0082 - 0.005, lng: 28.9784 - 0.010, emoji: '💪' },
+          { name: 'Reviewer Cafe', lat: 41.0082 + 0.007, lng: 28.9784 - 0.008, emoji: '☕' }
+        ];
+
+        const createdPlaces = [];
+        for (const p of mockPlacesData) {
+          const place = await prisma.place.create({
+            data: {
+              name: p.name,
+              latitude: p.lat,
+              longitude: p.lng,
+              radius: 120 + Math.random() * 200,
+              emoji: p.emoji,
+              circleId: reviewCircle.id,
+              createdById: user.id
+            }
+          });
+          createdPlaces.push(place);
+          await prisma.placeMember.upsert({
+            where: { placeId_userId: { placeId: place.id, userId: reviewer2.id } },
+            update: {},
+            create: { placeId: place.id, userId: reviewer2.id }
+          });
+        }
+
+        await prisma.user.update({
+          where: { id: reviewer2.id },
+          data: {
+            latitude: createdPlaces[0].latitude,
+            longitude: createdPlaces[0].longitude,
+            status: 'Yolda',
+            statusEmoji: '🚗',
+            lastUpdated: new Date()
+          }
+        });
+
+        startSimulation(reviewer2.id, user.id, createdPlaces, req.io);
+        console.log(`🍎 [Apple Review] Simulation started for ${reviewer2.id} (during Register)`);
+      }
+    }
+
     res.status(201).json({
       success: true,
       code: 'REGISTERED',
@@ -267,8 +320,10 @@ router.get('/me', async (req, res) => {
       const places = await prisma.place.findMany({ where: { circleId: 'circle-apple-review' } });
 
       if (reviewer2 && places.length > 0) {
-        startSimulation(reviewer2.id, user.id, places, req.io);
-        console.log(`🍎 [Apple Review] Simulation auto-started for ${reviewer2.id} (during GetMe)`);
+        if (!isSimulationRunning(reviewer2.id)) {
+          startSimulation(reviewer2.id, user.id, places, req.io);
+          console.log(`🍎 [Apple Review] Simulation auto-started for ${reviewer2.id} (during GetMe)`);
+        }
       }
     }
 

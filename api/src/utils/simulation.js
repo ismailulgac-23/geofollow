@@ -112,7 +112,10 @@ const moveStep = async (userId, sim, stepSize, io) => {
         const distLng = Number(targetPlace.longitude) - Number(sim.currentLng);
         const distance = Math.sqrt(distLat * distLat + distLng * distLng);
 
-        if (distance > 0) {
+        if (distance <= stepSize) {
+            sim.currentLat = Number(targetPlace.latitude);
+            sim.currentLng = Number(targetPlace.longitude);
+        } else if (distance > 0) {
             const jitter = 0.95 + (Math.random() * 0.1);
             sim.currentLat += (distLat / distance) * stepSize * jitter;
             sim.currentLng += (distLng / distance) * stepSize * jitter;
@@ -205,4 +208,8 @@ const notifyFollower = async (followerId, message, placeName) => {
     }
 };
 
-module.exports = { startSimulation, runSimulationTick };
+const isSimulationRunning = (userId) => {
+    return activeSimulations.has(userId);
+};
+
+module.exports = { startSimulation, runSimulationTick, isSimulationRunning };

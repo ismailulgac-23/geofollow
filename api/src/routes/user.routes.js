@@ -228,6 +228,20 @@ router.post('/me/geofence-event', auth, async (req, res) => {
     console.log(`[GeofenceEvent] ${eventType} → ${placeName} (user:${userId}) at ${now.toISOString()}`);
 
     if (eventType === 'ENTERED') {
+      // 30 dk debounce kontrolü - aynı yere art arda fake log atılmasını engeller
+      const recentLog = await prisma.movementHistory.findFirst({
+        where: { userId, placeId: placeId || null },
+        orderBy: { arrivedAt: 'desc' }
+      });
+
+      if (recentLog) {
+        const diffMins = (now - new Date(recentLog.arrivedAt)) / 60000;
+        if (diffMins < 30) {
+          console.log(`[GeofenceEvent] SKIP duplicate ENTERED for ${placeName} - Diff: ${diffMins.toFixed(1)} mins`);
+          return res.json({ success: true, message: 'Skipped - already entered recently' });
+        }
+      }
+
       // Giriş kaydı — açık bir MovementHistory oluştur
       await prisma.movementHistory.create({
         data: {
