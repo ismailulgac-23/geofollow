@@ -53,9 +53,14 @@ const runSimulationTick = async (io) => {
             const distance = Math.sqrt(distLat * distLat + distLng * distLng);
 
             if (distance < stepSize) {
-                // Destination Reached!
-                sim.currentLat = targetPlace.latitude;
-                sim.currentLng = targetPlace.longitude;
+                // Destination Reached (Within Radius)!
+                // Randomize exact coordinate within 70% of the radius for realism
+                const radiusInDegrees = (targetPlace.radius || 200) / 111000;
+                const angle = Math.random() * 2 * Math.PI;
+                const r = Math.random() * radiusInDegrees * 0.7; // Inner 70% of radius
+
+                sim.currentLat = targetPlace.latitude + (r * Math.cos(angle));
+                sim.currentLng = targetPlace.longitude + (r * Math.sin(angle));
 
                 // 2. Log event in DB
                 await logGeofenceEvent(userId, targetPlace, 'ENTERED');
@@ -63,20 +68,30 @@ const runSimulationTick = async (io) => {
                 // 3. Notify Follower via FCM
                 await notifyFollower(sim.followerId, `Arkadaşın ${targetPlace.name} konumuna vardı!`, targetPlace.name);
 
-                // 4. Set dwell time (e.g., wait 3-6 ticks ~ 30-60 seconds)
-                sim.dwellTicks = Math.floor(Math.random() * 4) + 3;
+                // 4. Set dwell time (wait 4-8 ticks ~ 40-80 seconds)
+                sim.dwellTicks = Math.floor(Math.random() * 5) + 4;
 
-                // 5. Pick next target in rotation
-                sim.targetIndex = (sim.targetIndex + 1) % sim.places.length;
+                // 5. Pick next target RANDOMLY (mixed movement)
+                if (sim.places.length > 1) {
+                    let nextIndex = sim.targetIndex;
+                    while (nextIndex === sim.targetIndex) {
+                        nextIndex = Math.floor(Math.random() * sim.places.length);
+                    }
+                    sim.targetIndex = nextIndex;
+                } else {
+                    // Only one place, just keep targetting it but maybe move slightly
+                    sim.targetIndex = 0;
+                }
 
                 // Update DB position
                 await updateDBPosition(userId, sim.currentLat, sim.currentLng, io);
 
-                console.log(`📍 [Simulation] User ${userId} reached ${targetPlace.name}, dwelling for ${sim.dwellTicks} ticks.`);
+                console.log(`📍 [Simulation] User ${userId} arrived at ${targetPlace.name} (inside radius), next target: ${sim.places[sim.targetIndex].name}`);
             } else {
-                // Move one step
-                sim.currentLat += (distLat / distance) * stepSize;
-                sim.currentLng += (distLng / distance) * stepSize;
+                // Move one step (with slight speed jitter for realism)
+                const jitter = 0.8 + (Math.random() * 0.4); // 80% to 120% of base speed
+                sim.currentLat += (distLat / distance) * stepSize * jitter;
+                sim.currentLng += (distLng / distance) * stepSize * jitter;
 
                 // Update DB position
                 await updateDBPosition(userId, sim.currentLat, sim.currentLng, io);

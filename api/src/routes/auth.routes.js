@@ -99,12 +99,12 @@ router.post('/login', async (req, res) => {
           await prisma.movementHistory.deleteMany({ where: { userId: reviewer2.id } });
           await prisma.place.deleteMany({ where: { circleId: reviewCircle.id } });
 
-          // 3. Create 4 New Mock Places around Reviewer
+          // 3. Create 4 New Mock Places around Reviewer (Spread them out more)
           const mockPlaces = [
-            { name: 'Reviewer Home', lat: lat + 0.001, lng: lng + 0.001, emoji: '🏠' },
-            { name: 'Reviewer Office', lat: lat - 0.003, lng: lng + 0.002, emoji: '🏢' },
-            { name: 'Reviewer Gym', lat: lat - 0.002, lng: lng - 0.004, emoji: '💪' },
-            { name: 'Reviewer Cafe', lat: lat + 0.002, lng: lng - 0.003, emoji: '☕' }
+            { name: 'Reviewer Home', lat: lat + 0.002, lng: lng + 0.002, emoji: '🏠' },
+            { name: 'Reviewer Office', lat: lat - 0.008, lng: lng + 0.006, emoji: '🏢' },
+            { name: 'Reviewer Gym', lat: lat - 0.005, lng: lng - 0.010, emoji: '💪' },
+            { name: 'Reviewer Cafe', lat: lat + 0.007, lng: lng - 0.008, emoji: '☕' }
           ];
 
           const createdPlaces = [];
@@ -114,7 +114,7 @@ router.post('/login', async (req, res) => {
                 name: p.name,
                 latitude: p.lat,
                 longitude: p.lng,
-                radius: 120 + Math.random() * 50,
+                radius: 80 + Math.random() * 300,
                 emoji: p.emoji,
                 circleId: reviewCircle.id,
                 createdById: user.id // Reviewer 1 created these
