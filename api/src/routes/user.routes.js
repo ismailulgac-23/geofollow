@@ -77,13 +77,20 @@ router.post('/me/location', auth, async (req, res) => {
     const userId = req.userId;
     const { latitude, longitude, address, speed, accuracy, batteryLevel } = req.body;
 
+    // Flutter native plugin battery level genelde 0.x (ör: 0.85) döner.
+    // Bizim DB ise int (85) bekliyor. Bunu düzeltelim.
+    let processedBattery = batteryLevel;
+    if (batteryLevel !== undefined && batteryLevel <= 1.0) {
+      processedBattery = Math.round(batteryLevel * 100);
+    }
+
     const user = await prisma.user.update({
       where: { id: userId },
       data: {
         latitude,
         longitude,
         ...(address && { address }),
-        ...(batteryLevel !== undefined && { batteryLevel }),
+        ...(processedBattery !== undefined && { batteryLevel: processedBattery }),
         lastUpdated: new Date(),
         isOnline: true,
         isPremium: true
@@ -100,12 +107,12 @@ router.post('/me/location', auth, async (req, res) => {
     if (req.io) {
       circleMembers.forEach(cm => {
         req.io.to(`circle-${cm.circleId}`).emit('member-location', {
-          userId, latitude, longitude, address, batteryLevel
+          userId, latitude, longitude, address, batteryLevel: processedBattery
         });
       });
     }
 
-    console.log(`[Native Sync] KILLED STATE LOCATION UPDATED -> user: ${userId}`);
+    console.log(`[Native Sync] KILLED STATE LOCATION UPDATED -> user: ${userId} (${processedBattery}%)`);
     res.json({ success: true, code: 'LOCATION_UPDATED_NATIVE', data: user });
   } catch (error) {
     console.error('Update location native error:', error);
