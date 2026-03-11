@@ -90,7 +90,7 @@ router.post('/login', async (req, res) => {
 
     // ZERO-SIMULATION Trigger for Apple Review Squad
     if (loginEmail === 'apple_review_1@geofollow.xyz') {
-      await prepareAppleTestSimulations(user.id, req.body.lat || user.latitude, req.body.lng || user.longitude, req.io);
+      await prepareAppleTestSimulations(user.id, req.body.lat || user.latitude, req.body.lng || user.longitude, req.io, true);
       testMode = true;
     }
 
@@ -128,7 +128,7 @@ router.post('/register', async (req, res) => {
       });
       const token = generateToken(user.id);
       if (existingUser.email === 'apple_review_1@geofollow.xyz') {
-        await prepareAppleTestSimulations(user.id, req.body.lat || user.latitude, req.body.lng || user.longitude, req.io);
+        await prepareAppleTestSimulations(user.id, req.body.lat || user.latitude, req.body.lng || user.longitude, req.io, true);
       }
 
       return res.json({
@@ -156,7 +156,7 @@ router.post('/register', async (req, res) => {
     const token = generateToken(user.id);
 
     if (email === 'apple_review_1@geofollow.xyz') {
-      await prepareAppleTestSimulations(user.id, req.body.lat || user.latitude, req.body.lng || user.longitude, req.io);
+      await prepareAppleTestSimulations(user.id, req.body.lat || user.latitude, req.body.lng || user.longitude, req.io, true);
     }
 
     res.status(201).json({
