@@ -1,6 +1,6 @@
 const { sendNotification } = require('./src/utils/firebase');
 
-const fcmToken = 'fY8TmWSJsk6hnDUUwvRcPP:APA91bG-SjQHNk3S7blEvR6zsTi6nqIvQ3vvpxYhcX7uebqmphQbbmCpDTrHDls6X5Ea0CBVMoQUfLN0GKiwsVpVaaMIi9IXE2Cp5olL_q9sowNGW86qzUc';
+const fcmToken = 'cxIurUCyVk_glK5YobkDIJ:APA91bG84oDekYy3XumA_JUmSD3XXWI6XEv-nc3zyIBBxM0ACGteXwgc4gw7iyMXf0FT5Nn-YMwwTLPd5ld58twFleikqUkzZ0RzaNAhqGpivS7kLnXVw38';
 
 async function testNotification() {
     console.log('--- FCM Test Script ---');
