@@ -62,9 +62,10 @@ router.post('/login', async (req, res) => {
     ]);
 
     if (!user) {
-      return res.status(404).json({
+      return res.status(200).json({
         success: false,
-        code: 'USER_NOT_FOUND'
+        code: 'USER_NOT_FOUND',
+        message: 'User not found. Redirecting to registration.'
       });
     }
 
