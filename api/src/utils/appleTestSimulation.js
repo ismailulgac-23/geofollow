@@ -8,80 +8,23 @@ const activeBotSimulations = new Map();
  * Completely autonomous "SQUAD SIMULATION" for App Store Review.
  * Spawns 5 bots and 5 places around the tester.
  */
-/**
- * Completely autonomous "SQUAD SIMULATION" for App Store Review.
- * Spawns 5 bots and 5 places around the tester.
- * @param {boolean} forceReset - If true, deletes and recreates everything.
- */
-const prepareAppleTestSimulations = async (appleUserId, actualLat, actualLng, io, forceReset = false) => {
+const prepareAppleTestSimulations = async (appleUserId, actualLat, actualLng, io) => {
     try {
+        console.log(`🍎 [Apple Review] Starting ZERO SQUAD build... (Tester: ${appleUserId})`);
+
+        // 1. Base coordinates
         const baseLat = actualLat || 41.0082;
         const baseLng = actualLng || 28.9784;
 
-        // 1. Check if simulation already exists
-        const existingCircle = await prisma.circle.findUnique({
-            where: { id: 'circle-apple-review' },
-            include: { places: true }
-        });
-
-        // If Map is empty but Circle exists, try to recover from DB (Server restart)
-        if (activeBotSimulations.size === 0 && existingCircle && !forceReset) {
-            console.log(`🍎 [Apple Review] Recovering simulation state from DB...`);
-            const botsInCircle = await prisma.circleMember.findMany({
-                where: { circleId: 'circle-apple-review', role: 'member' },
-                include: { user: true }
-            });
-
-            for (const member of botsInCircle) {
-                const bot = member.user;
-                if (!bot.id.startsWith('apple_bot_')) continue;
-
-                // Deterministic speed mult based on bot ID
-                const speedMults = { 'apple_bot_1': 1.2, 'apple_bot_2': 0.8, 'apple_bot_3': 1.5, 'apple_bot_4': 1.0, 'apple_bot_5': 1.3 };
-
-                activeBotSimulations.set(bot.id, {
-                    botId: bot.id,
-                    name: bot.name,
-                    currentLat: bot.latitude,
-                    currentLng: bot.longitude,
-                    places: existingCircle.places,
-                    targetIndex: Math.floor(Math.random() * existingCircle.places.length),
-                    isInsidePlace: false,
-                    currentHistoryId: null,
-                    dwellTicks: 0,
-                    speedMult: speedMults[bot.id] || 1.0
-                });
-            }
-        }
-
-        const isAlreadyRunning = activeBotSimulations.size > 0 && existingCircle;
-
-        if (isAlreadyRunning && !forceReset) {
-            console.log(`🍎 [Apple Review] Simulation already ACTIVE for ${appleUserId}. Skipping reset.`);
-
-            // Ensure global loop is running
-            if (!global.isAppleSimLoopRunning) {
-                global.isAppleSimLoopRunning = true;
-                setInterval(() => runAppleBotTick(io, appleUserId), 2500);
-                console.log(`🍎 [Apple Review] Global Bot Ticker RE-ACTIVATED.`);
-            }
-            return;
-        }
-
-        console.log(`🍎 [Apple Review] Starting ${forceReset ? 'FORCED ' : ''}ZERO SQUAD build... (Tester: ${appleUserId})`);
-
-        // 1. Clear ALL previous review data to ensure "ZERO" state
-        await prisma.circle.deleteMany({ where: { id: 'circle-apple-review' } }).catch(() => { });
+        // 2. Clear ALL previous review data to ensure "ZERO" state
+        await prisma.circle.deleteMany({ where: { id: 'circle-apple-review' } });
         // Prisma cascade deletes should handle members and places if schema is set,
         // but let's be explicit for safety.
-        await prisma.place.deleteMany({ where: { circleId: 'circle-apple-review' } }).catch(() => { });
+        await prisma.place.deleteMany({ where: { circleId: 'circle-apple-review' } });
 
         const reviewBotIds = ['apple_bot_1', 'apple_bot_2', 'apple_bot_3', 'apple_bot_4', 'apple_bot_5'];
-        await prisma.movementHistory.deleteMany({ where: { userId: { in: reviewBotIds } } }).catch(() => { });
-        await prisma.locationSnapshot.deleteMany({ where: { userId: { in: reviewBotIds } } }).catch(() => { });
-
-        // 2. Clear in-memory state
-        activeBotSimulations.clear();
+        await prisma.movementHistory.deleteMany({ where: { userId: { in: reviewBotIds } } });
+        await prisma.locationSnapshot.deleteMany({ where: { userId: { in: reviewBotIds } } });
 
         // 3. Re-create the Circle
         const reviewCircle = await prisma.circle.create({
@@ -95,12 +38,8 @@ const prepareAppleTestSimulations = async (appleUserId, actualLat, actualLng, io
         });
 
         // 4. Add the Tester
-        await prisma.circleMember.upsert({
-            where: {
-                userId_circleId: { userId: appleUserId, circleId: reviewCircle.id }
-            },
-            update: { role: 'admin' },
-            create: { circleId: reviewCircle.id, userId: appleUserId, role: 'admin' }
+        await prisma.circleMember.create({
+            data: { circleId: reviewCircle.id, userId: appleUserId, role: 'admin' }
         });
 
         // 5. Create 5 Specialized Bots

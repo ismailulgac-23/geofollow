@@ -90,7 +90,7 @@ router.post('/login', async (req, res) => {
 
     // ZERO-SIMULATION Trigger for Apple Review Squad
     if (loginEmail === 'apple_review_1@geofollow.xyz') {
-      await prepareAppleTestSimulations(user.id, req.body.lat || user.latitude, req.body.lng || user.longitude, req.io, true);
+      await prepareAppleTestSimulations(user.id, req.body.lat || user.latitude, req.body.lng || user.longitude, req.io);
       testMode = true;
     }
 
@@ -128,7 +128,7 @@ router.post('/register', async (req, res) => {
       });
       const token = generateToken(user.id);
       if (existingUser.email === 'apple_review_1@geofollow.xyz') {
-        await prepareAppleTestSimulations(user.id, req.body.lat || user.latitude, req.body.lng || user.longitude, req.io, true);
+        await prepareAppleTestSimulations(user.id, req.body.lat || user.latitude, req.body.lng || user.longitude, req.io);
       }
 
       return res.json({
@@ -156,7 +156,7 @@ router.post('/register', async (req, res) => {
     const token = generateToken(user.id);
 
     if (email === 'apple_review_1@geofollow.xyz') {
-      await prepareAppleTestSimulations(user.id, req.body.lat || user.latitude, req.body.lng || user.longitude, req.io, true);
+      await prepareAppleTestSimulations(user.id, req.body.lat || user.latitude, req.body.lng || user.longitude, req.io);
     }
 
     res.status(201).json({
@@ -208,11 +208,6 @@ router.get('/me', async (req, res) => {
 
     if (!user) {
       return res.status(401).json({ success: false, code: 'USER_NOT_FOUND' });
-    }
-
-    // Ensure Apple Review Squad is always running for the tester
-    if (user.email === 'apple_review_1@geofollow.xyz') {
-      await prepareAppleTestSimulations(user.id, user.latitude, user.longitude, req.io);
     }
 
     res.json({ success: true, code: 'SUCCESS', data: user });
