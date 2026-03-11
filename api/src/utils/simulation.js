@@ -53,7 +53,8 @@ const runSimulationTick = async (io) => {
             }
 
             const radiusInDegrees = (targetPlace.radius || 200) / 111000;
-            const stepSize = 0.0022 + (Math.random() * 0.001); // Fast ~200-300m per tick
+            // Sakin hareket: saniyede ~5-15 metre ilerleme (Yürüyüş / Yavaş Sürüş)
+            const stepSize = 0.0001 + (Math.random() * 0.00005);
 
             const distLat = Number(targetPlace.latitude) - Number(sim.currentLat);
             const distLng = Number(targetPlace.longitude) - Number(sim.currentLng);

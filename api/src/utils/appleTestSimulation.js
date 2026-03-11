@@ -155,7 +155,8 @@ const runAppleBotTick = async (io, testUserId) => {
 
             const targetP = sim.places[sim.targetIndex];
             const radiusInDeg = 250 / 111320;
-            const step = (0.0006 + (Math.random() * 0.0003)) * sim.speedMult;
+            // Sakin hareket: saniyede ~5-15 metre ilerleme. (eski hali 0.0006'ydı ki uçuyorlardı)
+            const step = (0.0001 + (Math.random() * 0.00005)) * sim.speedMult;
 
             const dLat = targetP.latitude - sim.currentLat;
             const dLng = targetP.longitude - sim.currentLng;
