@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>GeoFollow: Konum Takip</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>tracker_app</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(FLUTTER_BUILD_NAME)</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.489955924483-7vc4pp7q31k01hukfknn350fevp9npn0</string>
+			</array>
+		</dict>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>GOOGLE_MAPS_KEY</key>
+	<string>AIzaSyAgoiucP1vJNL9DJmCdZ6JI97-i8QcWmqo</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Uygulama kapalıyken bile aile üyelerinizin veya grup arkadaşlarınızın güvenliğiniz için anlık konumunuzu görebilmesi amacıyla arka plan konum erişimine ihtiyaç duyuyoruz. Not: Arka planda çalışan GPS kullanımı pil ömrünü önemli ölçüde azaltabilir.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Uygulama kapalıyken bile aile üyelerinizin veya grup arkadaşlarınızın güvenliğiniz için anlık konumunuzu görebilmesi amacıyla arka plan konum erişimine ihtiyaç duyuyoruz. Not: Arka planda çalışan GPS kullanımı pil ömrünü önemli ölçüde azaltabilir.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Harita üzerinde nerede olduğunuzu görmek ve grup üyelerinizle gerçek zamanlı konum paylaşabilmek için konum erişimine ihtiyaç duyuyoruz.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Profil fotoğrafınızı çekmek ve paylaşmak için kameranıza erişim gerekir.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Galerinizdeki fotoğrafları profil resmi olarak seçebilmeniz için fotoğraf kitaplığınıza erişim izni verilmelidir.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Cihaz hareketlerini takip ederek, konum güncellemelerini pil tasarrufu sağlayacak şekilde optimize ediyoruz.</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>Sizin için daha kişiselleştirilmiş bir güvenlik deneyimi sunmak ve uygulama performansını optimize etmek amacıyla cihaz tanımlayıcılarınız kullanılır.</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+		<string>remote-notification</string>
+		<string>fetch</string>
+		<string>processing</string>
+	</array>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.transistorsoft.fetch</string>
+		<string>com.transistorsoft.customtask</string>
+	</array>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIMainStoryboardFile</key>
+	<string>Main</string>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+</dict>
+</plist>

@@ -1,0 +1,83 @@
+name: tracker_app
+description: "A next-generation Family & Partner Location Tracking application."
+publish_to: 'none'
+
+version: 1.0.0+12
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  
+  # State Management
+  flutter_riverpod: ^2.5.1
+  
+  # Routing
+  go_router: ^14.1.4
+  
+  # Maps
+  google_maps_flutter: ^2.6.1
+  
+  # Animations
+  flutter_animate: ^4.5.0
+
+  firebase_messaging: ^16.1.2
+  firebase_core: ^4.5.0
+  
+  # Icons
+  flutter_svg: ^2.0.10+1
+  font_awesome_flutter: ^10.7.0
+  
+  # Utils
+  intl: ^0.20.2
+  cached_network_image: ^3.3.1
+  shimmer: ^3.0.0
+  geolocator: ^11.0.0
+  permission_handler: ^11.3.1
+  firebase_auth: ^6.2.0
+  
+  # HTTP & Storage
+  dio: ^5.4.0
+  shared_preferences: ^2.2.2
+  http: ^1.2.0
+  google_sign_in: ^6.2.2
+  sign_in_with_apple: ^7.0.1
+  geocoding: ^4.0.0
+  share_plus: ^12.0.1
+  icons_launcher: ^3.0.3
+  battery_plus: ^7.0.0
+  url_launcher: ^6.3.2
+  flutter_background_service: ^5.0.0
+  purchases_flutter: ^8.8.0
+  flutter_local_notifications: ^18.0.1
+  
+  # Localization
+  flutter_localizations:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+icons_launcher:
+  image_path: "assets/images/icon.png"
+  platforms:
+    android:
+      enable: true
+    ios:
+      enable: true
+
+flutter:
+  generate: true
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/images/
+    - assets/icons/
+    - assets/map_styles/

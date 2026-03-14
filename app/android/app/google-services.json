@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "489955924483",
+    "project_id": "geofollow-bffa2",
+    "storage_bucket": "geofollow-bffa2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:489955924483:android:bcf7ebe7b9637ea3b40c36",
+        "android_client_info": {
+          "package_name": "com.example.tracker_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4ha_oDyy8ryMTNYapaZCCGzeQzGobrM0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

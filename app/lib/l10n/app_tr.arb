@@ -1,0 +1,359 @@
+{
+  "@@locale": "tr",
+  "appName": "GeoFollow",
+  "stayConnected": "Bağlantıda Kalın",
+  "withLovedOnes": "Sevdiklerinizle",
+  "trackDescription": "Ailenizi ve arkadaşlarınızı gerçek zamanlı takip edin. Nerede olurlarsa olsunlar güvende olduklarını bilin.",
+  "setSafeZones": "Güvenli Bölgeler Belirleyin",
+  "getInstantAlerts": "Anlık Bildirimler Alın",
+  "safeZonesDescription": "Ev, okul veya iş için coğrafi sınırlar oluşturun. Aileniz geldiğinde veya ayrıldığında bildirim alın.",
+  "premiumFeatures": "Premium Özellikler",
+  "ultimatePeace": "Tam Huzur",
+  "premiumDescription": "Premium ile sınırsız yer, konum geçmişi ve öncelikli destek kilidini açın.",
+  "continueBtn": "Devam Et",
+  "getStarted": "Başla",
+  "skip": "Geç",
+  "home": "Ana Sayfa",
+  "profile": "Profil",
+  "settings": "Ayarlar",
+  "logout": "Çıkış Yap",
+  "deleteAccount": "Hesabı Sil",
+  "deleteAccountConfirm": "Hesabınızı kalıcı olarak silmek istediğinizden emin misiniz? Tüm verileriniz, gruplarınız ve yerleriniz kaybolacak. Bu işlem geri alınamaz.",
+  "cancel": "İptal",
+  "delete": "Sil",
+  "inviteMembers": "Üye Davet Et",
+  "inviteDescription": "Grup davet kodunuzu paylaşın",
+  "premiumTitle": "Premium",
+  "premiumSubtitle": "Aboneliğinizi yönetin",
+  "privacyPolicy": "Gizlilik Politikası",
+  "termsOfService": "Kullanım Şartları",
+  "version": "Sürüm",
+  "language": "Dil",
+  "turkish": "Türkçe",
+  "english": "İngilizce",
+  "preciseTracking": "Hassas Takip",
+  "allowBackground": "Uygulama kapalıyken de takibe izin ver",
+  "locationSettings": "Konum Ayarları",
+  "account": "Hesap",
+  "addressUnknown": "Konum Bilinmiyor",
+  "noInviteCode": "Davet kodu bulunamadı",
+  "sosDialogTitle": "SOS Uyarısı",
+  "sosDialogContent": "Bu işlem mevcut gruptaki tüm üyelere acil durum uyarısı gönderecektir. Devam edilsin mi?",
+  "sendSOS": "SOS Gönder",
+  "sosSent": "SOS Uyarısı Gönderildi",
+  "yourCircle": "Grubun",
+  "members": "Üyeler",
+  "circleCode": "Grup Kodu",
+  "joinCircle": "Gruba Katıl",
+  "createCircle": "Grup Oluştur",
+  "enterCode": "Davet Kodu Gir",
+  "circleName": "Grup Adı",
+  "editPlace": "Yeri Düzenle",
+  "addPlace": "Yer Ekle",
+  "placeName": "Yer Adı",
+  "radius": "Yarıçap",
+  "locationAlwaysRequired": "Her Zaman Konum İzni Gerekli",
+  "locationAlwaysDescription": "Konumunuzu arka planda takip edebilmek için cihaz ayarlarından konum iznini \"Her Zaman\" olarak ayarlamalısınız.",
+  "openSettings": "Ayarları Aç",
+  "familyTracker": "Aile Takipçisi",
+  "feelCloseToFamily": "Ailenizi her zaman yakın hissedin",
+  "welcome": "Hoş Geldiniz",
+  "loginToContinue": "Devam etmek için giriş yapın",
+  "continueWithGoogle": "Google ile devam et",
+  "continueWithApple": "Apple ile devam et",
+  "byContinuing": "Devam ederek ",
+  "and": " ve ",
+  "agreementSuffix": "'nı kabul etmiş olursunuz.",
+  "online": "aktif",
+  "leaveCircle": "Gruptan Ayrıl",
+  "leaveCircleConfirm": "Bu gruptan ayrılmak istediğinizden emin misiniz? Paylaşılan tüm konumlara ve yerlere erişiminizi kaybedeceksiniz.",
+  "leave": "Ayrıl",
+  "sosAlertSentToAll": "SOS uyarısı tüm grup üyelerine gönderildi!",
+  "successfullyLeftCircle": "Gruptan başarıyla ayrıldınız.",
+  "search": "Ara",
+  "searchHint": "Kişi veya yer ara...",
+  "searchPlaceholder": "Aile üyelerini veya yerleri ara...",
+  "searchNoResults": "Sonuç bulunamadı.",
+  "welcomeToGeoFollow": "GeoFollow'a Hoş Geldiniz",
+  "noCircleDescription": "Takip etmeye başlamak için bir grup oluşturun veya bir davet koduyla katılın.",
+  "or": "VEYA",
+  "circleNameExample": "Grup Adı (örn. Aile)",
+  "success": "Başarılı!",
+  "premiumUpgradeMessage": "Artık Premium üyesisiniz. Tüm özelliklerin kilidi açıldı!",
+  "awesome": "Harika!",
+  "goPremium": "Premium'a Geç",
+  "unlockAllFeatures": "Ailenizin güvenliği için tüm özelliklerin kilidini açın",
+  "youArePremiumMember": "Premium Üyesisiniz",
+  "allProFeaturesActive": "Tüm PRO özellikleri şu anda aktif.",
+  "manageSubscription": "Aboneliği Yönet",
+  "subscriptionManagementSoon": "Abonelik yönetimi yakında aktif olacak.",
+  "upgradeNow": "Şimdi Yükselt",
+  "cancelAnytime": "İstediğiniz zaman iptal edin. Taahhüt yok.",
+  "restorePurchases": "Satın Almaları Geri Yükle",
+  "purchaseRestored": "Satın almalar başarıyla geri yüklendi.",
+  "monthly": "Aylık",
+  "yearly": "Yıllık",
+  "save50": "%50 Tasarruf Et",
+  "realTimeLocation": "Gerçek Zamanlı Konum",
+  "locationHistory30Days": "30 Günlük Konum Geçmişi",
+  "unlimitedAlerts": "Sınırsız Uyarı",
+  "unlimitedPlaces": "Sınırsız Yer",
+  "sosEmergencyButton": "SOS Acil Durum Butonu",
+  "adFreeExperience": "Reklamsız Deneyim",
+  "processing": "İşleniyor...",
+  "places": "Yerler",
+  "safeZones": "Güvenli Bölgeler",
+  "safeZonesSubtitle": "Aile üyeleri bu yerlere geldiğinde veya ayrıldığında bildirim alın",
+  "noSafeZones": "Henüz Güvenli Bölge Yok",
+  "noSafeZonesDescription": "Ev, okul veya iş gibi önemli yerleri ekleyerek aile üyeleri geldiğinde veya ayrıldığında bildirim alın.",
+  "addFirstPlace": "İlk Yerinizi Ekleyin",
+  "deletePlace": "Yeri Sil?",
+  "deletePlaceConfirm": "{name} yerini silmek istediğinizden emin misiniz?",
+  "@deletePlaceConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "placeDeleted": "Yer silindi",
+  "failedToDeletePlace": "Yer silinemedi",
+  "editPlace": "Yeri Düzenle",
+  "addPlace": "Yer Ekle",
+  "fetchingAddress": "Adres alınıyor...",
+  "noAddressFound": "Bu konum için adres bulunamadı",
+  "searchForPlace": "Bir yer arayın...",
+  "selectedLocation": "Seçilen Konum",
+  "radius": "Yarıçap",
+  "placeDetails": "Yer Detayları",
+  "placeName": "Yer Adı",
+  "placeNameHint": "ör. Ev, İş, Okul",
+  "savePlaceBtn": "Yeri Kaydet",
+  "enterPlaceName": "Lütfen bir yer adı girin",
+  "noCircleFoundError": "Grup bulunamadı. Yer eklenemez.",
+  "placeUpdated": "\"{name}\" yeri güncellendi!",
+  "@placeUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "placeSaved": "\"{name}\" yeri kaydedildi!",
+  "@placeSaved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "failedToAddPlace": "Yer eklenemedi",
+  "errorSavingPlace": "Yer kaydedilirken hata oluştu: {error}",
+  "@errorSavingPlace": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "directions": "Yol Tarifi",
+  "message": "Mesaj",
+  "nudge": "Dürt",
+  "userNudged": "{name} başarıyla dürtüldü!",
+  "@userNudged": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "sendMessageTo": "{name} kişisine mesaj gönder",
+  "@sendMessageTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "typeMessage": "Mesajınızı yazın...",
+  "send": "Gönder",
+  "messageSent": "Mesaj başarıyla gönderildi!",
+  "todaysMovement": "Bugünkü Hareketler",
+  "welcomeName": "Hoş Geldin,\n{name}!",
+  "@welcomeName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeDescription": "Profiliniz hazır! Ailenizin güvenliğini 7/24 sağlamak için gerçek zamanlı takip ve anlık bildirim ayarlarınızı yapılandıralım.",
+  "appTracking": "Veri Gizliliği",
+  "appTrackingDescription": "Size daha kişiselleştirilmiş ve güvenli bir takip deneyimi sunabilmemiz için takip şeffaflığına izin verin.",
+  "backgroundLocation": "Arka Plan Takibi",
+  "backgroundLocationDescription": "GeoFollow, uygulama kapalıyken bile güvenli bölgelere giriş/çıkış bildirimlerini ailenize iletebilmek için 'Her Zaman' konum erişimine ihtiyaç duyar.",
+  "notifications": "Anlık Uyarılar",
+  "notificationsDescription": "Grup üyeleriniz güvenli bir yere ulaştığında veya SOS acil durum sinyali gönderdiğinde anında haberdar olun.",
+  "finishSetup": "Kurulumu Tamamla",
+  "allowAndContinue": "İzin Ver ve Devam Et",
+  "connectedAccount": "Bağlı Hesap",
+  "displayNameLabel": "Görünen Ad",
+  "trackingStepText": "Gizliliğiniz önceliğimizdir. Bu veriler yalnızca temel güvenlik özelliklerini sağlamak için kullanılır. Lütfen sistem uyarısı çıktığında 'İzin Ver' seçeneğine dokunun.",
+  "locationStepText": "Ailenizi her an güncel tutabilmek için lütfen bir sonraki ekranda konum iznini 'Her Zaman İzin Ver' olarak seçtiğinizden emin olun.",
+  "notificationStepText": "Grup üyelerinizin varışlarından, ayrılışlarından ve acil durum çağrılarından anında haberdar olun.",
+  "failedToPurchase": "Satın alma başarısız oldu: {error}",
+  "@failedToPurchase": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "perMonth": "/ay",
+  "perYear": "/yıl",
+  "user": "Kullanıcı",
+  "failedToDeleteAccount": "Hesap silinemedi: {error}",
+  "@failedToDeleteAccount": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "locationTrackingActive": "Konum Takibi Aktif",
+  "locationTrackingDescription": "GeoFollow güvenliğiniz için konumunuzu takip ediyor.",
+  "sosLocationSharingNote": "Konumunuz tüm üyelerle anında paylaşılacak.",
+  "failedToJoinCircle": "Gruba katılamadı",
+  "failedToCreateCircle": "Grup oluşturulamadı",
+  "safeZone": "Güvenli Bölge",
+  "justNow": "Az önce",
+  "minutesAgo": "{minutes} dk önce",
+  "@minutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursAgo": "{hours} sa önce",
+  "@hoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "daysAgo": "{days} gün önce",
+  "@daysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "now": "Şimdi",
+  "location": "Konum",
+  "battery": "Pil",
+  "lastSeen": "Son Görülme",
+  "navigate": "Yol Tarifi",
+  "inviteDescriptionFull": "Ailenizin veya arkadaşlarınızın gruba katılması için kodu paylaşın.",
+  "inviteCodeCopied": "Davet kodu kopyalandı!",
+  "copy": "Kopyala",
+  "share": "Paylaş",
+  "shareMessage": "GeoFollow grubuma katılmak için davet kodunu kullanın: {code}",
+  "@shareMessage": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "alerts": "Bildirimler",
+  "offline": "Çevrimdışı",
+  "address": "Adres",
+  "joinACircle": "Gruba Katıl",
+  "enterInviteCodeDescription": "Aile veya arkadaşlarınızın paylaştığı davet kodunu girin",
+  "enterCode": "KOD GİR",
+  "validCode": "Geçerli kod! Katılmaya hazır",
+  "joinCircleBtn": "Gruba Katıl",
+  "noNotificationsYet": "Henüz bildirim yok",
+  "noNotificationsDescription": "Grubunuzdan gelen uyarılar ve güncellemeleri burada göreceksiniz.",
+  "markAllRead": "Tümünü okundu işaretle",
+  "clearAll": "Tümünü Temizle",
+  "notificationSos": "SOS Uyarısı",
+  "notificationMember": "Üye Güncellemesi",
+  "notificationPlace": "Yer Güncellemesi",
+  "notificationMessage": "Mesaj",
+  "readAll": "Tümünü Oku",
+  "placeEntered": "{name}, {place} yerine giriş yaptı",
+  "@placeEntered": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "placeExited": "{name}, {place} yerinden ayrıldı",
+  "@placeExited": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "joinedCircle": "{circle} grubuna katıldı",
+  "@joinedCircle": {
+    "placeholders": {
+      "circle": {
+        "type": "String"
+      }
+    }
+  },
+  "leftCircle": "{name}, {circle} grubundan ayrıldı",
+  "@leftCircle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "circle": {
+        "type": "String"
+      }
+    }
+  },
+  "movementHistory": "Hareket Geçmişi",
+  "today": "Bugün",
+  "frequent": "Sık Gidilen",
+  "noMovementData": "Henüz konum verisi yok. Uygulama konumları takip etmeye başlayınca hareket geçmişi burada görünecek.",
+  "totalVisits": "{count} ziyaret",
+  "@totalVisits": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "avgTime": "Ort. {time}",
+  "@avgTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lastVisitLabel": "Son ziyaret",
+  "splashTagline": "Gerçek zamanlı aile güvenliği, yeniden tasarlandı.",
+  "onboardingRealTimeGps": "Gerçek Zamanlı GPS",
+  "onboardingBatteryStatus": "Pil durumu",
+  "onboardingLiveMap": "Canlı harita",
+  "onboardingCustomGeofences": "Özel güvenli bölgeler",
+  "onboardingInstantAlerts": "Anlık bildirimler",
+  "onboardingSmartHistory": "Akıllı geçmiş",
+  "onboardingSosEmergency": "SOS acil durum",
+  "onboarding30DayHistory": "30 günlük geçmiş"
+}

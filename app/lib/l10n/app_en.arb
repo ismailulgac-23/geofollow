@@ -1,0 +1,359 @@
+{
+  "@@locale": "en",
+  "appName": "GeoFollow",
+  "stayConnected": "Stay Connected",
+  "withLovedOnes": "with Your Loved Ones",
+  "trackDescription": "Track your family and friends in real-time. Know they're safe, wherever they are.",
+  "setSafeZones": "Set Safe Zones",
+  "getInstantAlerts": "Get Instant Alerts",
+  "safeZonesDescription": "Create geofences for home, school, or work. Receive notifications when family arrives or leaves.",
+  "premiumFeatures": "Premium Features",
+  "ultimatePeace": "Ultimate Peace of Mind",
+  "premiumDescription": "Unlock unlimited places, location history, and priority support with Premium.",
+  "continueBtn": "Continue",
+  "getStarted": "Get Started",
+  "skip": "Skip",
+  "home": "Home",
+  "profile": "Profile",
+  "settings": "Settings",
+  "logout": "Log Out",
+  "deleteAccount": "Delete Account",
+  "deleteAccountConfirm": "Are you sure you want to permanently delete your account? All your data, groups, and places will be lost. This action cannot be undone.",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "inviteMembers": "Invite Members",
+  "inviteDescription": "Share your group invite code",
+  "premiumTitle": "Premium",
+  "premiumSubtitle": "Manage your subscription",
+  "privacyPolicy": "Privacy Policy",
+  "termsOfService": "Terms of Service",
+  "version": "Version",
+  "language": "Language",
+  "turkish": "Turkish",
+  "english": "English",
+  "preciseTracking": "Precise Tracking",
+  "allowBackground": "Allow tracking even when app is closed",
+  "locationSettings": "Location Settings",
+  "account": "Account",
+  "addressUnknown": "Address Unknown",
+  "noInviteCode": "No invite code available",
+  "sosDialogTitle": "SOS Alert",
+  "sosDialogContent": "This will send an emergency alert to all members in your current group. Continue?",
+  "sendSOS": "Send SOS",
+  "sosSent": "SOS Alert Sent",
+  "yourCircle": "Your Group",
+  "members": "Members",
+  "circleCode": "Group Code",
+  "joinCircle": "Join Group",
+  "createCircle": "Create Group",
+  "enterCode": "Enter Invite Code",
+  "circleName": "Group Name",
+  "editPlace": "Edit Place",
+  "addPlace": "Add Place",
+  "placeName": "Place Name",
+  "radius": "Radius",
+  "locationAlwaysRequired": "Always Location Required",
+  "locationAlwaysDescription": "To track your location in the background, you must set location permission to \"Always\" in your device settings.",
+  "openSettings": "Open Settings",
+  "familyTracker": "Family Tracker",
+  "feelCloseToFamily": "Feel closer to your family anytime",
+  "welcome": "Welcome",
+  "loginToContinue": "Login to continue",
+  "continueWithGoogle": "Continue with Google",
+  "continueWithApple": "Continue with Apple",
+  "byContinuing": "By continuing, you agree to our ",
+  "and": " and ",
+  "agreementSuffix": ".",
+  "online": "online",
+  "leaveCircle": "Leave Group",
+  "leaveCircleConfirm": "Are you sure you want to leave this group? You will lose access to all shared locations and places.",
+  "leave": "Leave",
+  "sosAlertSentToAll": "SOS alert sent to all group members!",
+  "successfullyLeftCircle": "Successfully left the group.",
+  "search": "Search",
+  "searchHint": "Search people or places...",
+  "searchPlaceholder": "Search for family members or places...",
+  "searchNoResults": "No results found.",
+  "welcomeToGeoFollow": "Welcome to GeoFollow",
+  "noCircleDescription": "Create a group or join one with an invite code to start tracking.",
+  "or": "OR",
+  "circleNameExample": "Group Name (e.g. Family)",
+  "success": "Success!",
+  "premiumUpgradeMessage": "You are now a Premium member. All features have been unlocked!",
+  "awesome": "Awesome!",
+  "goPremium": "Go Premium",
+  "unlockAllFeatures": "Unlock all features for your family's safety",
+  "youArePremiumMember": "You are a Premium Member",
+  "allProFeaturesActive": "All PRO features are currently active.",
+  "manageSubscription": "Manage Subscription",
+  "subscriptionManagementSoon": "Subscription management will be available soon.",
+  "upgradeNow": "Upgrade Now",
+  "cancelAnytime": "Cancel anytime. No commitment.",
+  "restorePurchases": "Restore Purchases",
+  "purchaseRestored": "Purchase restored successfully.",
+  "monthly": "Monthly",
+  "yearly": "Yearly",
+  "save50": "Save 50%",
+  "realTimeLocation": "Real-time Location",
+  "locationHistory30Days": "30-day Location History",
+  "unlimitedAlerts": "Unlimited Alerts",
+  "unlimitedPlaces": "Unlimited Places",
+  "sosEmergencyButton": "SOS Emergency Button",
+  "adFreeExperience": "Ad-free Experience",
+  "processing": "Processing...",
+  "places": "Places",
+  "safeZones": "Safe Zones",
+  "safeZonesSubtitle": "Get notified when family members arrive or leave these places",
+  "noSafeZones": "No Safe Zones Yet",
+  "noSafeZonesDescription": "Add important places like Home, School, or Work to get notified when family members arrive or leave.",
+  "addFirstPlace": "Add Your First Place",
+  "deletePlace": "Delete Place?",
+  "deletePlaceConfirm": "Are you sure you want to delete {name}?",
+  "@deletePlaceConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "placeDeleted": "Place deleted",
+  "failedToDeletePlace": "Failed to delete place",
+  "editPlace": "Edit Place",
+  "addPlace": "Add Place",
+  "fetchingAddress": "Fetching address...",
+  "noAddressFound": "No address found for this location",
+  "searchForPlace": "Search for a place...",
+  "selectedLocation": "Selected Location",
+  "radius": "Radius",
+  "placeDetails": "Place Details",
+  "placeName": "Place Name",
+  "placeNameHint": "e.g., Home, Work, School",
+  "savePlaceBtn": "Save Place",
+  "enterPlaceName": "Please enter a place name",
+  "noCircleFoundError": "No group found. Cannot add place.",
+  "placeUpdated": "Place \"{name}\" updated!",
+  "@placeUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "placeSaved": "Place \"{name}\" saved!",
+  "@placeSaved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "failedToAddPlace": "Failed to add place",
+  "errorSavingPlace": "Error occurred while saving place: {error}",
+  "@errorSavingPlace": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "directions": "Directions",
+  "message": "Message",
+  "nudge": "Nudge",
+  "userNudged": "{name} was nudged successfully!",
+  "@userNudged": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "sendMessageTo": "Send Message to {name}",
+  "@sendMessageTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "typeMessage": "Type your message...",
+  "send": "Send",
+  "messageSent": "Message sent successfully!",
+  "todaysMovement": "Today's Movement",
+  "welcomeName": "Welcome,\n{name}!",
+  "@welcomeName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeDescription": "Your profile is set! To ensure your family's safety 24/7, let's configure your real-time tracking and instant notification settings.",
+  "appTracking": "Data Privacy",
+  "appTrackingDescription": "Enable tracking transparency to help us provide a more personalized, secure, and optimized tracking experience.",
+  "backgroundLocation": "Always-On Safety",
+  "backgroundLocationDescription": "GeoFollow requires 'Always' location access to send arrival and departure alerts to your family, even when the app is closed.",
+  "notifications": "Instant Alerts",
+  "notificationsDescription": "Get notified immediately when a circle member arrives at a safe zone or sends an SOS emergency signal.",
+  "finishSetup": "Finish Setup",
+  "allowAndContinue": "Allow and Continue",
+  "connectedAccount": "Connected Account",
+  "displayNameLabel": "Display Name",
+  "trackingStepText": "Your privacy is our priority. We use this data only to provide essential safety features. Please tap 'Allow' when the system dialog appears.",
+  "locationStepText": "To keep your circle updated round-the-clock, please ensure you select 'Always Allow' in the following system settings.",
+  "notificationStepText": "Stay informed with real-time updates from your group members' arrivals, departures, and emergency alerts.",
+  "failedToPurchase": "Failed to purchase: {error}",
+  "@failedToPurchase": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "perMonth": "/month",
+  "perYear": "/year",
+  "user": "User",
+  "failedToDeleteAccount": "Failed to delete account: {error}",
+  "@failedToDeleteAccount": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "locationTrackingActive": "Location Tracking Active",
+  "locationTrackingDescription": "GeoFollow is tracking your location for your safety.",
+  "sosLocationSharingNote": "Your location will be shared with all members immediately.",
+  "failedToJoinCircle": "Failed to join group",
+  "failedToCreateCircle": "Failed to create group",
+  "safeZone": "Safe Zone",
+  "justNow": "Just now",
+  "minutesAgo": "{minutes}m ago",
+  "@minutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursAgo": "{hours}h ago",
+  "@hoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "daysAgo": "{days}d ago",
+  "@daysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "now": "Now",
+  "location": "Location",
+  "battery": "Battery",
+  "lastSeen": "Last Seen",
+  "navigate": "Navigate",
+  "inviteDescriptionFull": "Share this code with your family or friends to let them join your group.",
+  "inviteCodeCopied": "Invite code copied!",
+  "copy": "Copy",
+  "share": "Share",
+  "shareMessage": "Join my group on GeoFollow using this invite code: {code}",
+  "@shareMessage": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "alerts": "Alerts",
+  "offline": "Offline",
+  "address": "Address",
+  "joinACircle": "Join a Group",
+  "enterInviteCodeDescription": "Enter the invite code shared by your family or friends",
+  "enterCode": "ENTER CODE",
+  "validCode": "Valid code! Ready to join",
+  "joinCircleBtn": "Join Group",
+  "noNotificationsYet": "No notifications yet",
+  "noNotificationsDescription": "You'll see alerts and updates from your group here.",
+  "markAllRead": "Mark all read",
+  "clearAll": "Clear All",
+  "notificationSos": "SOS Alert",
+  "notificationMember": "Member Update",
+  "notificationPlace": "Place Update",
+  "notificationMessage": "Message",
+  "readAll": "Read All",
+  "placeEntered": "{name} entered {place}",
+  "@placeEntered": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "placeExited": "{name} left {place}",
+  "@placeExited": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "joinedCircle": "joined {circle}",
+  "@joinedCircle": {
+    "placeholders": {
+      "circle": {
+        "type": "String"
+      }
+    }
+  },
+  "leftCircle": "{name} left {circle}",
+  "@leftCircle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "circle": {
+        "type": "String"
+      }
+    }
+  },
+  "movementHistory": "Movement History",
+  "today": "Today",
+  "frequent": "Frequent",
+  "noMovementData": "No location data yet. Movement history will appear here once the app tracks locations.",
+  "totalVisits": "{count} visits",
+  "@totalVisits": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "avgTime": "Avg {time}",
+  "@avgTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lastVisitLabel": "Last visit",
+  "splashTagline": "Real-time family safety, reimagined.",
+  "onboardingRealTimeGps": "Real-time GPS",
+  "onboardingBatteryStatus": "Battery status",
+  "onboardingLiveMap": "Live map",
+  "onboardingCustomGeofences": "Custom geofences",
+  "onboardingInstantAlerts": "Instant alerts",
+  "onboardingSmartHistory": "Smart history",
+  "onboardingSosEmergency": "SOS emergency",
+  "onboarding30DayHistory": "30 day history"
+}
