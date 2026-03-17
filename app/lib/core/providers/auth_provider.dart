@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -66,7 +69,33 @@ class AuthState {
 }
 
 class AuthNotifier extends StateNotifier<AuthState> {
-  AuthNotifier() : super(AuthState());
+  StreamSubscription<bool>? _premiumSubscription;
+
+  AuthNotifier() : super(AuthState()) {
+    _listenToPremiumStatus();
+  }
+
+  void _listenToPremiumStatus() {
+    _premiumSubscription?.cancel();
+    _premiumSubscription = RevenueCatService.premiumStatusStream.listen((
+      isPremium,
+    ) {
+      if (state.user != null && state.user!.isPremium != isPremium) {
+        state = state.copyWith(
+          user: state.user!.copyWith(isPremium: isPremium),
+        );
+        debugPrint(
+          '[AuthNotifier] 🔄 Premium status updated from RevenueCat Stream: $isPremium',
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _premiumSubscription?.cancel();
+    super.dispose();
+  }
 
   Future<void> checkAuthStatus() async {
     state = state.copyWith(status: AuthStatus.loading);
@@ -104,17 +133,20 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
         // RevenueCat — kullanıcı ID ile eşleştir ve premium durumunu senkronize et
         await RevenueCatService.logIn(userData['id'].toString());
-        final synced = await RevenueCatService.checkAndSyncPremiumStatus();
 
-        // Eğer senkronizasyon yapıldıysa (ve durum farklıysa) yerel state'i güncelle
-        if (synced) {
-          final isNowPremium = await RevenueCatService.isPremium();
-          if (isNowPremium != user.isPremium) {
-            state = state.copyWith(
-              user: user.copyWith(isPremium: isNowPremium),
-            );
-          }
+        // RevenueCat'ten en güncel durumu al ve backend verisinden üstün tut
+        final realPremiumStatus = await RevenueCatService.isPremium();
+        if (user.isPremium != realPremiumStatus) {
+          state = AuthState(
+            status: AuthStatus.authenticated,
+            user: user.copyWith(isPremium: realPremiumStatus),
+          );
+        } else {
+          state = AuthState(status: AuthStatus.authenticated, user: user);
         }
+
+        // Backend ile senkronize et (arkaplanda)
+        RevenueCatService.syncPremiumStatus(realPremiumStatus);
 
         // Önbelleğe (cache) al ki network koparsa veya terminate olursa çıkış yapmasın!
         final prefs = await SharedPreferences.getInstance();
@@ -336,14 +368,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
         state = AuthState(status: AuthStatus.authenticated, user: user);
         await RevenueCatService.logIn(data['user']['id'].toString());
-        if (await RevenueCatService.checkAndSyncPremiumStatus()) {
-          final isNowPremium = await RevenueCatService.isPremium();
-          if (isNowPremium != user.isPremium) {
-            state = state.copyWith(
-              user: user.copyWith(isPremium: isNowPremium),
-            );
-          }
+
+        final realPremiumStatus = await RevenueCatService.isPremium();
+        if (user.isPremium != realPremiumStatus) {
+          state = state.copyWith(
+            user: user.copyWith(isPremium: realPremiumStatus),
+          );
         }
+
+        RevenueCatService.syncPremiumStatus(realPremiumStatus);
 
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('cached_user_data', jsonEncode(data['user']));
@@ -448,14 +481,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
           clearError: true,
         );
         await RevenueCatService.logIn(data['user']['id'].toString());
-        if (await RevenueCatService.checkAndSyncPremiumStatus()) {
-          final isNowPremium = await RevenueCatService.isPremium();
-          if (isNowPremium != user.isPremium) {
-            state = state.copyWith(
-              user: user.copyWith(isPremium: isNowPremium),
-            );
-          }
+
+        final realPremiumStatus = await RevenueCatService.isPremium();
+        if (user.isPremium != realPremiumStatus) {
+          state = state.copyWith(
+            user: user.copyWith(isPremium: realPremiumStatus),
+          );
         }
+
+        RevenueCatService.syncPremiumStatus(realPremiumStatus);
 
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('cached_user_data', jsonEncode(data['user']));

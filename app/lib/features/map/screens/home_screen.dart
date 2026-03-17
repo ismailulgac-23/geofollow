@@ -10,7 +10,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tracker_app/core/models/place_model.dart';
 import 'package:tracker_app/core/models/user_model.dart';
-import 'package:tracker_app/core/providers/auth_provider.dart';
+
 import 'package:tracker_app/core/providers/providers.dart';
 import 'package:tracker_app/core/theme/app_theme.dart';
 import 'package:tracker_app/shared/widgets/avatar_widget.dart';
@@ -48,7 +48,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   CameraPosition get _initialCameraPosition =>
       CameraPosition(target: _currentCenter, zoom: 15.0);
 
-  String _darkMapStyle = '''
+  final String _darkMapStyle = '''
   [
     {
       "elementType": "geometry",
@@ -230,7 +230,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         icon = _userIconCache[cacheKey]!;
       } else {
         final iconBytes = await _getCustomMarkerIcon(user);
-        icon = BitmapDescriptor.fromBytes(iconBytes);
+        icon = BitmapDescriptor.bytes(iconBytes);
         _userIconCache[cacheKey] = icon;
       }
 
@@ -258,7 +258,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       return Marker(
         markerId: MarkerId('place_${place.id}'),
         position: place.location,
-        icon: BitmapDescriptor.fromBytes(iconBytes),
+        icon: BitmapDescriptor.bytes(iconBytes),
         anchor: const Offset(0.5, 0.9), // Slightly above the point
         onTap: () => _showPlaceDialog(place),
       );
@@ -530,7 +530,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         .animate()
                         .fadeIn(duration: 400.ms)
                         .slideX(begin: -0.3, end: 0),
-                  Expanded(child: SizedBox()),
+                  const SizedBox(width: AppTheme.spacingSM),
+                  // PRO Button for visibility (Apple Review)
+                  Builder(
+                    builder: (ctx) {
+                      final user = ref.watch(authProvider).user;
+                      if (user != null && user.isPremium) return const SizedBox();
+                      return _MapControlButton(
+                            icon: Icons.workspace_premium,
+                            onPressed: () => PremiumBottomSheet.show(context),
+                            size: 44,
+                            iconColor: const Color(0xFFFFD700), // Gold
+                          )
+                          .animate(onPlay: (controller) => controller.repeat())
+                          .shimmer(
+                            duration: 2000.ms,
+                            color: Colors.white.withValues(alpha: 0.3),
+                          )
+                          .animate()
+                          .fadeIn(duration: 400.ms)
+                          .slideX(begin: -0.3, end: 0);
+                    },
+                  ),
+                  const SizedBox(width: AppTheme.spacingSM),
+                  const Expanded(child: SizedBox()),
                   _MapControlButton(
                         icon: Icons.my_location,
                         onPressed: () {
@@ -937,7 +960,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             onPressed: () async {
               Navigator.pop(context);
               final response = await ApiClient.sendSOS();
-              if (response['success'] == true) {
+              if (response['success'] == true && context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Row(

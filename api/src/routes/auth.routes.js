@@ -149,7 +149,7 @@ router.post('/register', async (req, res) => {
         status: 'Online',
         batteryLevel: 100,
         isOnline: true,
-        isPremium: true,
+        isPremium: false,
         lastUpdated: new Date()
       }
     });

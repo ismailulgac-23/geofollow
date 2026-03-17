@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'api_client.dart';
+import 'dart:async';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // RevenueCat Service — GeoFollow
@@ -29,6 +30,10 @@ class RevenueCatService {
 
   // ── State ──────────────────────────────────────────────────────────────────
   static bool _initialized = false;
+  static final _premiumStatusController = StreamController<bool>.broadcast();
+
+  /// Premium durumu değişikliklerini dinlemek için stream
+  static Stream<bool> get premiumStatusStream => _premiumStatusController.stream;
 
   // ─────────────────────────────────────────────────────────────────────────
   // Initialization — main() içinde çağrılır
@@ -45,7 +50,27 @@ class RevenueCatService {
 
     await Purchases.configure(config);
     _initialized = true;
+
+    // Listen to customer info updates globally
+    Purchases.addCustomerInfoUpdateListener((customerInfo) {
+      final active = customerInfo.entitlements.active.containsKey(entitlementId);
+      _premiumStatusController.add(active);
+      debugPrint('[RevenueCat] 🔄 CustomerInfo Updated. isPremium: $active');
+
+      // Sync to backend whenever RevenueCat detects a change
+      syncPremiumStatus(active);
+    });
+
     debugPrint('[RevenueCat] ✅ Initialized. User: ${userId ?? "anonymous"}');
+  }
+
+  /// Sadece senkronizasyon amaçlı (iç kullanım)
+  static Future<void> syncPremiumStatus(bool isPremium) async {
+    try {
+      await ApiClient.syncPremiumStatus(isPremium);
+    } catch (e) {
+      debugPrint('[RevenueCat] syncPremiumStatus error: $e');
+    }
   }
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -66,22 +91,7 @@ class RevenueCatService {
     }
   }
 
-  /// RevenueCat durumunu backend ile senkronize eder.
-  static Future<bool> checkAndSyncPremiumStatus() async {
-    try {
-      final premium = await isPremium();
-      /* TODO */
-      final result = await ApiClient.syncPremiumStatus(premium);
-      final success = result['success'] == true;
-      debugPrint(
-        '[RevenueCat] Premium status synced to backend: $premium (Success: $success)',
-      );
-      return success;
-    } catch (e) {
-      debugPrint('[RevenueCat] checkAndSyncPremiumStatus error: $e');
-      return false;
-    }
-  }
+
 
   /// Aktif abonelik detaylarını döner. Premium değilse null.
   static Future<SubscriptionInfo?> getSubscriptionInfo() async {
@@ -196,6 +206,11 @@ class RevenueCatService {
     try {
       final result = await Purchases.logIn(userId);
       debugPrint('[RevenueCat] LogIn: $userId | isNew=${result.created}');
+
+      // LogIn sonrası aktif kontrol
+      final active = result.customerInfo.entitlements.active.containsKey(entitlementId);
+      _premiumStatusController.add(active);
+      await syncPremiumStatus(active);
     } catch (e) {
       debugPrint('[RevenueCat] logIn error: $e');
     }
@@ -204,7 +219,8 @@ class RevenueCatService {
   /// Kullanıcı çıkış yaptığında — anonymous moda geç
   static Future<void> logOut() async {
     try {
-      await Purchases.logOut();
+      final info = await Purchases.logOut();
+      _premiumStatusController.add(false);
       debugPrint('[RevenueCat] LogOut: anonymous mode');
     } catch (e) {
       debugPrint('[RevenueCat] logOut error: $e');

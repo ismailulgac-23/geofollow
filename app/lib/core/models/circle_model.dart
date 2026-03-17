@@ -38,4 +38,25 @@ class CircleModel {
           : [],
     );
   }
+  CircleModel copyWith({
+    String? id,
+    String? name,
+    String? emoji,
+    String? color,
+    String? inviteCode,
+    List<UserModel>? members,
+    List<PlaceModel>? places,
+    String? role,
+  }) {
+    return CircleModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      emoji: emoji ?? this.emoji,
+      color: color ?? this.color,
+      inviteCode: inviteCode ?? this.inviteCode,
+      members: members ?? this.members,
+      places: places ?? this.places,
+      role: role ?? this.role,
+    );
+  }
 }

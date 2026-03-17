@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tracker_app/core/models/circle_model.dart';
+import 'package:tracker_app/core/providers/auth_provider.dart';
 import 'package:tracker_app/core/services/api_client.dart';
 
 class CircleState {
@@ -24,7 +25,9 @@ class CircleState {
 }
 
 class CircleNotifier extends StateNotifier<CircleState> {
-  CircleNotifier() : super(CircleState(isLoading: true)) {
+  final Ref _ref;
+
+  CircleNotifier(this._ref) : super(CircleState(isLoading: true)) {
     fetchCircle();
   }
 
@@ -42,8 +45,22 @@ class CircleNotifier extends StateNotifier<CircleState> {
     try {
       final response = await ApiClient.getCircle();
       if (response['success'] == true && response['data'] != null) {
+        var circle = CircleModel.fromJson(response['data']);
+        
+        // Mevcut kullanıcının premium durumunu AuthProvider (asıl kaynak) ile eşitle
+        final currentUser = _ref.read(authProvider).user;
+        if (currentUser != null) {
+          final updatedMembers = circle.members.map((m) {
+            if (m.id == currentUser.id) {
+              return m.copyWith(isPremium: currentUser.isPremium);
+            }
+            return m;
+          }).toList();
+          circle = circle.copyWith(members: updatedMembers);
+        }
+
         state = state.copyWith(
-          circle: CircleModel.fromJson(response['data']),
+          circle: circle,
           isLoading: false,
           clearCircle: false,
         );
@@ -110,5 +127,5 @@ class CircleNotifier extends StateNotifier<CircleState> {
 final circleProvider = StateNotifierProvider<CircleNotifier, CircleState>((
   ref,
 ) {
-  return CircleNotifier();
+  return CircleNotifier(ref);
 });

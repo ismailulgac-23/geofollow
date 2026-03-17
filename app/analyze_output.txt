@@ -1,0 +1,48 @@
+Analyzing 2 items...                                            
+
+   info • The import of 'package:tracker_app/core/providers/auth_provider.dart' is unnecessary because all of the used elements are also provided by the import of 'package:tracker_app/core/providers/providers.dart' • lib/features/map/screens/home_screen.dart:13:8 • unnecessary_import
+   info • The private field _darkMapStyle could be 'final' • lib/features/map/screens/home_screen.dart:51:10 • prefer_final_fields
+   info • 'fromBytes' is deprecated and shouldn't be used. Use BitmapDescriptor.bytes method instead • lib/features/map/screens/home_screen.dart:233:33 • deprecated_member_use
+   info • 'fromBytes' is deprecated and shouldn't be used. Use BitmapDescriptor.bytes method instead • lib/features/map/screens/home_screen.dart:261:32 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:276:44 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:278:42 • deprecated_member_use
+   info • 'setMapStyle' is deprecated and shouldn't be used. Use GoogleMap.style instead • lib/features/map/screens/home_screen.dart:298:23 • deprecated_member_use
+   info • 'setMapStyle' is deprecated and shouldn't be used. Use GoogleMap.style instead • lib/features/map/screens/home_screen.dart:300:23 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:627:60 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:722:39 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:724:52 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:807:47 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:901:48 • deprecated_member_use
+   info • Don't use 'BuildContext's across async gaps • lib/features/map/screens/home_screen.dart:964:38 • use_build_context_synchronously
+   info • The local variable '_searchController' starts with an underscore • lib/features/map/screens/home_screen.dart:997:33 • no_leading_underscores_for_local_identifiers
+   info • The local variable '_searchResults' starts with an underscore • lib/features/map/screens/home_screen.dart:998:25 • no_leading_underscores_for_local_identifiers
+   info • The local variable '_isSearching' starts with an underscore • lib/features/map/screens/home_screen.dart:999:10 • no_leading_underscores_for_local_identifiers
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:1126:34 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:1142:47 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:1187:63 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:1252:69 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:1269:61 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:1558:30 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:1568:33 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:1569:32 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:1632:34 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:1649:51 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:1682:63 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:1685:65 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:1719:69 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:1735:65 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:1965:46 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:1966:48 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:2026:30 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:2079:32 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:2085:50 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:2201:61 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:2204:63 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:2213:50 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:2323:58 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:2506:30 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/map/screens/home_screen.dart:2511:50 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/shared/widgets/premium_bottom_sheet.dart:610:39 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/shared/widgets/premium_bottom_sheet.dart:628:54 • deprecated_member_use
+
+44 issues found. (ran in 1.4s)

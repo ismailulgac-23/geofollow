@@ -351,6 +351,7 @@ class ApiClient {
 
   static Future<Map<String, dynamic>> syncPremiumStatus(bool isPremium) async {
     try {
+      print('syncPremiumStatus: $isPremium');
       final response = await _dio.post(
         '/users/premium',
         data: {'isPremium': isPremium},

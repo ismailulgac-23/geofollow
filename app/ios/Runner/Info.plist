@@ -52,7 +52,7 @@
 	<key>NSMotionUsageDescription</key>
 	<string>Cihaz hareketlerini takip ederek, konum güncellemelerini pil tasarrufu sağlayacak şekilde optimize ediyoruz.</string>
 	<key>NSUserTrackingUsageDescription</key>
-	<string>Sizin için daha kişiselleştirilmiş bir güvenlik deneyimi sunmak ve uygulama performansını optimize etmek amacıyla cihaz tanımlayıcılarınız kullanılır.</string>
+	<string>Size daha güvenli bir deneyim sunmak, kişiselleştirilmiş konum bildirimleri sağlamak ve uygulama performansını iyileştirmek amacıyla verileriniz kullanılacaktır.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

@@ -164,8 +164,18 @@ class _SetupWizardScreenState extends ConsumerState<SetupWizardScreen> {
                 child: PageView.builder(
                   controller: _pageController,
                   physics: const NeverScrollableScrollPhysics(),
-                  onPageChanged: (index) =>
-                      setState(() => _currentPage = index),
+                  onPageChanged: (index) {
+                    setState(() => _currentPage = index);
+                    
+                    // Auto-trigger ATT prompt if on page 1 (Tracking)
+                    if (index == 1 && defaultTargetPlatform == TargetPlatform.iOS) {
+                      Future.delayed(const Duration(milliseconds: 1500), () async {
+                        if (mounted && _currentPage == 1) {
+                          await Permission.appTrackingTransparency.request();
+                        }
+                      });
+                    }
+                  },
                   itemCount: steps.length,
                   itemBuilder: (context, index) {
                     final step = steps[index];

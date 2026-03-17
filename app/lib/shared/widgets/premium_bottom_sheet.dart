@@ -149,8 +149,8 @@ class _PremiumBottomSheetState extends ConsumerState<PremiumBottomSheet>
     if (pkg == null) {
       _showErrorSnackbar(
         isEn
-            ? 'Offering data could not be loaded. Please check your internet or RevenueCat dashboard.'
-            : 'Teklif bilgileri yüklenemedi. Lütfen internetinizi veya RevenueCat panelini kontrol edin.',
+            ? 'Purchase options are currently being updated by Apple. Please try again in a few moments or use the "Restore" button if you already purchased.'
+            : 'Satın alma seçenekleri Apple tarafından güncelleniyor. Lütfen biraz sonra tekrar deneyin veya daha önce satın aldıysanız "Geri Yükle" butonunu kullanın.',
       );
       return;
     }
@@ -504,8 +504,8 @@ class _PremiumBottomSheetState extends ConsumerState<PremiumBottomSheet>
     final monthlyPkg = RevenueCatService.monthlyPackage(offering);
 
     // Gerçek fiyatlar — offering yoksa fallback
-    final weeklyPrice = weeklyPkg?.storeProduct.priceString ?? '\$1.99';
-    final monthlyPrice = monthlyPkg?.storeProduct.priceString ?? '\$4.99';
+    final weeklyPrice = weeklyPkg?.storeProduct.priceString ?? '\$2.99';
+    final monthlyPrice = monthlyPkg?.storeProduct.priceString ?? '\$9.99';
 
     return Column(
       children: [
@@ -607,7 +607,7 @@ class _PremiumBottomSheetState extends ConsumerState<PremiumBottomSheet>
               ? 'Cancel anytime · Full access will remain until expiration'
               : 'İstediğiniz zaman iptal edin · Süreniz bitene kadar haklarınız kalır',
           style: AppTheme.caption.copyWith(
-            color: AppTheme.textMuted.withOpacity(0.6),
+            color: AppTheme.textMuted.withValues(alpha: 0.6),
           ),
           textAlign: TextAlign.center,
         ),
@@ -625,7 +625,7 @@ class _PremiumBottomSheetState extends ConsumerState<PremiumBottomSheet>
         ),
         Text(
           '  •  ',
-          style: TextStyle(color: AppTheme.textMuted.withOpacity(0.3)),
+          style: TextStyle(color: AppTheme.textMuted.withValues(alpha: 0.3)),
         ),
         _legalLink(
           isEn ? 'Privacy Policy' : 'Gizlilik Politikası',

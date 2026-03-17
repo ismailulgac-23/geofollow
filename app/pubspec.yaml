@@ -2,7 +2,7 @@ name: tracker_app
 description: "A next-generation Family & Partner Location Tracking application."
 publish_to: 'none'
 
-version: 1.0.0+12
+version: 1.0.0+13
 
 environment:
   sdk: ^3.9.2
