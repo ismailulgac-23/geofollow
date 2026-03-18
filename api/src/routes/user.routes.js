@@ -93,7 +93,6 @@ router.post('/me/location', auth, async (req, res) => {
         ...(processedBattery !== undefined && { batteryLevel: processedBattery }),
         lastUpdated: new Date(),
         isOnline: true,
-        isPremium: true
       }
     });
 
@@ -127,7 +126,7 @@ router.put('/:id/location', auth, async (req, res) => {
 
     const user = await prisma.user.update({
       where: { id },
-      data: { latitude, longitude, address, batteryLevel, lastUpdated: new Date(), isOnline: true, isPremium: true }
+      data: { latitude, longitude, address, batteryLevel, lastUpdated: new Date(), isOnline: true }
     });
 
     // Hareket takip algoritmasını çalıştır (async, ana akışı bloke etmez)

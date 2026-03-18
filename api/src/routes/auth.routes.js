@@ -83,7 +83,7 @@ router.post('/login', async (req, res) => {
 
     await prisma.user.update({
       where: { id: user.id },
-      data: { isOnline: true, isPremium: true, lastUpdated: new Date() }
+      data: { isOnline: true, isPremium: false, lastUpdated: new Date() }
     });
 
     const token = generateToken(user.id);
