@@ -4,7 +4,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/foundation.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tracker_app/core/providers/providers.dart';
 import 'package:tracker_app/core/services/notification_service.dart';
@@ -14,6 +13,7 @@ import 'package:tracker_app/features/notifications/screens/notifications_screen.
 import 'package:tracker_app/features/places/screens/places_screen.dart';
 import 'package:tracker_app/features/profile/screens/profile_screen.dart';
 import 'package:tracker_app/l10n/app_localizations.dart';
+import 'package:tracker_app/core/services/att_service.dart';
 
 class MainShell extends ConsumerStatefulWidget {
   const MainShell({super.key});
@@ -43,14 +43,10 @@ class _MainShellState extends ConsumerState<MainShell> {
           }
         });
 
-    // Request ATT on iOS for all users (including reviewers who might skip onboarding)
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
-      Future.delayed(const Duration(seconds: 2), () async {
-        if (mounted) {
-          await Permission.appTrackingTransparency.request();
-        }
-      });
-    }
+    // ATT request check (Fail-safe for skipping Splash)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      AttService.checkAndRequest(context);
+    });
   }
 
   @override

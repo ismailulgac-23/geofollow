@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tracker_app/core/services/api_client.dart';
 import 'package:flutter/foundation.dart';
 
@@ -54,7 +55,7 @@ void onStart(ServiceInstance service) async {
     intervalDuration: const Duration(seconds: 3),
     foregroundNotificationConfig: const ForegroundNotificationConfig(
       notificationText: "Konumunuz paylaşılıyor",
-      notificationTitle: "GeoFollow",
+      notificationTitle: "Alveron",
       enableWakeLock: true,
     ),
   );
@@ -70,6 +71,16 @@ void onStart(ServiceInstance service) async {
                   : appleSettings),
       ).listen((Position position) async {
         try {
+          // Guard: Ensure we have a valid user ID before updating
+          final prefs = await SharedPreferences.getInstance();
+          final userId = prefs.getString('user_id');
+          final token = prefs.getString('auth_token');
+          
+          if (userId == null || userId.isEmpty || token == null || token.isEmpty) {
+            if (kDebugMode) print('[BG-SERVICE] Skip update: No valid user yet');
+            return;
+          }
+
           await ApiClient.updateLocation(
             latitude: position.latitude,
             longitude: position.longitude,
@@ -80,7 +91,7 @@ void onStart(ServiceInstance service) async {
           if (service is AndroidServiceInstance) {
             if (await service.isForegroundService()) {
               service.setForegroundNotificationInfo(
-                title: "GeoFollow Aktif",
+                title: "Alveron Aktif",
                 content:
                     "Son güncelleme: ${DateTime.now().hour}:${DateTime.now().minute}",
               );
@@ -111,7 +122,7 @@ class BackgroundLocationService {
         autoStart: true,
         isForegroundMode: true,
         notificationChannelId: notificationChannelId,
-        initialNotificationTitle: 'GeoFollow Aktif',
+        initialNotificationTitle: 'Alveron Aktif',
         initialNotificationContent: 'Konum takibi devam ediyor...',
         foregroundServiceNotificationId: notificationId,
       ),
@@ -165,6 +176,11 @@ class BackgroundLocationService {
 
   static Future<void> checkAndStart() async {
     final service = FlutterBackgroundService();
+    
+    // Guard: Only start if user is logged in
+    final userId = await ApiClient.getUserId();
+    if (userId == null || userId.isEmpty) return;
+
     if (!await service.isRunning()) {
       await service.startService();
     }
@@ -172,6 +188,10 @@ class BackgroundLocationService {
 
   static Future<void> forceUpdateLocation() async {
     try {
+      // Guard: Only update if user is logged in
+      final userId = await ApiClient.getUserId();
+      if (userId == null || userId.isEmpty) return;
+
       final pos = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );

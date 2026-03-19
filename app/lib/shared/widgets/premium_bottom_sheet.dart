@@ -519,7 +519,7 @@ class _PremiumBottomSheetState extends ConsumerState<PremiumBottomSheet>
               shaderCallback: (b) =>
                   const LinearGradient(colors: [_c2, _c1]).createShader(b),
               child: const Text(
-                'GeoFollow Premium',
+                'Alveron Premium',
                 style: TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.w900,

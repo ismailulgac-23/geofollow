@@ -26,6 +26,10 @@ class _SetupWizardScreenState extends ConsumerState<SetupWizardScreen> {
   int _currentPage = 0;
   bool _isLoading = false;
   String? _displayName;
+  bool _showSettingsButton = false;
+  bool _isTrackingDenied = false;
+  bool _isLocationDenied = false;
+  bool _isNotificationDenied = false;
 
   @override
   void initState() {
@@ -97,11 +101,7 @@ class _SetupWizardScreenState extends ConsumerState<SetupWizardScreen> {
         }
       } else if (_currentPage == 2) {
         // Step 2: Location
-        final granted = await BackgroundLocationService.requestPermissions();
-        if (granted) {
-          // Optionally start or pre-init service
-          await BackgroundLocationService.initialize();
-        }
+        await BackgroundLocationService.requestPermissions();
       } else if (_currentPage == 3) {
         // Step 3: Notifications
         if (defaultTargetPlatform == TargetPlatform.android) {
@@ -112,6 +112,8 @@ class _SetupWizardScreenState extends ConsumerState<SetupWizardScreen> {
     } catch (e) {
       debugPrint('Error during permission request: $e');
     } finally {
+      // Check if we should show settings button based on current state
+      _checkIfSettingsNeeded();
       setState(() => _isLoading = false);
     }
 
@@ -127,13 +129,57 @@ class _SetupWizardScreenState extends ConsumerState<SetupWizardScreen> {
 
   Future<void> _finishSetup() async {
     setState(() => _isLoading = true);
-    final success = await ref
-        .read(authProvider.notifier)
-        .register(name: _displayName ?? '');
-    setState(() => _isLoading = false);
+    try {
+      final success = await ref
+          .read(authProvider.notifier)
+          .register(name: _displayName ?? '');
 
-    if (success && mounted) {
-      context.go('/home');
+      if (success && mounted) {
+        // Start background service AFTER registration (with correct user ID)
+        await BackgroundLocationService.initialize();
+        context.go('/home');
+      } else if (mounted) {
+        final error = ref.read(authProvider).error;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error ?? 'Registration failed. Please try again.'),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: $e'),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  void _checkIfSettingsNeeded() async {
+    final tracking = await Permission.appTrackingTransparency.status;
+    final location = await Permission.locationAlways.status;
+    final notification = await Permission.notification.status;
+
+    if (mounted) {
+      setState(() {
+        _isTrackingDenied = tracking.isPermanentlyDenied;
+        _isLocationDenied =
+            location.isPermanentlyDenied || location.isRestricted;
+        _isNotificationDenied = notification.isPermanentlyDenied;
+
+        _showSettingsButton =
+            (_currentPage == 1 && _isTrackingDenied) ||
+            (_currentPage == 2 && _isLocationDenied) ||
+            (_currentPage == 3 && _isNotificationDenied);
+      });
     }
   }
 
@@ -164,16 +210,23 @@ class _SetupWizardScreenState extends ConsumerState<SetupWizardScreen> {
                 child: PageView.builder(
                   controller: _pageController,
                   physics: const NeverScrollableScrollPhysics(),
-                  onPageChanged: (index) {
-                    setState(() => _currentPage = index);
-                    
+                  onPageChanged: (page) {
+                    setState(() {
+                      _currentPage = page;
+                    });
+                    _checkIfSettingsNeeded();
+
                     // Auto-trigger ATT prompt if on page 1 (Tracking)
-                    if (index == 1 && defaultTargetPlatform == TargetPlatform.iOS) {
-                      Future.delayed(const Duration(milliseconds: 1500), () async {
-                        if (mounted && _currentPage == 1) {
-                          await Permission.appTrackingTransparency.request();
-                        }
-                      });
+                    if (page == 1 &&
+                        defaultTargetPlatform == TargetPlatform.iOS) {
+                      Future.delayed(
+                        const Duration(milliseconds: 1500),
+                        () async {
+                          if (mounted && _currentPage == 1) {
+                            await Permission.appTrackingTransparency.request();
+                          }
+                        },
+                      );
                     }
                   },
                   itemCount: steps.length,
@@ -329,40 +382,75 @@ class _SetupWizardScreenState extends ConsumerState<SetupWizardScreen> {
     );
   }
 
+  Widget _buildSettingsLink(AppLocalizations l10n) {
+    return Padding(
+      padding: const EdgeInsets.only(top: AppTheme.spacingMD),
+      child: InkWell(
+        onTap: () => openAppSettings(),
+        borderRadius: BorderRadius.circular(8),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.settings, size: 14, color: Colors.white70),
+              const SizedBox(width: 6),
+              Text(
+                l10n.openSettings,
+                style: AppTheme.bodySmall.copyWith(
+                  color: Colors.white70,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildTrackingStep(
     BuildContext context,
     String email,
     AppLocalizations l10n,
   ) {
-    return Container(
-      padding: const EdgeInsets.all(AppTheme.spacingLG),
-      decoration: BoxDecoration(
-        color: AppTheme.accentPink.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.accentPink.withValues(alpha: 0.3)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: 24,
-            child: Center(
-              child: Icon(
-                FontAwesomeIcons.shieldHeart,
-                color: AppTheme.accentPink,
-                size: 20,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(AppTheme.spacingLG),
+          decoration: BoxDecoration(
+            color: AppTheme.accentPink.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: AppTheme.accentPink.withValues(alpha: 0.3),
+            ),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 24,
+                child: Center(
+                  child: Icon(
+                    FontAwesomeIcons.shieldHeart,
+                    color: AppTheme.accentPink,
+                    size: 20,
+                  ),
+                ),
               ),
-            ),
+              const SizedBox(width: AppTheme.spacingMD),
+              Expanded(
+                child: Text(
+                  l10n.trackingStepText,
+                  style: AppTheme.bodyMedium.copyWith(height: 1.3),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: AppTheme.spacingMD),
-          Expanded(
-            child: Text(
-              l10n.trackingStepText,
-              style: AppTheme.bodyMedium.copyWith(height: 1.3),
-            ),
-          ),
-        ],
-      ),
+        ),
+        if (_isTrackingDenied) _buildSettingsLink(l10n),
+      ],
     );
   }
 
@@ -371,35 +459,43 @@ class _SetupWizardScreenState extends ConsumerState<SetupWizardScreen> {
     String email,
     AppLocalizations l10n,
   ) {
-    return Container(
-      padding: const EdgeInsets.all(AppTheme.spacingLG),
-      decoration: BoxDecoration(
-        color: AppTheme.accentColor.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.accentColor.withValues(alpha: 0.3)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: 24,
-            child: Center(
-              child: Icon(
-                FontAwesomeIcons.mapLocationDot,
-                color: AppTheme.accentColor,
-                size: 20,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(AppTheme.spacingLG),
+          decoration: BoxDecoration(
+            color: AppTheme.accentColor.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: AppTheme.accentColor.withValues(alpha: 0.3),
+            ),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 24,
+                child: Center(
+                  child: Icon(
+                    FontAwesomeIcons.mapLocationDot,
+                    color: AppTheme.accentColor,
+                    size: 20,
+                  ),
+                ),
               ),
-            ),
+              const SizedBox(width: AppTheme.spacingMD),
+              Expanded(
+                child: Text(
+                  l10n.locationStepText,
+                  style: AppTheme.bodyMedium.copyWith(height: 1.3),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: AppTheme.spacingMD),
-          Expanded(
-            child: Text(
-              l10n.locationStepText,
-              style: AppTheme.bodyMedium.copyWith(height: 1.3),
-            ),
-          ),
-        ],
-      ),
+        ),
+        if (_isLocationDenied) _buildSettingsLink(l10n),
+      ],
     );
   }
 
@@ -408,35 +504,43 @@ class _SetupWizardScreenState extends ConsumerState<SetupWizardScreen> {
     String email,
     AppLocalizations l10n,
   ) {
-    return Container(
-      padding: const EdgeInsets.all(AppTheme.spacingLG),
-      decoration: BoxDecoration(
-        color: AppTheme.accentOrange.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.accentOrange.withValues(alpha: 0.3)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: 24,
-            child: Center(
-              child: Icon(
-                FontAwesomeIcons.circleExclamation,
-                color: AppTheme.accentOrange,
-                size: 20,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(AppTheme.spacingLG),
+          decoration: BoxDecoration(
+            color: AppTheme.accentOrange.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: AppTheme.accentOrange.withValues(alpha: 0.3),
+            ),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 24,
+                child: Center(
+                  child: Icon(
+                    FontAwesomeIcons.circleExclamation,
+                    color: AppTheme.accentOrange,
+                    size: 20,
+                  ),
+                ),
               ),
-            ),
+              const SizedBox(width: AppTheme.spacingMD),
+              Expanded(
+                child: Text(
+                  l10n.notificationStepText,
+                  style: AppTheme.bodyMedium.copyWith(height: 1.3),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: AppTheme.spacingMD),
-          Expanded(
-            child: Text(
-              l10n.notificationStepText,
-              style: AppTheme.bodyMedium.copyWith(height: 1.3),
-            ),
-          ),
-        ],
-      ),
+        ),
+        if (_isNotificationDenied) _buildSettingsLink(l10n),
+      ],
     );
   }
 }

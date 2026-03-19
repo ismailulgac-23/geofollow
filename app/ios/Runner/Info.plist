@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>GeoFollow: Konum Takip</string>
+	<string>Alveron</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -40,19 +40,19 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Uygulama kapalıyken bile aile üyelerinizin veya grup arkadaşlarınızın güvenliğiniz için anlık konumunuzu görebilmesi amacıyla arka plan konum erişimine ihtiyaç duyuyoruz. Not: Arka planda çalışan GPS kullanımı pil ömrünü önemli ölçüde azaltabilir.</string>
+	<string>We need background location access so your family members can see your real-time location for your safety, even when the app is closed. Note: Continued use of GPS running in the background can significantly decrease battery life.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Uygulama kapalıyken bile aile üyelerinizin veya grup arkadaşlarınızın güvenliğiniz için anlık konumunuzu görebilmesi amacıyla arka plan konum erişimine ihtiyaç duyuyoruz. Not: Arka planda çalışan GPS kullanımı pil ömrünü önemli ölçüde azaltabilir.</string>
+	<string>We need background location access so your family members can see your real-time location for your safety, even when the app is closed. Note: Continued use of GPS running in the background can significantly decrease battery life.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Harita üzerinde nerede olduğunuzu görmek ve grup üyelerinizle gerçek zamanlı konum paylaşabilmek için konum erişimine ihtiyaç duyuyoruz.</string>
+	<string>We need location access to show you on the map and share real-time updates with your group members.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Profil fotoğrafınızı çekmek ve paylaşmak için kameranıza erişim gerekir.</string>
+	<string>We need camera access to take and share your profile photo.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Galerinizdeki fotoğrafları profil resmi olarak seçebilmeniz için fotoğraf kitaplığınıza erişim izni verilmelidir.</string>
+	<string>We need photo library access to let you choose a profile picture from your gallery.</string>
 	<key>NSMotionUsageDescription</key>
-	<string>Cihaz hareketlerini takip ederek, konum güncellemelerini pil tasarrufu sağlayacak şekilde optimize ediyoruz.</string>
+	<string>We track device motion to optimize location updates and save battery.</string>
 	<key>NSUserTrackingUsageDescription</key>
-	<string>Size daha güvenli bir deneyim sunmak, kişiselleştirilmiş konum bildirimleri sağlamak ve uygulama performansını iyileştirmek amacıyla verileriniz kullanılacaktır.</string>
+	<string>Your data will be used to provide a safer experience, personalized location notifications, and to improve app performance.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

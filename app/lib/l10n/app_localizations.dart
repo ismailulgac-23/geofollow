@@ -62,8 +62,7 @@ import 'app_localizations_tr.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -71,8 +70,7 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -84,24 +82,23 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
-      <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
-    Locale('tr'),
+    Locale('tr')
   ];
 
   /// No description provided for @appName.
   ///
   /// In en, this message translates to:
-  /// **'GeoFollow'**
+  /// **'Alveron'**
   String get appName;
 
   /// No description provided for @stayConnected.
@@ -542,11 +539,11 @@ abstract class AppLocalizations {
   /// **'No results found.'**
   String get searchNoResults;
 
-  /// No description provided for @welcomeToGeoFollow.
+  /// No description provided for @welcomeToAlveron.
   ///
   /// In en, this message translates to:
-  /// **'Welcome to GeoFollow'**
-  String get welcomeToGeoFollow;
+  /// **'Welcome to Alveron'**
+  String get welcomeToAlveron;
 
   /// No description provided for @noCircleDescription.
   ///
@@ -905,43 +902,43 @@ abstract class AppLocalizations {
   /// No description provided for @welcomeDescription.
   ///
   /// In en, this message translates to:
-  /// **'We created a great profile for you. You are very close to staying connected with your family at all times.'**
+  /// **'Your profile is set! To ensure your family\'s safety 24/7, let\'s configure your real-time tracking and instant notification settings.'**
   String get welcomeDescription;
 
   /// No description provided for @appTracking.
   ///
   /// In en, this message translates to:
-  /// **'App Tracking'**
+  /// **'Data Privacy'**
   String get appTracking;
 
   /// No description provided for @appTrackingDescription.
   ///
   /// In en, this message translates to:
-  /// **'You must allow app tracking so that we can offer you a special and uninterrupted experience.'**
+  /// **'Enable tracking transparency to help us provide a more personalized, secure, and optimized tracking experience.'**
   String get appTrackingDescription;
 
   /// No description provided for @backgroundLocation.
   ///
   /// In en, this message translates to:
-  /// **'Background Location'**
+  /// **'Always-On Safety'**
   String get backgroundLocation;
 
   /// No description provided for @backgroundLocationDescription.
   ///
   /// In en, this message translates to:
-  /// **'Even if the app is closed, we need your background location so your family knows you are safe.'**
+  /// **'Alveron requires \'Always\' location access to send arrival and departure alerts to your family, even when the app is closed.'**
   String get backgroundLocationDescription;
 
   /// No description provided for @notifications.
   ///
   /// In en, this message translates to:
-  /// **'Notifications'**
+  /// **'Instant Alerts'**
   String get notifications;
 
   /// No description provided for @notificationsDescription.
   ///
   /// In en, this message translates to:
-  /// **'Be notified instantly when your family is safe.'**
+  /// **'Get notified immediately when a circle member arrives at a safe zone or sends an SOS emergency signal.'**
   String get notificationsDescription;
 
   /// No description provided for @finishSetup.
@@ -971,19 +968,19 @@ abstract class AppLocalizations {
   /// No description provided for @trackingStepText.
   ///
   /// In en, this message translates to:
-  /// **'Your security is important to us. You must allow tracking in the system notification that will appear when you click the \'Continue\' button.'**
+  /// **'Your privacy is our priority. We use this data only to provide essential safety features. Please tap \'Allow\' when the system dialog appears.'**
   String get trackingStepText;
 
   /// No description provided for @locationStepText.
   ///
   /// In en, this message translates to:
-  /// **'Make sure you select location permission as \"Always Allow\" so we can work even when the device is locked.'**
+  /// **'To keep your circle updated round-the-clock, please ensure you select \'Always Allow\' in the following system settings.'**
   String get locationStepText;
 
   /// No description provided for @notificationStepText.
   ///
   /// In en, this message translates to:
-  /// **'Instant notification when your family enters or leaves places.'**
+  /// **'Stay informed with real-time updates from your group members\' arrivals, departures, and emergency alerts.'**
   String get notificationStepText;
 
   /// No description provided for @failedToPurchase.
@@ -1025,7 +1022,7 @@ abstract class AppLocalizations {
   /// No description provided for @locationTrackingDescription.
   ///
   /// In en, this message translates to:
-  /// **'GeoFollow is tracking your location for your safety.'**
+  /// **'Alveron is tracking your location for your safety.'**
   String get locationTrackingDescription;
 
   /// No description provided for @sosLocationSharingNote.
@@ -1133,7 +1130,7 @@ abstract class AppLocalizations {
   /// No description provided for @shareMessage.
   ///
   /// In en, this message translates to:
-  /// **'Join my group on GeoFollow using this invite code: {code}'**
+  /// **'Join my group on Alveron using this invite code: {code}'**
   String shareMessage(String code);
 
   /// No description provided for @alerts.
@@ -1231,6 +1228,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Read All'**
   String get readAll;
+
+  /// No description provided for @placeEntered.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} entered {place}'**
+  String placeEntered(String name, String place);
+
+  /// No description provided for @placeExited.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} left {place}'**
+  String placeExited(String name, String place);
 
   /// No description provided for @joinedCircle.
   ///
@@ -1340,15 +1349,20 @@ abstract class AppLocalizations {
   /// **'30 day history'**
   String get onboarding30DayHistory;
 
-  /// No description provided for @loadingLocation.
+  /// No description provided for @permitted.
   ///
   /// In en, this message translates to:
-  /// **'Initializing location...'**
-  String get loadingLocation;
+  /// **'Permitted'**
+  String get permitted;
+
+  /// No description provided for @notPermitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Permitted'**
+  String get notPermitted;
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -1357,26 +1371,25 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['en', 'tr'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'tr'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
+
+
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'en':
-      return AppLocalizationsEn();
-    case 'tr':
-      return AppLocalizationsTr();
+    case 'en': return AppLocalizationsEn();
+    case 'tr': return AppLocalizationsTr();
   }
 
   throw FlutterError(
     'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.',
+    'that was used.'
   );
 }

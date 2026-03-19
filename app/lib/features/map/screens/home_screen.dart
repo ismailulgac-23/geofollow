@@ -358,7 +358,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 const CircularProgressIndicator(color: AppTheme.primaryColor),
                 const SizedBox(height: 24),
                 Text(
-                  l10n.loadingLocation,
+                  "...",
                   style: AppTheme.bodyLarge.copyWith(
                     color: AppTheme.textSecondary,
                   ),
@@ -535,7 +535,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   Builder(
                     builder: (ctx) {
                       final user = ref.watch(authProvider).user;
-                      if (user != null && user.isPremium) return const SizedBox();
+                      if (user != null && user.isPremium)
+                        return const SizedBox();
                       return _MapControlButton(
                             icon: Icons.workspace_premium,
                             onPressed: () => PremiumBottomSheet.show(context),
@@ -2334,7 +2335,7 @@ class _NoCircleViewState extends ConsumerState<_NoCircleView> {
                         ),
                         const SizedBox(height: AppTheme.spacingXL),
                         Text(
-                          l10n.welcomeToGeoFollow,
+                          l10n.welcomeToAlveron,
                           style: AppTheme.heading1,
                           textAlign: TextAlign.center,
                         ).animate().fadeIn(delay: 200.ms),

@@ -5,7 +5,7 @@ import 'api_client.dart';
 import 'dart:async';
 
 // ─────────────────────────────────────────────────────────────────────────────
-// RevenueCat Service — GeoFollow
+// RevenueCat Service — Alveron
 //
 // Products (App Store):
 //   pro_1month  → PRO (1 Month)
@@ -33,7 +33,8 @@ class RevenueCatService {
   static final _premiumStatusController = StreamController<bool>.broadcast();
 
   /// Premium durumu değişikliklerini dinlemek için stream
-  static Stream<bool> get premiumStatusStream => _premiumStatusController.stream;
+  static Stream<bool> get premiumStatusStream =>
+      _premiumStatusController.stream;
 
   // ─────────────────────────────────────────────────────────────────────────
   // Initialization — main() içinde çağrılır
@@ -53,7 +54,9 @@ class RevenueCatService {
 
     // Listen to customer info updates globally
     Purchases.addCustomerInfoUpdateListener((customerInfo) {
-      final active = customerInfo.entitlements.active.containsKey(entitlementId);
+      final active = customerInfo.entitlements.active.containsKey(
+        entitlementId,
+      );
       _premiumStatusController.add(active);
       debugPrint('[RevenueCat] 🔄 CustomerInfo Updated. isPremium: $active');
 
@@ -90,8 +93,6 @@ class RevenueCatService {
       return false;
     }
   }
-
-
 
   /// Aktif abonelik detaylarını döner. Premium değilse null.
   static Future<SubscriptionInfo?> getSubscriptionInfo() async {
@@ -208,7 +209,9 @@ class RevenueCatService {
       debugPrint('[RevenueCat] LogIn: $userId | isNew=${result.created}');
 
       // LogIn sonrası aktif kontrol
-      final active = result.customerInfo.entitlements.active.containsKey(entitlementId);
+      final active = result.customerInfo.entitlements.active.containsKey(
+        entitlementId,
+      );
       _premiumStatusController.add(active);
       await syncPremiumStatus(active);
     } catch (e) {
@@ -219,7 +222,7 @@ class RevenueCatService {
   /// Kullanıcı çıkış yaptığında — anonymous moda geç
   static Future<void> logOut() async {
     try {
-      final info = await Purchases.logOut();
+      await Purchases.logOut();
       _premiumStatusController.add(false);
       debugPrint('[RevenueCat] LogOut: anonymous mode');
     } catch (e) {

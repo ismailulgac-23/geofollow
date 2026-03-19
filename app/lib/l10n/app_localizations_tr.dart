@@ -9,7 +9,7 @@ class AppLocalizationsTr extends AppLocalizations {
   AppLocalizationsTr([String locale = 'tr']) : super(locale);
 
   @override
-  String get appName => 'GeoFollow';
+  String get appName => 'Alveron';
 
   @override
   String get stayConnected => 'Bağlantıda Kalın';
@@ -101,9 +101,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get turkish => 'Türkçe';
-
-  @override
-  String get loadingLocation => 'Konum başlatılıyor...';
 
   @override
   String get english => 'İngilizce';
@@ -241,7 +238,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get searchNoResults => 'Sonuç bulunamadı.';
 
   @override
-  String get welcomeToGeoFollow => 'GeoFollow\'a Hoş Geldiniz';
+  String get welcomeToAlveron => 'Alveron\'a Hoş Geldiniz';
 
   @override
   String get noCircleDescription =>
@@ -442,52 +439,52 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get welcomeDescription =>
-      'Senin için harika bir profil oluşturduk. Artık ailenle her an bağlantıda kalmaya çok yakınsın.';
+      'Profiliniz hazır! Ailenizin güvenliğini 7/24 sağlamak için gerçek zamanlı takip ve anlık bildirim ayarlarınızı yapılandıralım.';
 
   @override
-  String get appTracking => 'Uygulama Takibi';
+  String get appTracking => 'Veri Gizliliği';
 
   @override
   String get appTrackingDescription =>
-      'Sana özel ve kesintisiz bir deneyim sunabilmemiz için uygulama takibine izin vermelisin.';
+      'Bu, konum hassasiyetini optimize etmemize ve uygulama performansını artırmamıza yardımcı olur. Bunu etkinleştirerek, ailenizin güvenliği için en güvenilir bağlantıyı sağlarsınız.';
 
   @override
-  String get backgroundLocation => 'Arka Plan Konumu';
+  String get backgroundLocation => 'Arka Plan Takibi';
 
   @override
   String get backgroundLocationDescription =>
-      'Uygulama kapalı olsa bile ailenin senin güvende olduğunu bilmesi için arka plan konumuna ihtiyacımız var.';
+      '7/24 güvenlik için hayati önem taşır. Bu, Alveron\'un uygulama cebinizdeyken bile güvenli bölgelere giriş/çıkış yaptığınızda ailenize haber vermesini sağlar.';
 
   @override
-  String get notifications => 'Bildirimler';
+  String get notifications => 'Anlık Uyarılar';
 
   @override
   String get notificationsDescription =>
-      'Ailen güvende olduğunda anında haberdar ol.';
+      'Ailenizin güvenliğine açılan köprüdür. Grup üyelerinizin varışları, ayrılışları ve acil durum sinyalleri hakkında anında bildirim alın.';
 
   @override
   String get finishSetup => 'Kurulumu Tamamla';
 
   @override
-  String get allowAndContinue => 'İzin Ver ve Devam Et';
+  String get allowAndContinue => 'Devam Et';
 
   @override
   String get connectedAccount => 'Bağlı Hesap';
 
   @override
-  String get displayNameLabel => 'Görünen Adın';
+  String get displayNameLabel => 'Görünen Ad';
 
   @override
   String get trackingStepText =>
-      'Güvenliğin bizim için önemli. \"Devam Et\" butonuna tıkladığında karşına çıkacak sistem uyarısında uygulama içi deneyim için takip izni vermelisin.';
+      'Bu verileri yalnızca güvenliği artırmak ve doğru konum güncellemeleri sağlamak için kullanıyoruz. Devre dışı kalırsa, takip daha az hassas olabilir ve bazı bağlantı özellikleri kısıtlanabilir.';
 
   @override
   String get locationStepText =>
-      'Cihazın kilidi kapalıyken dahi çalışabilmemiz için konum iznini \"Her Zaman İzin Ver\" olarak seçtiğinden emin ol.';
+      'Kesintisiz erişim, grubunuzun gerçek zamanlı güncellemeler almasını sağlar. \'Her Zaman İzin Ver\' seçilmezse, otomatik güvenli bölge uyarıları ve arka planda SOS paylaşımı çalışmaz.';
 
   @override
   String get notificationStepText =>
-      'Aileniz mekanlara girdiğinde veya çıktığında anında bildirim almak için gereklidir.';
+      'Bildirimler kapalı olursa, bir aile üyesi yardım istediğinde veya hedefine güvenle ulaştığında anlık uyarı alamazsınız.';
 
   @override
   String failedToPurchase(String error) {
@@ -513,7 +510,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get locationTrackingDescription =>
-      'GeoFollow güvenliğiniz için konumunuzu takip ediyor.';
+      'Alveron güvenliğiniz için konumunuzu takip ediyor.';
 
   @override
   String get sosLocationSharingNote =>
@@ -576,7 +573,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String shareMessage(String code) {
-    return 'GeoFollow grubuma katılmak için davet kodunu kullanın: $code';
+    return 'Alveron grubuma katılmak için davet kodunu kullanın: $code';
   }
 
   @override
@@ -628,6 +625,16 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get readAll => 'Tümünü Oku';
+
+  @override
+  String placeEntered(String name, String place) {
+    return '$name, $place yerine giriş yaptı';
+  }
+
+  @override
+  String placeExited(String name, String place) {
+    return '$name, $place yerinden ayrıldı';
+  }
 
   @override
   String joinedCircle(String circle) {
@@ -692,4 +699,10 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get onboarding30DayHistory => '30 günlük geçmiş';
+
+  @override
+  String get permitted => 'İzin Verildi';
+
+  @override
+  String get notPermitted => 'İzin Verilmedi';
 }

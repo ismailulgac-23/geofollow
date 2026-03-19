@@ -8,6 +8,8 @@ import 'package:tracker_app/core/providers/auth_provider.dart';
 import 'package:tracker_app/core/services/api_client.dart';
 import 'package:tracker_app/core/theme/app_theme.dart';
 import 'package:tracker_app/l10n/app_localizations.dart';
+import 'package:tracker_app/core/services/att_service.dart';
+import 'package:flutter/foundation.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ─────────────────────────────────────────────────────────────────────────────
@@ -42,7 +44,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   }
 
   Future<void> _initApp() async {
-    await Future.delayed(const Duration(milliseconds: 2800));
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      await Future.delayed(const Duration(milliseconds: 1500));
+      if (!mounted) return;
+      await AttService.checkAndRequest(context);
+    }
+
+    await Future.delayed(const Duration(milliseconds: 1000));
     if (!mounted) return;
 
     await ref.read(authProvider.notifier).checkAuthStatus();
@@ -167,6 +175,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       ),
     );
   }
+
+  // ── Version badge ─────────────────────────────────────────────────
 
   List<Widget> _buildOrbs() {
     return [

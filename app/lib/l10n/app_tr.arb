@@ -1,6 +1,6 @@
 {
   "@@locale": "tr",
-  "appName": "GeoFollow",
+  "appName": "Alveron",
   "stayConnected": "Bağlantıda Kalın",
   "withLovedOnes": "Sevdiklerinizle",
   "trackDescription": "Ailenizi ve arkadaşlarınızı gerçek zamanlı takip edin. Nerede olurlarsa olsunlar güvende olduklarını bilin.",
@@ -74,7 +74,7 @@
   "searchHint": "Kişi veya yer ara...",
   "searchPlaceholder": "Aile üyelerini veya yerleri ara...",
   "searchNoResults": "Sonuç bulunamadı.",
-  "welcomeToGeoFollow": "GeoFollow'a Hoş Geldiniz",
+  "welcomeToGeoFollow": "Alveron'a Hoş Geldiniz",
   "noCircleDescription": "Takip etmeye başlamak için bir grup oluşturun veya bir davet koduyla katılın.",
   "or": "VEYA",
   "circleNameExample": "Grup Adı (örn. Aile)",
@@ -189,18 +189,18 @@
   },
   "welcomeDescription": "Profiliniz hazır! Ailenizin güvenliğini 7/24 sağlamak için gerçek zamanlı takip ve anlık bildirim ayarlarınızı yapılandıralım.",
   "appTracking": "Veri Gizliliği",
-  "appTrackingDescription": "Size daha güvenli bir deneyim sunmak, kişiselleştirilmiş konum bildirimleri sağlamak ve uygulama performansını iyileştirmek amacıyla verileriniz kullanılacaktır.",
+  "appTrackingDescription": "Bu, konum hassasiyetini optimize etmemize ve uygulama performansını artırmamıza yardımcı olur. Bunu etkinleştirerek, ailenizin güvenliği için en güvenilir bağlantıyı sağlarsınız.",
   "backgroundLocation": "Arka Plan Takibi",
-  "backgroundLocationDescription": "GeoFollow, uygulama kapalıyken bile güvenli bölgelere giriş/çıkış bildirimlerini ailenize iletebilmek için 'Her Zaman' konum erişimine ihtiyaç duyar.",
+  "backgroundLocationDescription": "7/24 güvenlik için hayati önem taşır. Bu, Alveron'un uygulama cebinizdeyken bile güvenli bölgelere giriş/çıkış yaptığınızda ailenize haber vermesini sağlar.",
   "notifications": "Anlık Uyarılar",
-  "notificationsDescription": "Grup üyeleriniz güvenli bir yere ulaştığında veya SOS acil durum sinyali gönderdiğinde anında haberdar olun.",
+  "notificationsDescription": "Ailenizin güvenliğine açılan köprüdür. Grup üyelerinizin varışları, ayrılışları ve acil durum sinyalleri hakkında anında bildirim alın.",
   "finishSetup": "Kurulumu Tamamla",
-  "allowAndContinue": "İzin Ver ve Devam Et",
+  "allowAndContinue": "Devam Et",
   "connectedAccount": "Bağlı Hesap",
   "displayNameLabel": "Görünen Ad",
-  "trackingStepText": "Gizliliğiniz önceliğimizdir. Lütfen sistem uyarısı çıktığında, size özel bildirimler ve güvenlik özellikleri sunabilmemiz için 'İzin Ver' seçeneğine dokunun.",
-  "locationStepText": "Ailenizi her an güncel tutabilmek için lütfen bir sonraki ekranda konum iznini 'Her Zaman İzin Ver' olarak seçtiğinizden emin olun.",
-  "notificationStepText": "Grup üyelerinizin varışlarından, ayrılışlarından ve acil durum çağrılarından anında haberdar olun.",
+  "trackingStepText": "Gizliliğiniz önceliğimizdir. Bu veriler sadece güvenliğiniz için hayati öneme sahip özellikler sunmak amacıyla kullanılır.",
+  "locationStepText": "Kesintisiz erişim, grubunuzun gerçek zamanlı güncellemeler almasını sağlar. 'Her Zaman İzin Ver' seçilmezse, otomatik güvenli bölge uyarıları ve arka planda SOS paylaşımı çalışmaz.",
+  "notificationStepText": "Bildirimler kapalı olursa, bir aile üyesi yardım istediğinde veya hedefine güvenle ulaştığında anlık uyarı alamazsınız.",
   "failedToPurchase": "Satın alma başarısız oldu: {error}",
   "@failedToPurchase": {
     "placeholders": {
@@ -221,7 +221,7 @@
     }
   },
   "locationTrackingActive": "Konum Takibi Aktif",
-  "locationTrackingDescription": "GeoFollow güvenliğiniz için konumunuzu takip ediyor.",
+  "locationTrackingDescription": "Alveron güvenliğiniz için konumunuzu takip ediyor.",
   "sosLocationSharingNote": "Konumunuz tüm üyelerle anında paylaşılacak.",
   "failedToJoinCircle": "Gruba katılamadı",
   "failedToCreateCircle": "Grup oluşturulamadı",
@@ -260,7 +260,7 @@
   "inviteCodeCopied": "Davet kodu kopyalandı!",
   "copy": "Kopyala",
   "share": "Paylaş",
-  "shareMessage": "GeoFollow grubuma katılmak için davet kodunu kullanın: {code}",
+  "shareMessage": "Alveron grubuma katılmak için davet kodunu kullanın: {code}",
   "@shareMessage": {
     "placeholders": {
       "code": {
@@ -355,5 +355,7 @@
   "onboardingInstantAlerts": "Anlık bildirimler",
   "onboardingSmartHistory": "Akıllı geçmiş",
   "onboardingSosEmergency": "SOS acil durum",
-  "onboarding30DayHistory": "30 günlük geçmiş"
+  "onboarding30DayHistory": "30 günlük geçmiş",
+  "permitted": "İzin Verildi",
+  "notPermitted": "İzin Verilmedi"
 }

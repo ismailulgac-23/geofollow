@@ -16,6 +16,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:tracker_app/l10n/app_localizations.dart';
 import 'package:tracker_app/core/providers/locale_provider.dart';
+import 'package:tracker_app/core/services/att_service.dart';
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
+import 'package:flutter/foundation.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -29,6 +32,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
   bool _ghostMode = false;
   bool _notifications = true;
   bool _alwaysLocation = false;
+  TrackingStatus _attStatus = TrackingStatus.notDetermined;
 
   @override
   void initState() {
@@ -63,9 +67,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
 
   Future<void> _checkPermissions() async {
     final isRunning = await FlutterBackgroundService().isRunning();
+    TrackingStatus attStatus = TrackingStatus.notDetermined;
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      attStatus = await AppTrackingTransparency.trackingAuthorizationStatus;
+    }
     if (mounted) {
       setState(() {
         _alwaysLocation = isRunning;
+        _attStatus = attStatus;
       });
     }
   }
@@ -333,6 +342,24 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                         onChanged: _toggleAlwaysLocation,
                       ),
                     ).animate().fadeIn(duration: 400.ms, delay: 500.ms),
+                    if (defaultTargetPlatform == TargetPlatform.iOS) ...[
+                      const SizedBox(height: AppTheme.spacingSM),
+                      _SettingsTile(
+                        icon: FontAwesomeIcons.shieldHalved,
+                        title: l10n.appTracking,
+                        subtitle: _attStatus == TrackingStatus.authorized
+                            ? l10n.permitted
+                            : l10n.notPermitted,
+                        onTap: () async {
+                          if (_attStatus == TrackingStatus.notDetermined) {
+                            await AttService.checkAndRequest(context);
+                            await _checkPermissions();
+                          } else {
+                            openAppSettings();
+                          }
+                        },
+                      ).animate().fadeIn(duration: 400.ms, delay: 550.ms),
+                    ],
                     const SizedBox(height: AppTheme.spacingMD),
                     Align(
                       alignment: Alignment.centerLeft,

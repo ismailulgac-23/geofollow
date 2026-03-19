@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appName => 'GeoFollow';
+  String get appName => 'Alveron';
 
   @override
   String get stayConnected => 'Stay Connected';
@@ -238,7 +238,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get searchNoResults => 'No results found.';
 
   @override
-  String get welcomeToGeoFollow => 'Welcome to GeoFollow';
+  String get welcomeToAlveron => 'Welcome to Alveron';
 
   @override
   String get noCircleDescription =>
@@ -439,34 +439,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get welcomeDescription =>
-      'We created a great profile for you. You are very close to staying connected with your family at all times.';
+      'Your profile is set! To ensure your family\'s safety 24/7, let\'s configure your real-time tracking and instant notification settings.';
 
   @override
-  String get appTracking => 'App Tracking';
+  String get appTracking => 'Data Privacy';
 
   @override
   String get appTrackingDescription =>
-      'You must allow app tracking so that we can offer you a special and uninterrupted experience.';
+      'This helps us optimize tracking precision and improve app performance. By enabling this, you ensure the most reliable connection for your family\'s safety.';
 
   @override
-  String get backgroundLocation => 'Background Location';
+  String get backgroundLocation => 'Always-On Safety';
 
   @override
   String get backgroundLocationDescription =>
-      'Even if the app is closed, we need your background location so your family knows you are safe.';
+      'Essential for 24/7 safety. This allows Alveron to notify your family the moment you arrive or leave safe zones, even when the app is in your pocket.';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => 'Instant Alerts';
 
   @override
   String get notificationsDescription =>
-      'Be notified instantly when your family is safe.';
+      'The bridge to your family\'s safety. Get instant updates on arrivals, departures, and emergency signals from your circle members.';
 
   @override
   String get finishSetup => 'Finish Setup';
 
   @override
-  String get allowAndContinue => 'Allow and Continue';
+  String get allowAndContinue => 'Continue';
 
   @override
   String get connectedAccount => 'Connected Account';
@@ -476,15 +476,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trackingStepText =>
-      'Your security is important to us. You must allow tracking in the system notification that will appear when you click the \'Continue\' button.';
+      'We use this data solely to enhance security and provide accurate location updates. If disabled, tracking may be less precise, and some connection features may be limited.';
 
   @override
   String get locationStepText =>
-      'Make sure you select location permission as \"Always Allow\" so we can work even when the device is locked.';
+      'Continuous access ensures your group receives real-time updates. Without \'Always Allow\', automatic safe zone alerts and background SOS sharing will not function.';
 
   @override
   String get notificationStepText =>
-      'Instant notification when your family enters or leaves places.';
+      'Without notifications, you won\'t be alerted if a family member needs help or when they safely reach their destination.';
 
   @override
   String failedToPurchase(String error) {
@@ -510,7 +510,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get locationTrackingDescription =>
-      'GeoFollow is tracking your location for your safety.';
+      'Alveron is tracking your location for your safety.';
 
   @override
   String get sosLocationSharingNote =>
@@ -573,7 +573,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String shareMessage(String code) {
-    return 'Join my group on GeoFollow using this invite code: $code';
+    return 'Join my group on Alveron using this invite code: $code';
   }
 
   @override
@@ -625,6 +625,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get readAll => 'Read All';
+
+  @override
+  String placeEntered(String name, String place) {
+    return '$name entered $place';
+  }
+
+  @override
+  String placeExited(String name, String place) {
+    return '$name left $place';
+  }
 
   @override
   String joinedCircle(String circle) {
@@ -684,11 +694,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingSmartHistory => 'Smart history';
 
   @override
-  String get onboarding30DayHistory => '30 day history';
-
-  @override
   String get onboardingSosEmergency => 'SOS emergency';
 
   @override
-  String get loadingLocation => 'Initializing location...';
+  String get onboarding30DayHistory => '30 day history';
+
+  @override
+  String get permitted => 'Permitted';
+
+  @override
+  String get notPermitted => 'Not Permitted';
 }

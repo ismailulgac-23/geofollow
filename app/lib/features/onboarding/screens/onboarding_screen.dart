@@ -233,20 +233,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                 text: const TextSpan(
                   children: [
                     TextSpan(
-                      text: 'Geo',
+                      text: 'Alveron',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
                         color: Color(0xFFA29BFE),
-                        letterSpacing: -0.5,
-                      ),
-                    ),
-                    TextSpan(
-                      text: 'Follow',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w300,
-                        color: Colors.white,
                         letterSpacing: -0.5,
                       ),
                     ),
@@ -496,7 +487,7 @@ class _EmojiFeatureBadge extends StatelessWidget {
               Text(emoji, style: const TextStyle(fontSize: 16)),
               const SizedBox(width: 6),
               Text(
-                'GeoFollow',
+                'Alveron',
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,

@@ -90,7 +90,7 @@ class _TrackerAppState extends ConsumerState<TrackerApp>
     });
 
     return MaterialApp.router(
-      title: 'GeoFollow',
+      title: 'Alveron',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkTheme,
       routerConfig: AppRouter.router,

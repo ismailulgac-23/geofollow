@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tracker_app/core/models/user_model.dart';
-import 'package:tracker_app/core/providers/providers.dart';
 import 'package:tracker_app/core/services/api_client.dart';
 import 'package:tracker_app/core/services/location_service.dart';
 import 'package:tracker_app/core/services/revenue_cat_service.dart';
@@ -15,7 +14,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:geolocator/geolocator.dart';
 
 // Auth state
 enum AuthStatus {
