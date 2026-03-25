@@ -153,7 +153,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     while (position == null && retryCount < 3) {
       if (!mounted) return;
       position = await LocationService.getCurrentPosition(
-        timeout: const Duration(seconds: 4),
+        timeout: const Duration(seconds: 12),
       );
 
       if (position == null) {
@@ -1403,10 +1403,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<Uint8List> _getCustomMarkerIcon(UserModel user) async {
-    // Create a large avatar marker - 220x220 pixels for better visibility
-    const int markerSize = 220;
-    const double avatarRadius = 80.0;
-    const double borderWidth = 8.0;
+    // Ultra minimal ve çok daha temiz bir boyut (80x80)
+    const int markerSize = 80;
+    const double avatarRadius = 30.0;
+    const double borderWidth = 3.0;
 
     final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
     final Canvas canvas = Canvas(pictureRecorder);
@@ -1415,11 +1415,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final avatarUrl = user.avatarUrl;
     final isOnline = user.isOnline;
 
-    // Draw shadow
+    // Gölgelendirme (Ultra minimal boyut için optimize edildi)
     final Paint shadowPaint = Paint()
-      ..color = Colors.black.withValues(alpha: 0.3)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 15);
-    canvas.drawCircle(center, avatarRadius + borderWidth + 5, shadowPaint);
+      ..color = Colors.black.withValues(alpha: 0.2)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6);
+    canvas.drawCircle(center, avatarRadius + borderWidth + 1, shadowPaint);
 
     // Draw outer border (status color)
     final Paint borderPaint = Paint()
@@ -1485,19 +1485,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       }
     }
 
-    // Draw initial if no avatar
+    // Eğer avatar yoksa veya yüklenemediyse İkon çiz (Zarafet için İsim baş harfi yerine İkon)
     if (!avatarDrawn) {
-      final String initial = user.name.isNotEmpty
-          ? user.name.substring(0, 1).toUpperCase()
-          : '?';
-
       final TextPainter textPainter = TextPainter(
         text: TextSpan(
-          text: initial,
-          style: const TextStyle(
-            fontSize: 40,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+          text: String.fromCharCode(Icons.person.codePoint),
+          style: TextStyle(
+            fontSize: 28,
+            fontFamily: Icons.person.fontFamily,
+            color: Colors.white.withValues(alpha: 0.9),
           ),
         ),
         textAlign: TextAlign.center,
@@ -1520,23 +1516,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         center.dy - avatarRadius + 5,
       );
 
-      // Badge shadow
+      // Badge shadow (Ultra minimal ölçek)
       final Paint badgeShadowPaint = Paint()
-        ..color = const Color(0xFF10B981).withValues(alpha: 0.5)
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
-      canvas.drawCircle(badgeCenter, 16, badgeShadowPaint);
+        ..color = const Color(0xFF10B981).withValues(alpha: 0.3)
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3);
+      canvas.drawCircle(badgeCenter, 6, badgeShadowPaint);
 
       // Badge white background
       final Paint badgeBgPaint = Paint()
         ..color = Colors.white
         ..style = PaintingStyle.fill;
-      canvas.drawCircle(badgeCenter, 14, badgeBgPaint);
+      canvas.drawCircle(badgeCenter, 5, badgeBgPaint);
 
       // Badge green dot
       final Paint badgeDotPaint = Paint()
         ..color = const Color(0xFF10B981)
         ..style = PaintingStyle.fill;
-      canvas.drawCircle(badgeCenter, 10, badgeDotPaint);
+      canvas.drawCircle(badgeCenter, 3.5, badgeDotPaint);
     }
 
     final picture = pictureRecorder.endRecording();

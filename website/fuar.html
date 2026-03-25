@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Küresel Ticari Fuar Rehberi ve Medya</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Daha temiz bir görünüm için özel kaydırma çubuğu */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+    </style>
+</head>
+
+<body class="bg-[#FAFAFA] text-gray-900 antialiased selection:bg-gray-200">
+
+    <!-- Üst Reklam Banner'ı -->
+    <div
+        class="w-full bg-gray-100 border-b border-gray-200 py-3 flex items-center justify-center text-xs text-gray-500 uppercase tracking-widest font-medium">
+        Üst Reklam Alanı
+    </div>
+
+    <!-- Navigasyon -->
+    <nav class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-2">
+                    <div class="w-8 h-8 bg-black rounded-md flex items-center justify-center">
+                        <iconify-icon icon="solar:global-linear" class="text-white text-lg"></iconify-icon>
+                    </div>
+                    <span class="font-semibold tracking-tighter text-xl">FUARHUB</span>
+                </div>
+
+                <!-- Masaüstü Menü -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="text-sm font-medium text-gray-900">Rehber</a>
+                    <a href="#" class="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">Haberler
+                        ve Medya</a>
+                    <a href="#"
+                        class="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">Organizatörler
+                        İçin</a>
+                </div>
+
+                <!-- Aksiyonlar -->
+                <div class="flex items-center space-x-4">
+                    <!-- Dil Seçimi -->
+                    <button
+                        class="hidden md:flex items-center gap-1 text-sm font-medium text-gray-500 hover:text-gray-900">
+                        <span>TR</span>
+                        <iconify-icon icon="solar:alt-arrow-down-linear"></iconify-icon>
+                    </button>
+                    <a href="#"
+                        class="hidden sm:inline-block text-sm font-medium text-gray-500 hover:text-gray-900">Giriş
+                        Yap</a>
+                    <a href="#"
+                        class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-800 transition-colors">
+                        Kayıt Ol
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero & Arama Bölümü -->
+    <header class="bg-white border-b border-gray-200 py-16 lg:py-24 relative overflow-hidden">
+        <div
+            class="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-30">
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tighter text-gray-900 mb-6">
+                Küresel Ticari Fuarları Keşfedin
+            </h1>
+            <p class="max-w-2xl mx-auto text-base sm:text-lg text-gray-500 mb-10 font-normal">
+                Uluslararası sergiler için en kapsamlı rehber ve haber platformu, dünya çapındaki profesyonelleri
+                endüstriler arasında birbirine bağlar.
+            </p>
+
+            <!-- Gelişmiş Arama Kutusu -->
+            <div class="max-w-4xl mx-auto bg-white border border-gray-200 shadow-sm rounded-2xl p-2 sm:p-3">
+                <form class="flex flex-col md:flex-row gap-2">
+                    <!-- Anahtar Kelime -->
+                    <div class="flex-1 relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <iconify-icon icon="solar:magnifer-linear" class="text-gray-400"></iconify-icon>
+                        </div>
+                        <input type="text" placeholder="Etkinlik, sektör ara..."
+                            class="block w-full pl-10 pr-3 py-3 border-none bg-gray-50 rounded-xl text-sm focus:ring-1 focus:ring-gray-200 focus:bg-white transition-colors outline-none w-full placeholder-gray-400">
+                    </div>
+
+                    <!-- Sektör Filtresi -->
+                    <div
+                        class="md:w-48 relative border-t md:border-t-0 md:border-l border-gray-100 pt-2 md:pt-0 md:pl-2">
+                        <div
+                            class="absolute inset-y-0 left-0 md:left-2 pl-3 flex items-center pointer-events-none mt-2 md:mt-0">
+                            <iconify-icon icon="solar:box-linear" class="text-gray-400"></iconify-icon>
+                        </div>
+                        <select
+                            class="block w-full pl-10 pr-8 py-3 border-none bg-transparent text-sm text-gray-700 focus:ring-0 outline-none appearance-none cursor-pointer">
+                            <option>Tüm Sektörler</option>
+                            <option>Teknoloji</option>
+                            <option>Üretim</option>
+                            <option>Tekstil</option>
+                            <option>Otomotiv</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none mt-2 md:mt-0">
+                            <iconify-icon icon="solar:alt-arrow-down-linear" class="text-gray-400"></iconify-icon>
+                        </div>
+                    </div>
+
+                    <!-- Konum Filtresi -->
+                    <div
+                        class="md:w-48 relative border-t md:border-t-0 md:border-l border-gray-100 pt-2 md:pt-0 md:pl-2">
+                        <div
+                            class="absolute inset-y-0 left-0 md:left-2 pl-3 flex items-center pointer-events-none mt-2 md:mt-0">
+                            <iconify-icon icon="solar:map-point-linear" class="text-gray-400"></iconify-icon>
+                        </div>
+                        <select
+                            class="block w-full pl-10 pr-8 py-3 border-none bg-transparent text-sm text-gray-700 focus:ring-0 outline-none appearance-none cursor-pointer">
+                            <option>Küresel</option>
+                            <option>Avrupa</option>
+                            <option>Asya</option>
+                            <option>Kuzey Amerika</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none mt-2 md:mt-0">
+                            <iconify-icon icon="solar:alt-arrow-down-linear" class="text-gray-400"></iconify-icon>
+                        </div>
+                    </div>
+
+                    <button type="button"
+                        class="mt-2 md:mt-0 w-full md:w-auto px-8 py-3 bg-black text-white text-sm font-medium rounded-xl hover:bg-gray-800 transition-colors flex items-center justify-center gap-2">
+                        Ara
+                    </button>
+                </form>
+            </div>
+
+            <!-- Hızlı Filtreler -->
+            <div class="mt-6 flex flex-wrap justify-center gap-2">
+                <span
+                    class="px-3 py-1.5 bg-gray-100 border border-gray-200 rounded-full text-xs font-medium text-gray-600 cursor-pointer hover:border-gray-300 transition-colors">Bu
+                    Ay</span>
+                <span
+                    class="px-3 py-1.5 bg-gray-100 border border-gray-200 rounded-full text-xs font-medium text-gray-600 cursor-pointer hover:border-gray-300 transition-colors">En
+                    İyi 100 Fuar</span>
+                <span
+                    class="px-3 py-1.5 bg-gray-100 border border-gray-200 rounded-full text-xs font-medium text-gray-600 cursor-pointer hover:border-gray-300 transition-colors">Çevrimiçi
+                    Etkinlikler</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Ana İçerik -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+
+            <!-- Sol Sütun: Rehber (Genişlik 8) -->
+            <div class="lg:col-span-8 space-y-12">
+
+                <!-- Öne Çıkan / Sponsorlu Fuarlar -->
+                <section>
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-semibold tracking-tight text-gray-900 flex items-center gap-2">
+                            <iconify-icon icon="solar:star-linear" class="text-gray-400"></iconify-icon>
+                            Öne Çıkan Sergiler
+                        </h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Öne Çıkan Kart 1 -->
+                        <div
+                            class="group relative bg-white border border-gray-200 rounded-2xl p-5 hover:border-gray-300 hover:shadow-sm transition-all cursor-pointer flex flex-col h-full">
+                            <div class="flex justify-between items-start mb-4">
+                                <span
+                                    class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-600">Teknoloji</span>
+                                <span
+                                    class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-gray-900 text-white tracking-widest uppercase text-[10px]">Sponsorlu</span>
+                            </div>
+                            <h3 class="text-lg font-medium tracking-tight text-gray-900 group-hover:text-black mb-2">
+                                GITEX Global 2024</h3>
+                            <p class="text-sm text-gray-500 mb-4 line-clamp-2">Dubai'ye geri dönen dünyanın en büyük
+                                kurumsal ve devlet teknoloji etkinliği.</p>
+
+                            <div class="mt-auto space-y-2">
+                                <div class="flex items-center text-sm text-gray-600 gap-2">
+                                    <iconify-icon icon="solar:calendar-linear" class="text-gray-400"></iconify-icon>
+                                    14 - 18 Ekim 2024
+                                </div>
+                                <div class="flex items-center text-sm text-gray-600 gap-2">
+                                    <iconify-icon icon="solar:map-point-linear" class="text-gray-400"></iconify-icon>
+                                    Dubai, BAE
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Öne Çıkan Kart 2 -->
+                        <div
+                            class="group relative bg-white border border-gray-200 rounded-2xl p-5 hover:border-gray-300 hover:shadow-sm transition-all cursor-pointer flex flex-col h-full">
+                            <div class="flex justify-between items-start mb-4">
+                                <span
+                                    class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-600">Üretim</span>
+                                <span
+                                    class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-gray-900 text-white tracking-widest uppercase text-[10px]">Sponsorlu</span>
+                            </div>
+                            <h3 class="text-lg font-medium tracking-tight text-gray-900 group-hover:text-black mb-2">
+                                Hannover Messe</h3>
+                            <p class="text-sm text-gray-500 mb-4 line-clamp-2">Endüstriyel teknoloji için dünyanın önde
+                                gelen ticaret fuarı, otomasyon ve robotiği sergiliyor.</p>
+
+                            <div class="mt-auto space-y-2">
+                                <div class="flex items-center text-sm text-gray-600 gap-2">
+                                    <iconify-icon icon="solar:calendar-linear" class="text-gray-400"></iconify-icon>
+                                    22 - 26 Nisan 2024
+                                </div>
+                                <div class="flex items-center text-sm text-gray-600 gap-2">
+                                    <iconify-icon icon="solar:map-point-linear" class="text-gray-400"></iconify-icon>
+                                    Hannover, Almanya
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- İçerik İçi Reklam Banner'ı -->
+                <div
+                    class="w-full bg-gray-100 border border-gray-200 rounded-xl py-6 flex flex-col items-center justify-center text-gray-400">
+                    <span class="text-xs uppercase tracking-widest font-medium mb-1">Reklam</span>
+                    <span class="text-sm">Yaklaşan etkinliğinizin tanıtımını burada yapın</span>
+                </div>
+
+                <!-- Yaklaşan Fuarlar Listesi -->
+                <section>
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-semibold tracking-tight text-gray-900">Yaklaşan Fuarlar</h2>
+                        <a href="#" class="text-sm font-medium text-gray-500 hover:text-black flex items-center gap-1">
+                            Tümünü gör <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+                        </a>
+                    </div>
+
+                    <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden divide-y divide-gray-100">
+
+                        <!-- Liste Öğesi 1 -->
+                        <a href="#"
+                            class="flex flex-col sm:flex-row gap-4 p-4 hover:bg-gray-50 transition-colors group">
+                            <div
+                                class="sm:w-24 flex-shrink-0 flex flex-col items-center justify-center bg-gray-50 rounded-lg border border-gray-100 p-2 h-20 sm:h-auto">
+                                <span class="text-xs text-gray-500 uppercase font-medium">KAS</span>
+                                <span class="text-xl font-semibold tracking-tight text-gray-900">12</span>
+                            </div>
+                            <div class="flex-1 flex flex-col justify-center">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <h3
+                                        class="text-base font-medium tracking-tight text-gray-900 group-hover:underline decoration-gray-300 underline-offset-4">
+                                        Web Summit 2024</h3>
+                                </div>
+                                <div class="flex flex-wrap items-center text-xs text-gray-500 gap-x-4 gap-y-1 mt-1">
+                                    <span class="flex items-center gap-1"><iconify-icon
+                                            icon="solar:map-point-linear"></iconify-icon> Lizbon, Portekiz</span>
+                                    <span class="flex items-center gap-1"><iconify-icon
+                                            icon="solar:box-linear"></iconify-icon> Teknoloji ve Girişimler</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <!-- Liste Öğesi 2 -->
+                        <a href="#"
+                            class="flex flex-col sm:flex-row gap-4 p-4 hover:bg-gray-50 transition-colors group">
+                            <div
+                                class="sm:w-24 flex-shrink-0 flex flex-col items-center justify-center bg-gray-50 rounded-lg border border-gray-100 p-2 h-20 sm:h-auto">
+                                <span class="text-xs text-gray-500 uppercase font-medium">ARA</span>
+                                <span class="text-xl font-semibold tracking-tight text-gray-900">05</span>
+                            </div>
+                            <div class="flex-1 flex flex-col justify-center">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <h3
+                                        class="text-base font-medium tracking-tight text-gray-900 group-hover:underline decoration-gray-300 underline-offset-4">
+                                        Art Basel Miami Beach</h3>
+                                </div>
+                                <div class="flex flex-wrap items-center text-xs text-gray-500 gap-x-4 gap-y-1 mt-1">
+                                    <span class="flex items-center gap-1"><iconify-icon
+                                            icon="solar:map-point-linear"></iconify-icon> Miami, ABD</span>
+                                    <span class="flex items-center gap-1"><iconify-icon
+                                            icon="solar:box-linear"></iconify-icon> Sanat ve Kültür</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <!-- Liste Öğesi 3 -->
+                        <a href="#"
+                            class="flex flex-col sm:flex-row gap-4 p-4 hover:bg-gray-50 transition-colors group">
+                            <div
+                                class="sm:w-24 flex-shrink-0 flex flex-col items-center justify-center bg-gray-50 rounded-lg border border-gray-100 p-2 h-20 sm:h-auto">
+                                <span class="text-xs text-gray-500 uppercase font-medium">OCA</span>
+                                <span class="text-xl font-semibold tracking-tight text-gray-900">09</span>
+                            </div>
+                            <div class="flex-1 flex flex-col justify-center">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <h3
+                                        class="text-base font-medium tracking-tight text-gray-900 group-hover:underline decoration-gray-300 underline-offset-4">
+                                        CES 2025</h3>
+                                </div>
+                                <div class="flex flex-wrap items-center text-xs text-gray-500 gap-x-4 gap-y-1 mt-1">
+                                    <span class="flex items-center gap-1"><iconify-icon
+                                            icon="solar:map-point-linear"></iconify-icon> Las Vegas, ABD</span>
+                                    <span class="flex items-center gap-1"><iconify-icon
+                                            icon="solar:box-linear"></iconify-icon> Tüketici Elektroniği</span>
+                                </div>
+                            </div>
+                        </a>
+
+                    </div>
+                </section>
+
+                <!-- Sayfalama -->
+                <div class="flex items-center justify-between border-t border-gray-200 pt-6">
+                    <button
+                        class="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-black disabled:opacity-50"
+                        disabled>
+                        <iconify-icon icon="solar:arrow-left-linear"></iconify-icon> Önceki
+                    </button>
+                    <div class="hidden sm:flex items-center gap-1">
+                        <span
+                            class="w-8 h-8 flex items-center justify-center rounded-md bg-gray-100 text-sm font-medium text-black">1</span>
+                        <a href="#"
+                            class="w-8 h-8 flex items-center justify-center rounded-md text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-black transition-colors">2</a>
+                        <a href="#"
+                            class="w-8 h-8 flex items-center justify-center rounded-md text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-black transition-colors">3</a>
+                        <span class="text-gray-400 mx-1">...</span>
+                        <a href="#"
+                            class="w-8 h-8 flex items-center justify-center rounded-md text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-black transition-colors">12</a>
+                    </div>
+                    <button class="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-black">
+                        Sonraki <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Sağ Sütun: Yan Panel ve Medya (Genişlik 4) -->
+            <aside class="lg:col-span-4 space-y-10">
+
+                <!-- Yan Panel Reklamı -->
+                <div
+                    class="w-full h-64 bg-gray-100 border border-gray-200 rounded-2xl flex flex-col items-center justify-center text-gray-400">
+                    <span class="text-xs uppercase tracking-widest font-medium mb-1">Yan Panel Reklamı</span>
+                    <span class="text-sm">300x250 Yer Tutucu</span>
+                </div>
+
+                <!-- Sektör Haberleri ve Blog -->
+                <section>
+                    <div class="flex items-center justify-between mb-5">
+                        <h2 class="text-lg font-semibold tracking-tight text-gray-900 flex items-center gap-2">
+                            <iconify-icon icon="solar:document-text-linear" class="text-gray-400"></iconify-icon>
+                            Sektör Haberleri
+                        </h2>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Haber Öğesi 1 -->
+                        <a href="#" class="group flex gap-3">
+                            <div class="w-20 h-20 bg-gray-200 rounded-lg flex-shrink-0"></div>
+                            <div class="flex flex-col justify-center">
+                                <span class="text-[10px] uppercase tracking-wider font-medium text-gray-500 mb-1">Pazar
+                                    Trendleri</span>
+                                <h4
+                                    class="text-sm font-medium tracking-tight text-gray-900 group-hover:text-black line-clamp-2 leading-snug">
+                                    Küresel sergi pazarının 2025 yılına kadar pandemi öncesi seviyeleri aşması
+                                    bekleniyor.</h4>
+                            </div>
+                        </a>
+
+                        <!-- Haber Öğesi 2 -->
+                        <a href="#" class="group flex gap-3">
+                            <div class="w-20 h-20 bg-gray-200 rounded-lg flex-shrink-0"></div>
+                            <div class="flex flex-col justify-center">
+                                <span
+                                    class="text-[10px] uppercase tracking-wider font-medium text-gray-500 mb-1">Teknoloji</span>
+                                <h4
+                                    class="text-sm font-medium tracking-tight text-gray-900 group-hover:text-black line-clamp-2 leading-snug">
+                                    Yapay zekanın organizatörlerin ziyaretçi akışını ve katılımını yönetme biçimini
+                                    nasıl değiştirdiği.</h4>
+                            </div>
+                        </a>
+
+                        <!-- Haber Öğesi 3 -->
+                        <a href="#" class="group flex gap-3">
+                            <div class="w-20 h-20 bg-gray-200 rounded-lg flex-shrink-0"></div>
+                            <div class="flex flex-col justify-center">
+                                <span
+                                    class="text-[10px] uppercase tracking-wider font-medium text-gray-500 mb-1">Sürdürülebilirlik</span>
+                                <h4
+                                    class="text-sm font-medium tracking-tight text-gray-900 group-hover:text-black line-clamp-2 leading-snug">
+                                    Sıfır atık etkinlik planlamasında başı çeken en iyi 10 Avrupa fuarı.</h4>
+                            </div>
+                        </a>
+                    </div>
+                    <a href="#" class="inline-block mt-4 text-sm font-medium text-gray-500 hover:text-black">Daha fazla
+                        makale oku &rarr;</a>
+                </section>
+
+                <!-- Popüler Sektörler -->
+                <section class="bg-white border border-gray-200 rounded-2xl p-5">
+                    <h2
+                        class="text-sm font-semibold tracking-tight text-gray-900 mb-4 uppercase text-xs tracking-widest text-gray-500">
+                        Popüler Sektörler</h2>
+                    <div class="flex flex-wrap gap-2">
+                        <a href="#"
+                            class="px-3 py-1.5 bg-gray-50 border border-gray-200 hover:border-gray-300 rounded-lg text-sm font-medium text-gray-700 transition-colors">Teknoloji
+                            (142)</a>
+                        <a href="#"
+                            class="px-3 py-1.5 bg-gray-50 border border-gray-200 hover:border-gray-300 rounded-lg text-sm font-medium text-gray-700 transition-colors">Sağlık
+                            (89)</a>
+                        <a href="#"
+                            class="px-3 py-1.5 bg-gray-50 border border-gray-200 hover:border-gray-300 rounded-lg text-sm font-medium text-gray-700 transition-colors">İnşaat
+                            (76)</a>
+                        <a href="#"
+                            class="px-3 py-1.5 bg-gray-50 border border-gray-200 hover:border-gray-300 rounded-lg text-sm font-medium text-gray-700 transition-colors">Tarım
+                            (54)</a>
+                        <a href="#"
+                            class="px-3 py-1.5 bg-gray-50 border border-gray-200 hover:border-gray-300 rounded-lg text-sm font-medium text-gray-700 transition-colors">Tekstil
+                            (41)</a>
+                    </div>
+                </section>
+
+            </aside>
+        </div>
+    </main>
+
+    <!-- Alt Bilgi (Footer) -->
+    <footer class="bg-white border-t border-gray-200 mt-12 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div class="md:col-span-1">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-6 h-6 bg-black rounded flex items-center justify-center">
+                            <iconify-icon icon="solar:global-linear" class="text-white text-sm"></iconify-icon>
+                        </div>
+                        <span class="font-semibold tracking-tighter text-lg">FUARHUB</span>
+                    </div>
+                    <p class="text-sm text-gray-500 font-normal">Profesyonelleri dünyanın önde gelen ticaret fuarları ve
+                        sergileriyle buluşturuyoruz.</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-medium text-gray-900 mb-4">Rehber</h3>
+                    <ul class="space-y-3 text-sm text-gray-500">
+                        <li><a href="#" class="hover:text-black transition-colors">Tüm Sergiler</a></li>
+                        <li><a href="#" class="hover:text-black transition-colors">Ülkeye Göre</a></li>
+                        <li><a href="#" class="hover:text-black transition-colors">Sektöre Göre</a></li>
+                        <li><a href="#" class="hover:text-black transition-colors">Etkinlik Gönder</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-medium text-gray-900 mb-4">Medya</h3>
+                    <ul class="space-y-3 text-sm text-gray-500">
+                        <li><a href="#" class="hover:text-black transition-colors">Sektör Haberleri</a></li>
+                        <li><a href="#" class="hover:text-black transition-colors">Organizatör Analizleri</a></li>
+                        <li><a href="#" class="hover:text-black transition-colors">Bize Reklam Verin</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-medium text-gray-900 mb-4">Bülten</h3>
+                    <p class="text-xs text-gray-500 mb-3">Yaklaşan en iyi fuarlar hakkında haftalık güncellemeler alın.
+                    </p>
+                    <form class="flex gap-2">
+                        <input type="email" placeholder="E-posta adresi"
+                            class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-gray-400 bg-gray-50">
+                        <button
+                            class="px-3 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors">Katıl</button>
+                    </form>
+                </div>
+            </div>
+            <div class="border-t border-gray-100 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                <p class="text-xs text-gray-400">&copy; 2024 FUARHUB. Tüm hakları saklıdır.</p>
+                <div class="flex gap-4 text-gray-400">
+                    <a href="#" class="hover:text-black"><iconify-icon icon="solar:link-circle-linear"
+                            class="text-lg"></iconify-icon></a>
+                    <a href="#" class="hover:text-black"><iconify-icon icon="solar:letter-linear"
+                            class="text-lg"></iconify-icon></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

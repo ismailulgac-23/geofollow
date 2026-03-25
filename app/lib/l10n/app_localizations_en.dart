@@ -18,8 +18,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get withLovedOnes => 'with Your Loved Ones';
 
   @override
-  String get trackDescription =>
-      'Track your family and friends in real-time. Know they\'re safe, wherever they are.';
+  String get trackDescription => 'Track your family and friends in real-time. Know they\'re safe, wherever they are.';
 
   @override
   String get setSafeZones => 'Set Safe Zones';
@@ -28,8 +27,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get getInstantAlerts => 'Get Instant Alerts';
 
   @override
-  String get safeZonesDescription =>
-      'Create geofences for home, school, or work. Receive notifications when family arrives or leaves.';
+  String get safeZonesDescription => 'Create geofences for home, school, or work. Receive notifications when family arrives or leaves.';
 
   @override
   String get premiumFeatures => 'Premium Features';
@@ -38,8 +36,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ultimatePeace => 'Ultimate Peace of Mind';
 
   @override
-  String get premiumDescription =>
-      'Unlock unlimited places, location history, and priority support with Premium.';
+  String get premiumDescription => 'Unlock unlimited places, location history, and priority support with Premium.';
 
   @override
   String get continueBtn => 'Continue';
@@ -66,8 +63,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteAccount => 'Delete Account';
 
   @override
-  String get deleteAccountConfirm =>
-      'Are you sure you want to permanently delete your account? All your data, groups, and places will be lost. This action cannot be undone.';
+  String get deleteAccountConfirm => 'Are you sure you want to permanently delete your account? All your data, groups, and places will be lost. This action cannot be undone.';
 
   @override
   String get cancel => 'Cancel';
@@ -127,8 +123,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sosDialogTitle => 'SOS Alert';
 
   @override
-  String get sosDialogContent =>
-      'This will send an emergency alert to all members in your current group. Continue?';
+  String get sosDialogContent => 'This will send an emergency alert to all members in your current group. Continue?';
 
   @override
   String get sendSOS => 'Send SOS';
@@ -173,8 +168,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get locationAlwaysRequired => 'Always Location Required';
 
   @override
-  String get locationAlwaysDescription =>
-      'To track your location in the background, you must set location permission to \"Always\" in your device settings.';
+  String get locationAlwaysDescription => 'To track your location in the background, you must set location permission to \"Always\" in your device settings.';
 
   @override
   String get openSettings => 'Open Settings';
@@ -213,8 +207,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get leaveCircle => 'Leave Group';
 
   @override
-  String get leaveCircleConfirm =>
-      'Are you sure you want to leave this group? You will lose access to all shared locations and places.';
+  String get leaveCircleConfirm => 'Are you sure you want to leave this group? You will lose access to all shared locations and places.';
 
   @override
   String get leave => 'Leave';
@@ -238,11 +231,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get searchNoResults => 'No results found.';
 
   @override
+  String get welcomeToGeoFollow => 'Welcome to Alveron';
+
+  @override
   String get welcomeToAlveron => 'Welcome to Alveron';
 
   @override
-  String get noCircleDescription =>
-      'Create a group or join one with an invite code to start tracking.';
+  String get noCircleDescription => 'Create a group or join one with an invite code to start tracking.';
 
   @override
   String get or => 'OR';
@@ -254,8 +249,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get success => 'Success!';
 
   @override
-  String get premiumUpgradeMessage =>
-      'You are now a Premium member. All features have been unlocked!';
+  String get premiumUpgradeMessage => 'You are now a Premium member. All features have been unlocked!';
 
   @override
   String get awesome => 'Awesome!';
@@ -264,8 +258,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get goPremium => 'Go Premium';
 
   @override
-  String get unlockAllFeatures =>
-      'Unlock all features for your family\'s safety';
+  String get unlockAllFeatures => 'Unlock all features for your family\'s safety';
 
   @override
   String get youArePremiumMember => 'You are a Premium Member';
@@ -277,8 +270,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get manageSubscription => 'Manage Subscription';
 
   @override
-  String get subscriptionManagementSoon =>
-      'Subscription management will be available soon.';
+  String get subscriptionManagementSoon => 'Subscription management will be available soon.';
 
   @override
   String get upgradeNow => 'Upgrade Now';
@@ -329,15 +321,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get safeZones => 'Safe Zones';
 
   @override
-  String get safeZonesSubtitle =>
-      'Get notified when family members arrive or leave these places';
+  String get safeZonesSubtitle => 'Get notified when family members arrive or leave these places';
 
   @override
   String get noSafeZones => 'No Safe Zones Yet';
 
   @override
-  String get noSafeZonesDescription =>
-      'Add important places like Home, School, or Work to get notified when family members arrive or leave.';
+  String get noSafeZonesDescription => 'Add important places like Home, School, or Work to get notified when family members arrive or leave.';
 
   @override
   String get addFirstPlace => 'Add Your First Place';
@@ -438,29 +428,25 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get welcomeDescription =>
-      'Your profile is set! To ensure your family\'s safety 24/7, let\'s configure your real-time tracking and instant notification settings.';
+  String get welcomeDescription => 'Your profile is set! To ensure your family\'s safety 24/7, let\'s configure your real-time tracking and instant notification settings.';
 
   @override
   String get appTracking => 'Data Privacy';
 
   @override
-  String get appTrackingDescription =>
-      'This helps us optimize tracking precision and improve app performance. By enabling this, you ensure the most reliable connection for your family\'s safety.';
+  String get appTrackingDescription => 'This helps us optimize tracking precision and improve app performance. By enabling this, you ensure the most reliable connection for your family\'s safety.';
 
   @override
   String get backgroundLocation => 'Always-On Safety';
 
   @override
-  String get backgroundLocationDescription =>
-      'Essential for 24/7 safety. This allows Alveron to notify your family the moment you arrive or leave safe zones, even when the app is in your pocket.';
+  String get backgroundLocationDescription => 'Essential for 24/7 safety. This allows Alveron to notify your family the moment you arrive or leave safe zones, even when the app is in your pocket.';
 
   @override
   String get notifications => 'Instant Alerts';
 
   @override
-  String get notificationsDescription =>
-      'The bridge to your family\'s safety. Get instant updates on arrivals, departures, and emergency signals from your circle members.';
+  String get notificationsDescription => 'The bridge to your family\'s safety. Get instant updates on arrivals, departures, and emergency signals from your circle members.';
 
   @override
   String get finishSetup => 'Finish Setup';
@@ -475,16 +461,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get displayNameLabel => 'Display Name';
 
   @override
-  String get trackingStepText =>
-      'We use this data solely to enhance security and provide accurate location updates. If disabled, tracking may be less precise, and some connection features may be limited.';
+  String get trackingStepText => 'We use this data solely to enhance security and provide accurate location updates. If disabled, tracking may be less precise, and some connection features may be limited.';
 
   @override
-  String get locationStepText =>
-      'Continuous access ensures your group receives real-time updates. Without \'Always Allow\', automatic safe zone alerts and background SOS sharing will not function.';
+  String get locationStepText => 'Continuous access ensures your group receives real-time updates. Without \'Always Allow\', automatic safe zone alerts and background SOS sharing will not function.';
 
   @override
-  String get notificationStepText =>
-      'Without notifications, you won\'t be alerted if a family member needs help or when they safely reach their destination.';
+  String get notificationStepText => 'Without notifications, you won\'t be alerted if a family member needs help or when they safely reach their destination.';
 
   @override
   String failedToPurchase(String error) {
@@ -509,12 +492,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get locationTrackingActive => 'Location Tracking Active';
 
   @override
-  String get locationTrackingDescription =>
-      'Alveron is tracking your location for your safety.';
+  String get locationTrackingDescription => 'Alveron is tracking your location for your safety.';
 
   @override
-  String get sosLocationSharingNote =>
-      'Your location will be shared with all members immediately.';
+  String get sosLocationSharingNote => 'Your location will be shared with all members immediately.';
 
   @override
   String get failedToJoinCircle => 'Failed to join group';
@@ -559,8 +540,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navigate => 'Navigate';
 
   @override
-  String get inviteDescriptionFull =>
-      'Share this code with your family or friends to let them join your group.';
+  String get inviteDescriptionFull => 'Share this code with your family or friends to let them join your group.';
 
   @override
   String get inviteCodeCopied => 'Invite code copied!';
@@ -589,8 +569,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get joinACircle => 'Join a Group';
 
   @override
-  String get enterInviteCodeDescription =>
-      'Enter the invite code shared by your family or friends';
+  String get enterInviteCodeDescription => 'Enter the invite code shared by your family or friends';
 
   @override
   String get validCode => 'Valid code! Ready to join';
@@ -602,8 +581,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noNotificationsYet => 'No notifications yet';
 
   @override
-  String get noNotificationsDescription =>
-      'You\'ll see alerts and updates from your group here.';
+  String get noNotificationsDescription => 'You\'ll see alerts and updates from your group here.';
 
   @override
   String get markAllRead => 'Mark all read';
@@ -622,6 +600,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationMessage => 'Message';
+
+  @override
+  String get notificationMovement => 'Movement Update';
+
+  @override
+  String onTheMove(String name) {
+    return '$name is on the move after a while';
+  }
 
   @override
   String get readAll => 'Read All';
@@ -656,8 +642,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get frequent => 'Frequent';
 
   @override
-  String get noMovementData =>
-      'No location data yet. Movement history will appear here once the app tracks locations.';
+  String get noMovementData => 'No location data yet. Movement history will appear here once the app tracks locations.';
 
   @override
   String totalVisits(int count) {

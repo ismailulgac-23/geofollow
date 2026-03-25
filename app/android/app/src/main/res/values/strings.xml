@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="facebook_app_id">1633606464442573</string>
+    <string name="fb_login_protocol_scheme">fb1633606464442573</string>
+    <!-- TODO: Add your Facebook Client Token from the App Dashboard -->
+    <string name="facebook_client_token">98f6726ece13149888de3ddb4fb879aa</string>
+</resources>

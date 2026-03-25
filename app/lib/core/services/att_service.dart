@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:tracker_app/core/theme/app_theme.dart';
 import 'package:tracker_app/l10n/app_localizations.dart';
+import 'package:tracker_app/core/services/facebook_analytics_service.dart';
 
 class AttService {
   AttService._();
@@ -16,8 +17,18 @@ class AttService {
       if (!context.mounted) return;
       final agreed = await showDisclosure(context);
       if (agreed) {
-        await AppTrackingTransparency.requestTrackingAuthorization();
+        final newStatus =
+            await AppTrackingTransparency.requestTrackingAuthorization();
+        if (newStatus == TrackingStatus.authorized) {
+          FacebookAnalyticsService.setAdvertiserTracking(true);
+        } else {
+          FacebookAnalyticsService.setAdvertiserTracking(false);
+        }
       }
+    } else if (status == TrackingStatus.authorized) {
+      FacebookAnalyticsService.setAdvertiserTracking(true);
+    } else {
+      FacebookAnalyticsService.setAdvertiserTracking(false);
     }
   }
 

@@ -207,6 +207,12 @@ class NotificationModel {
         return '⚡';
       case 'member':
         return '👋';
+      case 'place_entered':
+        return '📍';
+      case 'place_exited':
+        return '🚶';
+      case 'movement_started':
+        return '🏃';
       default:
         return '🔔';
     }

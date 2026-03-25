@@ -75,6 +75,7 @@
   "searchPlaceholder": "Search for family members or places...",
   "searchNoResults": "No results found.",
   "welcomeToGeoFollow": "Welcome to Alveron",
+  "welcomeToAlveron": "Welcome to Alveron",
   "noCircleDescription": "Create a group or join one with an invite code to start tracking.",
   "or": "OR",
   "circleNameExample": "Group Name (e.g. Family)",
@@ -284,6 +285,15 @@
   "notificationMember": "Member Update",
   "notificationPlace": "Place Update",
   "notificationMessage": "Message",
+  "notificationMovement": "Movement Update",
+  "onTheMove": "{name} is on the move after a while",
+  "@onTheMove": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "readAll": "Read All",
   "placeEntered": "{name} entered {place}",
   "@placeEntered": {

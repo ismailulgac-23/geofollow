@@ -317,7 +317,7 @@ class LocationService {
   // ── Tek seferlik mevcut konum al ────────────────────────────────────────
 
   static Future<Position?> getCurrentPosition({
-    Duration timeout = const Duration(seconds: 8),
+    Duration timeout = const Duration(seconds: 15),
     bool useLastKnownAsFallback = true,
   }) async {
     try {
@@ -340,31 +340,49 @@ class LocationService {
         ).first.timeout(timeout);
       } catch (streamError) {
         if (kDebugMode)
-          print('[LocationService] Stream timeout/error: $streamError');
-        // Eğer stream timeout olursa, normal metod ile zorla
-        fresh = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.best,
-        );
+          print('[LocationService] Stream timeout/error: $streamError. Trying forced getCurrentPosition...');
+        
+        // 1. Eğer stream timeout olursa, normal metod ile zorla (kısa bir süre daha tanı)
+        try {
+          fresh = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.best,
+            timeLimit: const Duration(seconds: 5), // Maksimum 5 saniye daha ver
+          );
+        } catch (currentPosError) {
+           if (kDebugMode) print('[LocationService] Forced getCurrentPosition failed: $currentPosError');
+           rethrow; // Dışarıdaki catch bloğuna (Fallback kısmına) gitsin
+        }
       }
 
       instance._lastPosition = fresh;
       return fresh;
     } catch (e) {
-      if (kDebugMode) print('[LocationService] getCurrentPosition error: $e');
+      if (kDebugMode) print('[LocationService] Final fallback triggered due to: $e');
 
-      if (useLastKnownAsFallback) {
-        try {
-          Position? lastKnown = await Geolocator.getLastKnownPosition();
-          if (lastKnown != null) {
-            instance._lastPosition = lastKnown;
-            if (kDebugMode)
-              print('[LocationService] Fallback to lastKnown returned');
-            return lastKnown;
-          }
-        } catch (_) {}
-      }
+      // 2. Son bilinen konumu dene (Daha gerçekçi olur)
+      try {
+        Position? lastKnown = await Geolocator.getLastKnownPosition();
+        if (lastKnown != null) {
+          instance._lastPosition = lastKnown;
+          if (kDebugMode) print('[LocationService] Fallback to lastKnown success.');
+          return lastKnown;
+        }
+      } catch (_) {}
 
-      return null;
+      // 3. O da yoksa 0,0 dön (Kullanıcının kesin isteği)
+      if (kDebugMode) print('[LocationService] No location found anywhere. Returning 0.0, 0.0 as requested.');
+      return Position(
+        latitude: 0.0,
+        longitude: 0.0,
+        timestamp: DateTime.now(),
+        accuracy: 0.0,
+        altitude: 0.0,
+        altitudeAccuracy: 0.0,
+        heading: 0.0,
+        headingAccuracy: 0.0,
+        speed: 0.0,
+        speedAccuracy: 0.0,
+      );
     }
   }
 

@@ -32,11 +32,38 @@
 				<string>com.googleusercontent.apps.489955924483-7vc4pp7q31k01hukfknn350fevp9npn0</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb1633606464442573</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>GOOGLE_MAPS_KEY</key>
 	<string>AIzaSyAgoiucP1vJNL9DJmCdZ6JI97-i8QcWmqo</string>
+	<key>FacebookAppID</key>
+	<string>1633606464442573</string>
+	<key>FacebookClientToken</key>
+	<string>98f6726ece13149888de3ddb4fb879aa</string>
+	<key>FacebookDisplayName</key>
+	<string>Alveron</string>
+	<key>FacebookAutoLogAppEventsEnabled</key>
+	<true/>
+	<key>FacebookAdvertiserIDCollectionEnabled</key>
+	<true/>
+	<key>SKAdNetworkItems</key>
+	<array>
+		<dict>
+			<key>SKAdNetworkIdentifier</key>
+			<string>v9wttpbfk9.skadnetwork</string>
+		</dict>
+		<dict>
+			<key>SKAdNetworkIdentifier</key>
+			<string>n38lu8286q.skadnetwork</string>
+		</dict>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>

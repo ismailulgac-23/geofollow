@@ -6,6 +6,7 @@ import 'package:tracker_app/core/services/background_location_service.dart';
 class ApiClient {
   static late final Dio _dio;
   static const String baseUrl = 'https://api.geofollow.xyz/api';
+  /* static const String baseUrl = 'http://192.168.1.12:3000/api'; */
 
   static Future<void> init() async {
     _dio = Dio(

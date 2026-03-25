@@ -2,7 +2,9 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'api_client.dart';
+import 'facebook_analytics_service.dart';
 import 'dart:async';
+
 
 // ─────────────────────────────────────────────────────────────────────────────
 // RevenueCat Service — Alveron
@@ -70,6 +72,10 @@ class RevenueCatService {
   /// Sadece senkronizasyon amaçlı (iç kullanım)
   static Future<void> syncPremiumStatus(bool isPremium) async {
     try {
+      // SADECE kullanıcı giriş yapmışsa (token varsa) sunucuya gönder
+      final token = await ApiClient.getToken();
+      if (token == null) return;
+
       await ApiClient.syncPremiumStatus(isPremium);
     } catch (e) {
       debugPrint('[RevenueCat] syncPremiumStatus error: $e');
@@ -165,11 +171,38 @@ class RevenueCatService {
     try {
       debugPrint('[RevenueCat] Purchasing: ${package.storeProduct.identifier}');
 
+      // Log Facebook Initiate Checkout Event
+      FacebookAnalyticsService.logInitiatedCheckout(
+        amount: package.storeProduct.price,
+        currency: package.storeProduct.currencyCode,
+        contentId: package.storeProduct.identifier,
+        contentType: 'subscription',
+      );
+
       final customerInfo = await Purchases.purchasePackage(package);
       final success = customerInfo.entitlements.active.containsKey(
         entitlementId,
       );
       debugPrint('[RevenueCat] Purchase result: success=$success');
+
+      if (success) {
+        // Log Facebook Subscribe Event (Standard)
+        FacebookAnalyticsService.logSubscribe(
+          amount: package.storeProduct.price,
+          currency: package.storeProduct.currencyCode,
+          orderId: customerInfo.originalAppUserId,
+        );
+        
+        // Also log Purchase for redundancy
+        FacebookAnalyticsService.logPurchase(
+          amount: package.storeProduct.price,
+          currency: package.storeProduct.currencyCode,
+          parameters: {
+            'product_id': package.storeProduct.identifier,
+          },
+        );
+      }
+
       return PurchaseResult(success: success, customerInfo: customerInfo);
     } on PurchasesErrorCode catch (e) {
       if (e == PurchasesErrorCode.purchaseCancelledError) {

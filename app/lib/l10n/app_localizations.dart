@@ -539,6 +539,12 @@ abstract class AppLocalizations {
   /// **'No results found.'**
   String get searchNoResults;
 
+  /// No description provided for @welcomeToGeoFollow.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Alveron'**
+  String get welcomeToGeoFollow;
+
   /// No description provided for @welcomeToAlveron.
   ///
   /// In en, this message translates to:
@@ -914,7 +920,7 @@ abstract class AppLocalizations {
   /// No description provided for @appTrackingDescription.
   ///
   /// In en, this message translates to:
-  /// **'Enable tracking transparency to help us provide a more personalized, secure, and optimized tracking experience.'**
+  /// **'This helps us optimize tracking precision and improve app performance. By enabling this, you ensure the most reliable connection for your family\'s safety.'**
   String get appTrackingDescription;
 
   /// No description provided for @backgroundLocation.
@@ -926,7 +932,7 @@ abstract class AppLocalizations {
   /// No description provided for @backgroundLocationDescription.
   ///
   /// In en, this message translates to:
-  /// **'Alveron requires \'Always\' location access to send arrival and departure alerts to your family, even when the app is closed.'**
+  /// **'Essential for 24/7 safety. This allows Alveron to notify your family the moment you arrive or leave safe zones, even when the app is in your pocket.'**
   String get backgroundLocationDescription;
 
   /// No description provided for @notifications.
@@ -938,7 +944,7 @@ abstract class AppLocalizations {
   /// No description provided for @notificationsDescription.
   ///
   /// In en, this message translates to:
-  /// **'Get notified immediately when a circle member arrives at a safe zone or sends an SOS emergency signal.'**
+  /// **'The bridge to your family\'s safety. Get instant updates on arrivals, departures, and emergency signals from your circle members.'**
   String get notificationsDescription;
 
   /// No description provided for @finishSetup.
@@ -950,7 +956,7 @@ abstract class AppLocalizations {
   /// No description provided for @allowAndContinue.
   ///
   /// In en, this message translates to:
-  /// **'Allow and Continue'**
+  /// **'Continue'**
   String get allowAndContinue;
 
   /// No description provided for @connectedAccount.
@@ -968,19 +974,19 @@ abstract class AppLocalizations {
   /// No description provided for @trackingStepText.
   ///
   /// In en, this message translates to:
-  /// **'Your privacy is our priority. We use this data only to provide essential safety features. Please tap \'Allow\' when the system dialog appears.'**
+  /// **'We use this data solely to enhance security and provide accurate location updates. If disabled, tracking may be less precise, and some connection features may be limited.'**
   String get trackingStepText;
 
   /// No description provided for @locationStepText.
   ///
   /// In en, this message translates to:
-  /// **'To keep your circle updated round-the-clock, please ensure you select \'Always Allow\' in the following system settings.'**
+  /// **'Continuous access ensures your group receives real-time updates. Without \'Always Allow\', automatic safe zone alerts and background SOS sharing will not function.'**
   String get locationStepText;
 
   /// No description provided for @notificationStepText.
   ///
   /// In en, this message translates to:
-  /// **'Stay informed with real-time updates from your group members\' arrivals, departures, and emergency alerts.'**
+  /// **'Without notifications, you won\'t be alerted if a family member needs help or when they safely reach their destination.'**
   String get notificationStepText;
 
   /// No description provided for @failedToPurchase.
@@ -1222,6 +1228,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Message'**
   String get notificationMessage;
+
+  /// No description provided for @notificationMovement.
+  ///
+  /// In en, this message translates to:
+  /// **'Movement Update'**
+  String get notificationMovement;
+
+  /// No description provided for @onTheMove.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is on the move after a while'**
+  String onTheMove(String name);
 
   /// No description provided for @readAll.
   ///

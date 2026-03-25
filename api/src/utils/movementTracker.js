@@ -38,22 +38,54 @@ async function processLocationUpdate(userId, latitude, longitude, address, speed
         const now = new Date();
 
         // 1. Ham konumu kaydet (Snapshot)
-        await prisma.locationSnapshot.create({
+        const currentSnapshot = await prisma.locationSnapshot.create({
             data: { userId, latitude, longitude, address, speed, accuracy }
         });
 
-        // 2. Kullanıcının üye olduğu çemberlerdeki yerleri çek
+        // 2. Kullanıcının bilgisini al (Son bildirim ne zaman atıldı?)
+        const user = await prisma.user.findUnique({
+            where: { id: userId }
+        });
+
+        if (!user) return;
+
+        // 3. HAREKETE GEÇTİ ANALİZİ (On the Move Detection)
+        // Eğer 15 dakikadır konum gelmemişse (veya hareketsizse) ve şimdi mesafe katetmişse bildir
+        const lastSnapshot = await prisma.locationSnapshot.findFirst({
+            where: { userId, id: { not: currentSnapshot.id } },
+            orderBy: { timestamp: 'desc' }
+        });
+
+        if (lastSnapshot) {
+            const timeDiffMins = (now - new Date(lastSnapshot.timestamp)) / 60000;
+            const dist = haversineDistance(latitude, longitude, lastSnapshot.latitude, lastSnapshot.longitude);
+
+            // Uzun süre (15dk+) bekledi ve şimdi 200m+ mesafe katetti
+            // Ve son 1 saat içinde "Harekete geçti" bildirimi almamış olmalı (Spam koruması)
+            const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
+            const canSendNotification = !user.lastMovementNotificationAt || user.lastMovementNotificationAt < oneHourAgo;
+
+            if (timeDiffMins >= 15 && dist >= 200 && canSendNotification) {
+                // Eğer bir YER'e (Safe Zone) girdiyse ZATEN bildirim gidecek.
+                // Sadece hiçbir yerin içinde değilken "Harekete geçti" demeliyiz.
+                // Bu check'i aşağıda yer kontrolünden sonra yapacağız.
+                user._shouldNotifyMovement = true; 
+            }
+        }
+
+        // 4. Kullanıcının üye olduğu çemberlerdeki yerleri çek
         const memberships = await prisma.circleMember.findMany({
             where: { userId },
             include: { circle: { include: { places: { where: { isActive: true } } } } }
         });
 
         const allPlaces = memberships.flatMap(m => m.circle.places);
-        if (allPlaces.length === 0) {
-            // Hiç yer yoksa ve aktif bir hareket varsa kapat (User "temiz" alana çıktı)
-            await closeActiveMovement(userId, now);
-            return;
-        }
+
+        // 3. Aktif durumu kontrol et
+        const activeMovement = await prisma.movementHistory.findFirst({
+            where: { userId, leftAt: null },
+            orderBy: { arrivedAt: 'desc' }
+        });
 
         // 3. Mesafe bazlı analiz
         // Hysteresis (Gecikme/Tolerans): Giriş için tam radius, çıkış için %20 daha geniş alan
@@ -75,46 +107,73 @@ async function processLocationUpdate(userId, latitude, longitude, address, speed
             }
         }
 
-        // 4. Aktif durumu kontrol et
-        const activeMovement = await prisma.movementHistory.findFirst({
-            where: { userId, leftAt: null },
-            orderBy: { arrivedAt: 'desc' }
-        });
-
+        // 4. Hareket Durum Yönetimi (Timeline Mantığı)
         if (bestPlace) {
-            // Kullanıcı bir yerin içinde
+            // 4.1. Kullanıcı tanımlı bir yerin içinde
             if (activeMovement) {
                 if (activeMovement.placeId === bestPlace.id) {
-                    // ZATEN BURADA: Hiçbir şey yapma (Duplicate engellendi)
-                    return;
-                } else {
-                    // BAŞKA BİR YERE GEÇTİ: Eski yeri kapat, yeniyi aç
-                    await closeActiveMovement(userId, now, activeMovement);
-                    await createNewMovement(userId, bestPlace, address || bestPlace.address, now);
+                    return; // Zaten burada, işlem yapmaya gerek yok
                 }
-            } else {
-                // YENİ GİRİŞ: Hiçbir yerde değildi, şimdi bir yere girdi
-                await createNewMovement(userId, bestPlace, address || bestPlace.address, now);
+                // Başka bir yerden (yer veya stationary) buraya geldi, eskiyi kapat
+                await closeActiveMovement(userId, now, activeMovement);
             }
+            // Yeni girişi başlat
+            await createNewMovement(userId, bestPlace, address || bestPlace.address, now);
         } else {
-            // Kullanıcı hiçbir yerin (tam) içinde değil
+            // 4.2. Tanımlı bir yerin içinde değil
             if (activeMovement) {
-                // ÇIKTI MI? %20 toleransı kontrol et (Hysteresis)
-                const currentPlace = allPlaces.find(p => p.id === activeMovement.placeId);
-                if (currentPlace) {
-                    const dist = haversineDistance(latitude, longitude, currentPlace.latitude, currentPlace.longitude);
-                    if (dist > (currentPlace.radius * EXIT_THRESHOLD_MULTIPLIER)) {
-                        // Tolerans dışına çıktı, gerçekten ayrıldı
-                        await closeActiveMovement(userId, now, activeMovement);
+                if (activeMovement.placeId) {
+                    // Tanımlı bir yerden çıktı mı? (Tolerans / Hysteresis kontrolü)
+                    const currentPlace = allPlaces.find(p => p.id === activeMovement.placeId);
+                    if (currentPlace) {
+                        const dist = haversineDistance(latitude, longitude, currentPlace.latitude, currentPlace.longitude);
+                        if (dist > (currentPlace.radius * EXIT_THRESHOLD_MULTIPLIER)) {
+                            await closeActiveMovement(userId, now, activeMovement);
+                        }
                     } else {
-                        // Tolerans içinde, hâlâ orada sayılır (Log duplicate etmiyoruz)
-                        return;
+                        // Yer artık mevcut değilse kapat
+                        await closeActiveMovement(userId, now, activeMovement);
                     }
                 } else {
-                    // Yer silinmiş veya pasif, kapat
-                    await closeActiveMovement(userId, now, activeMovement);
+                    // Zaten "Stationary Point" (bilinmeyen yer) içindeydi, hareket etti mi?
+                    const distMovement = haversineDistance(latitude, longitude, activeMovement.latitude, activeMovement.longitude);
+                    if (distMovement > 100) { // 100m'den fazla uzaklaşırsa sabitlik bozulur
+                        await closeActiveMovement(userId, now, activeMovement);
+                    }
+                }
+            } else {
+                // Hiçbir yerde değil ve aktif hareketi yok. 
+                // Yeni bir stationary nokta (bilinmeyen yer) tespiti yapalım.
+                const lastSnapshot = await prisma.locationSnapshot.findFirst({
+                    where: { userId, timestamp: { lt: new Date(now.getTime() - 10 * 60000) } }, // 10 dk önce
+                    orderBy: { timestamp: 'desc' }
+                });
+
+                if (lastSnapshot) {
+                    const distFromLast = haversineDistance(latitude, longitude, lastSnapshot.latitude, lastSnapshot.longitude);
+                    if (distFromLast < 80) { // 10 dk boyunca 80m radius içindeyse "sabit" sayılır
+                        await createNewMovement(userId, {
+                            id: null, 
+                            name: address || 'Stationary',
+                            address: address || 'Unknown Location',
+                            latitude: lastSnapshot.latitude,
+                            longitude: lastSnapshot.longitude,
+                            emoji: '📍'
+                        }, address, now);
+                    }
                 }
             }
+        }
+
+        // 5. Harekete Geçti Bildirimi (Place'e girmediyse at)
+        if (user._shouldNotifyMovement && !bestPlace) {
+            await prisma.user.update({
+                where: { id: userId },
+                data: { lastMovementNotificationAt: now }
+            });
+
+            console.log(`[MovementTracker] ON THE MOVE: ${user.name} (User: ${userId})`);
+            notifyCircles(userId, '🏃 Harekete Geçti', `${user.name} uzun süre sonra harekete geçti.`, 'MOVEMENT_STARTED', { speed: speed });
         }
     } catch (error) {
         console.error('[MovementTracker] Error:', error.message);
@@ -273,11 +332,16 @@ async function notifyCircles(userId, title, body, type, data) {
                     recipientTokens.push(member.user.fcmToken);
                 }
 
+                let dbTitle = 'notification';
+                if (type === 'ENTERED') dbTitle = 'place_entered';
+                else if (type === 'EXITED') dbTitle = 'place_exited';
+                else if (type === 'MOVEMENT_STARTED') dbTitle = 'movement_started';
+
                 notificationPromises.push(prisma.notification.create({
                     data: {
-                        title: type === 'ENTERED' ? 'place_entered' : 'place_exited',
-                        message: `${currentUser.name || 'User'} ${type === 'ENTERED' ? 'entered' : 'exited'} ${body.replace('User has left ', '').replace('User has entered ', '')}`,
-                        type: 'place',
+                        title: dbTitle,
+                        message: `${currentUser.name || 'User'} ${body.split(' ').slice(1).join(' ')}`,
+                        type: type.toLowerCase(),
                         userId: member.userId,
                         avatarUrl: currentUser.avatarUrl,
                         relatedUserId: currentUser.id

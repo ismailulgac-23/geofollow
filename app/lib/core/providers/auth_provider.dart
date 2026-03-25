@@ -14,6 +14,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tracker_app/core/services/facebook_analytics_service.dart';
+
 
 // Auth state
 enum AuthStatus {
@@ -128,6 +130,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
           isPremium: userData['isPremium'] ?? false,
         );
         state = AuthState(status: AuthStatus.authenticated, user: user);
+
+        // Advanced Matching for Facebook
+        FacebookAnalyticsService.setUserData(
+          email: user.email,
+          firstName: user.name.split(' ').first,
+          lastName: user.name.contains(' ') ? user.name.split(' ').last : '',
+        );
 
         // RevenueCat — kullanıcı ID ile eşleştir ve premium durumunu senkronize et
         await RevenueCatService.logIn(userData['id'].toString());
@@ -329,7 +338,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       Position? position;
       try {
         position = await LocationService.getCurrentPosition(
-          timeout: const Duration(seconds: 3),
+          timeout: const Duration(seconds: 12),
         );
       } catch (_) {}
 
@@ -365,6 +374,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
         );
 
         state = AuthState(status: AuthStatus.authenticated, user: user);
+
+        // Advanced Matching for Facebook
+        FacebookAnalyticsService.setUserData(
+          email: user.email,
+          firstName: user.name.split(' ').first,
+          lastName: user.name.contains(' ') ? user.name.split(' ').last : '',
+        );
+
         await RevenueCatService.logIn(data['user']['id'].toString());
 
         final realPremiumStatus = await RevenueCatService.isPremium();
@@ -378,6 +395,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('cached_user_data', jsonEncode(data['user']));
+
+        // Log Facebook Event
+        FacebookAnalyticsService.logCompleteRegistration(
+          registrationMethod: 'Email/Password',
+        );
 
         return true;
       } else {
@@ -478,6 +500,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
           registrationEmail: email,
           clearError: true,
         );
+
+        // Advanced Matching for Facebook
+        FacebookAnalyticsService.setUserData(
+          email: user.email,
+          firstName: user.name.split(' ').first,
+          lastName: user.name.contains(' ') ? user.name.split(' ').last : '',
+        );
+
         await RevenueCatService.logIn(data['user']['id'].toString());
 
         final realPremiumStatus = await RevenueCatService.isPremium();
@@ -525,7 +555,25 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> logout() async {
     await ApiClient.logout();
     await RevenueCatService.logOut(); // RevenueCat anonymous moda geçirir
+    FacebookAnalyticsService.clearUserData();
     state = AuthState(status: AuthStatus.unauthenticated);
+  }
+
+  Future<bool> deleteAccount() async {
+    try {
+      final response = await ApiClient.deleteAccount();
+      if (response['success'] == true) {
+        // Log Facebook Event
+        FacebookAnalyticsService.logAccountDeleted();
+
+        await logout();
+        return true;
+      }
+      return false;
+    } catch (e) {
+      debugPrint('Delete account error: $e');
+      return false;
+    }
   }
 
   void clearError() {

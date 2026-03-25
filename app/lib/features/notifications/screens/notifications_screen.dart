@@ -310,6 +310,8 @@ class _NotificationCardState extends ConsumerState<_NotificationCard>
         return FontAwesomeIcons.gaugeHigh;
       case 'member':
         return FontAwesomeIcons.userPlus;
+      case 'movement_started':
+        return FontAwesomeIcons.personRunning;
       default:
         return FontAwesomeIcons.bell;
     }
@@ -325,6 +327,8 @@ class _NotificationCardState extends ConsumerState<_NotificationCard>
       case 'departure':
       case 'place_exited':
         return AppTheme.accentOrange;
+      case 'movement_started':
+        return AppTheme.primaryColor;
       case 'geofence':
         return AppTheme.primaryColor;
       case 'sos':
@@ -362,6 +366,8 @@ class _NotificationCardState extends ConsumerState<_NotificationCard>
         return l10n.notificationPlace;
       case 'message':
         return l10n.notificationMessage;
+      case 'movement_started':
+        return l10n.notificationMovement;
       default:
         return title;
     }

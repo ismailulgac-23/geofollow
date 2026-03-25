@@ -144,6 +144,16 @@ class NotificationService {
       if (kDebugMode) {
         print('🔑 FCM Token: $token');
       }
+
+      // SADECE kullanıcı giriş yapmışsa (token varsa) sunucuya gönder
+      final authToken = await ApiClient.getToken();
+      if (authToken == null) {
+        if (kDebugMode) {
+          print('ℹ️ FCM Token skip: User not logged in yet.');
+        }
+        return;
+      }
+
       // Sunucuya gönder
       await ApiClient.updateProfile({'fcmToken': token});
     } catch (e) {

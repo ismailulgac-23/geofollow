@@ -537,15 +537,44 @@ class _MemberDetailScreenState extends ConsumerState<MemberDetailScreen> {
       error: (e, _) => _EmptyHistory(message: l10n.noMovementData),
       data: (list) {
         if (list.isEmpty) return _EmptyHistory(message: l10n.noMovementData);
-        return Column(
-          children: list.asMap().entries.map((e) {
-            return _MovementTimelineItem(
-              movement: e.value,
-              isLast: e.key == list.length - 1,
-              index: e.key,
-            );
-          }).toList(),
-        );
+
+        // İki konum arasındaki yolculuk süresini hesaplayarak araya ekliyoruz
+        final items = <Widget>[];
+        for (int i = 0; i < list.length; i++) {
+          final movement = list[i];
+
+          // Konum kartı
+          items.add(
+            _MovementTimelineItem(
+              movement: movement,
+              isLast: i == list.length - 1,
+              index: i,
+            ),
+          );
+
+          // Yolculuk kartı (Eğer bir önceki (zaman olarak daha eski) kayıt varsa)
+          if (i < list.length - 1) {
+            final prevMovement =
+                list[i + 1]; // Liste desc olduğu için i+1 daha eskidir
+            if (prevMovement.leftAt != null) {
+              final travelDuration = movement.arrivedAt.difference(
+                prevMovement.leftAt!,
+              );
+              // Sadece 2 dakikadan uzun yolculukları göster
+              if (travelDuration.inMinutes >= 2) {
+                items.add(
+                  _TravelTimelineItem(
+                    duration: travelDuration,
+                    fromPlace: prevMovement.placeName,
+                    toPlace: movement.placeName,
+                  ),
+                );
+              }
+            }
+          }
+        }
+
+        return Column(children: items);
       },
     );
   }
@@ -698,7 +727,7 @@ class _MovementTimelineItem extends StatelessWidget {
                 if (!isLast)
                   Container(
                     width: 2,
-                    height: 56,
+                    height: 20, // Daha kısa yaptık çünkü araya Travel gelecek
                     margin: const EdgeInsets.symmetric(vertical: 4),
                     color: AppTheme.glassBorder,
                   ),
@@ -722,7 +751,11 @@ class _MovementTimelineItem extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            movement.placeName,
+                            movement.placeName == 'Stationary'
+                                ? (l10n.localeName == 'tr'
+                                      ? 'Sabit Nokta'
+                                      : 'Stationary Spot')
+                                : movement.placeName,
                             style: AppTheme.bodyMedium.copyWith(
                               fontWeight: FontWeight.w600,
                             ),
@@ -796,6 +829,80 @@ class _MovementTimelineItem extends StatelessWidget {
           delay: Duration(milliseconds: 900 + (index * 80)),
         )
         .slideX(begin: 0.1, end: 0);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// _TravelTimelineItem
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _TravelTimelineItem extends StatelessWidget {
+  final Duration duration;
+  final String fromPlace;
+  final String toPlace;
+
+  const _TravelTimelineItem({
+    required this.duration,
+    required this.fromPlace,
+    required this.toPlace,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isTr = Localizations.localeOf(context).languageCode == 'tr';
+
+    String durationStr = duration.inHours >= 1
+        ? '${duration.inHours}${isTr ? 'sa' : 'h'} ${duration.inMinutes % 60}m'
+        : '${duration.inMinutes}m';
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 17, bottom: 12, top: 2),
+      child: Row(
+        children: [
+          Column(
+            children: [
+              Container(width: 2, height: 15, color: AppTheme.glassBorder),
+              const SizedBox(height: 2),
+              Icon(
+                FontAwesomeIcons.carSide,
+                size: 12,
+                color: AppTheme.primaryColor.withOpacity(0.5),
+              ),
+              const SizedBox(height: 2),
+              Container(width: 2, height: 15, color: AppTheme.glassBorder),
+            ],
+          ),
+          const SizedBox(width: AppTheme.spacingMD),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: AppTheme.primaryColor.withOpacity(0.05),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: AppTheme.primaryColor.withOpacity(0.1)),
+            ),
+            child: Row(
+              children: [
+                Text(
+                  isTr ? 'Yolculuk:' : 'Travel:',
+                  style: AppTheme.caption.copyWith(
+                    color: AppTheme.primaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  durationStr,
+                  style: AppTheme.caption.copyWith(
+                    color: AppTheme.textSecondary,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ).animate().fadeIn(duration: 400.ms).slideX(begin: 0.05, end: 0);
   }
 }
 

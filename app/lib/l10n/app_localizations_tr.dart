@@ -18,8 +18,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get withLovedOnes => 'Sevdiklerinizle';
 
   @override
-  String get trackDescription =>
-      'Ailenizi ve arkadaşlarınızı gerçek zamanlı takip edin. Nerede olurlarsa olsunlar güvende olduklarını bilin.';
+  String get trackDescription => 'Ailenizi ve arkadaşlarınızı gerçek zamanlı takip edin. Nerede olurlarsa olsunlar güvende olduklarını bilin.';
 
   @override
   String get setSafeZones => 'Güvenli Bölgeler Belirleyin';
@@ -28,8 +27,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get getInstantAlerts => 'Anlık Bildirimler Alın';
 
   @override
-  String get safeZonesDescription =>
-      'Ev, okul veya iş için coğrafi sınırlar oluşturun. Aileniz geldiğinde veya ayrıldığında bildirim alın.';
+  String get safeZonesDescription => 'Ev, okul veya iş için coğrafi sınırlar oluşturun. Aileniz geldiğinde veya ayrıldığında bildirim alın.';
 
   @override
   String get premiumFeatures => 'Premium Özellikler';
@@ -38,8 +36,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get ultimatePeace => 'Tam Huzur';
 
   @override
-  String get premiumDescription =>
-      'Premium ile sınırsız yer, konum geçmişi ve öncelikli destek kilidini açın.';
+  String get premiumDescription => 'Premium ile sınırsız yer, konum geçmişi ve öncelikli destek kilidini açın.';
 
   @override
   String get continueBtn => 'Devam Et';
@@ -66,8 +63,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get deleteAccount => 'Hesabı Sil';
 
   @override
-  String get deleteAccountConfirm =>
-      'Hesabınızı kalıcı olarak silmek istediğinizden emin misiniz? Tüm verileriniz, gruplarınız ve yerleriniz kaybolacak. Bu işlem geri alınamaz.';
+  String get deleteAccountConfirm => 'Hesabınızı kalıcı olarak silmek istediğinizden emin misiniz? Tüm verileriniz, gruplarınız ve yerleriniz kaybolacak. Bu işlem geri alınamaz.';
 
   @override
   String get cancel => 'İptal';
@@ -127,8 +123,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get sosDialogTitle => 'SOS Uyarısı';
 
   @override
-  String get sosDialogContent =>
-      'Bu işlem mevcut gruptaki tüm üyelere acil durum uyarısı gönderecektir. Devam edilsin mi?';
+  String get sosDialogContent => 'Bu işlem mevcut gruptaki tüm üyelere acil durum uyarısı gönderecektir. Devam edilsin mi?';
 
   @override
   String get sendSOS => 'SOS Gönder';
@@ -173,8 +168,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get locationAlwaysRequired => 'Her Zaman Konum İzni Gerekli';
 
   @override
-  String get locationAlwaysDescription =>
-      'Konumunuzu arka planda takip edebilmek için cihaz ayarlarından konum iznini \"Her Zaman\" olarak ayarlamalısınız.';
+  String get locationAlwaysDescription => 'Konumunuzu arka planda takip edebilmek için cihaz ayarlarından konum iznini \"Her Zaman\" olarak ayarlamalısınız.';
 
   @override
   String get openSettings => 'Ayarları Aç';
@@ -213,8 +207,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get leaveCircle => 'Gruptan Ayrıl';
 
   @override
-  String get leaveCircleConfirm =>
-      'Bu gruptan ayrılmak istediğinizden emin misiniz? Paylaşılan tüm konumlara ve yerlere erişiminizi kaybedeceksiniz.';
+  String get leaveCircleConfirm => 'Bu gruptan ayrılmak istediğinizden emin misiniz? Paylaşılan tüm konumlara ve yerlere erişiminizi kaybedeceksiniz.';
 
   @override
   String get leave => 'Ayrıl';
@@ -238,11 +231,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get searchNoResults => 'Sonuç bulunamadı.';
 
   @override
+  String get welcomeToGeoFollow => 'Alveron\'a Hoş Geldiniz';
+
+  @override
   String get welcomeToAlveron => 'Alveron\'a Hoş Geldiniz';
 
   @override
-  String get noCircleDescription =>
-      'Takip etmeye başlamak için bir grup oluşturun veya bir davet koduyla katılın.';
+  String get noCircleDescription => 'Takip etmeye başlamak için bir grup oluşturun veya bir davet koduyla katılın.';
 
   @override
   String get or => 'VEYA';
@@ -254,8 +249,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get success => 'Başarılı!';
 
   @override
-  String get premiumUpgradeMessage =>
-      'Artık Premium üyesisiniz. Tüm özelliklerin kilidi açıldı!';
+  String get premiumUpgradeMessage => 'Artık Premium üyesisiniz. Tüm özelliklerin kilidi açıldı!';
 
   @override
   String get awesome => 'Harika!';
@@ -264,8 +258,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get goPremium => 'Premium\'a Geç';
 
   @override
-  String get unlockAllFeatures =>
-      'Ailenizin güvenliği için tüm özelliklerin kilidini açın';
+  String get unlockAllFeatures => 'Ailenizin güvenliği için tüm özelliklerin kilidini açın';
 
   @override
   String get youArePremiumMember => 'Premium Üyesisiniz';
@@ -277,8 +270,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get manageSubscription => 'Aboneliği Yönet';
 
   @override
-  String get subscriptionManagementSoon =>
-      'Abonelik yönetimi yakında aktif olacak.';
+  String get subscriptionManagementSoon => 'Abonelik yönetimi yakında aktif olacak.';
 
   @override
   String get upgradeNow => 'Şimdi Yükselt';
@@ -329,15 +321,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get safeZones => 'Güvenli Bölgeler';
 
   @override
-  String get safeZonesSubtitle =>
-      'Aile üyeleri bu yerlere geldiğinde veya ayrıldığında bildirim alın';
+  String get safeZonesSubtitle => 'Aile üyeleri bu yerlere geldiğinde veya ayrıldığında bildirim alın';
 
   @override
   String get noSafeZones => 'Henüz Güvenli Bölge Yok';
 
   @override
-  String get noSafeZonesDescription =>
-      'Ev, okul veya iş gibi önemli yerleri ekleyerek aile üyeleri geldiğinde veya ayrıldığında bildirim alın.';
+  String get noSafeZonesDescription => 'Ev, okul veya iş gibi önemli yerleri ekleyerek aile üyeleri geldiğinde veya ayrıldığında bildirim alın.';
 
   @override
   String get addFirstPlace => 'İlk Yerinizi Ekleyin';
@@ -438,29 +428,25 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get welcomeDescription =>
-      'Profiliniz hazır! Ailenizin güvenliğini 7/24 sağlamak için gerçek zamanlı takip ve anlık bildirim ayarlarınızı yapılandıralım.';
+  String get welcomeDescription => 'Profiliniz hazır! Ailenizin güvenliğini 7/24 sağlamak için gerçek zamanlı takip ve anlık bildirim ayarlarınızı yapılandıralım.';
 
   @override
   String get appTracking => 'Veri Gizliliği';
 
   @override
-  String get appTrackingDescription =>
-      'Bu, konum hassasiyetini optimize etmemize ve uygulama performansını artırmamıza yardımcı olur. Bunu etkinleştirerek, ailenizin güvenliği için en güvenilir bağlantıyı sağlarsınız.';
+  String get appTrackingDescription => 'Bu, konum hassasiyetini optimize etmemize ve uygulama performansını artırmamıza yardımcı olur. Bunu etkinleştirerek, ailenizin güvenliği için en güvenilir bağlantıyı sağlarsınız.';
 
   @override
   String get backgroundLocation => 'Arka Plan Takibi';
 
   @override
-  String get backgroundLocationDescription =>
-      '7/24 güvenlik için hayati önem taşır. Bu, Alveron\'un uygulama cebinizdeyken bile güvenli bölgelere giriş/çıkış yaptığınızda ailenize haber vermesini sağlar.';
+  String get backgroundLocationDescription => '7/24 güvenlik için hayati önem taşır. Bu, Alveron\'un uygulama cebinizdeyken bile güvenli bölgelere giriş/çıkış yaptığınızda ailenize haber vermesini sağlar.';
 
   @override
   String get notifications => 'Anlık Uyarılar';
 
   @override
-  String get notificationsDescription =>
-      'Ailenizin güvenliğine açılan köprüdür. Grup üyelerinizin varışları, ayrılışları ve acil durum sinyalleri hakkında anında bildirim alın.';
+  String get notificationsDescription => 'Ailenizin güvenliğine açılan köprüdür. Grup üyelerinizin varışları, ayrılışları ve acil durum sinyalleri hakkında anında bildirim alın.';
 
   @override
   String get finishSetup => 'Kurulumu Tamamla';
@@ -475,16 +461,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get displayNameLabel => 'Görünen Ad';
 
   @override
-  String get trackingStepText =>
-      'Bu verileri yalnızca güvenliği artırmak ve doğru konum güncellemeleri sağlamak için kullanıyoruz. Devre dışı kalırsa, takip daha az hassas olabilir ve bazı bağlantı özellikleri kısıtlanabilir.';
+  String get trackingStepText => 'Gizliliğiniz önceliğimizdir. Bu veriler sadece güvenliğiniz için hayati öneme sahip özellikler sunmak amacıyla kullanılır.';
 
   @override
-  String get locationStepText =>
-      'Kesintisiz erişim, grubunuzun gerçek zamanlı güncellemeler almasını sağlar. \'Her Zaman İzin Ver\' seçilmezse, otomatik güvenli bölge uyarıları ve arka planda SOS paylaşımı çalışmaz.';
+  String get locationStepText => 'Kesintisiz erişim, grubunuzun gerçek zamanlı güncellemeler almasını sağlar. \'Her Zaman İzin Ver\' seçilmezse, otomatik güvenli bölge uyarıları ve arka planda SOS paylaşımı çalışmaz.';
 
   @override
-  String get notificationStepText =>
-      'Bildirimler kapalı olursa, bir aile üyesi yardım istediğinde veya hedefine güvenle ulaştığında anlık uyarı alamazsınız.';
+  String get notificationStepText => 'Bildirimler kapalı olursa, bir aile üyesi yardım istediğinde veya hedefine güvenle ulaştığında anlık uyarı alamazsınız.';
 
   @override
   String failedToPurchase(String error) {
@@ -509,12 +492,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get locationTrackingActive => 'Konum Takibi Aktif';
 
   @override
-  String get locationTrackingDescription =>
-      'Alveron güvenliğiniz için konumunuzu takip ediyor.';
+  String get locationTrackingDescription => 'Alveron güvenliğiniz için konumunuzu takip ediyor.';
 
   @override
-  String get sosLocationSharingNote =>
-      'Konumunuz tüm üyelerle anında paylaşılacak.';
+  String get sosLocationSharingNote => 'Konumunuz tüm üyelerle anında paylaşılacak.';
 
   @override
   String get failedToJoinCircle => 'Gruba katılamadı';
@@ -559,8 +540,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get navigate => 'Yol Tarifi';
 
   @override
-  String get inviteDescriptionFull =>
-      'Ailenizin veya arkadaşlarınızın gruba katılması için kodu paylaşın.';
+  String get inviteDescriptionFull => 'Ailenizin veya arkadaşlarınızın gruba katılması için kodu paylaşın.';
 
   @override
   String get inviteCodeCopied => 'Davet kodu kopyalandı!';
@@ -589,8 +569,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get joinACircle => 'Gruba Katıl';
 
   @override
-  String get enterInviteCodeDescription =>
-      'Aile veya arkadaşlarınızın paylaştığı davet kodunu girin';
+  String get enterInviteCodeDescription => 'Aile veya arkadaşlarınızın paylaştığı davet kodunu girin';
 
   @override
   String get validCode => 'Geçerli kod! Katılmaya hazır';
@@ -602,8 +581,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get noNotificationsYet => 'Henüz bildirim yok';
 
   @override
-  String get noNotificationsDescription =>
-      'Grubunuzdan gelen uyarılar ve güncellemeleri burada göreceksiniz.';
+  String get noNotificationsDescription => 'Grubunuzdan gelen uyarılar ve güncellemeleri burada göreceksiniz.';
 
   @override
   String get markAllRead => 'Tümünü okundu işaretle';
@@ -622,6 +600,14 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get notificationMessage => 'Mesaj';
+
+  @override
+  String get notificationMovement => 'Hareket Güncellemesi';
+
+  @override
+  String onTheMove(String name) {
+    return '$name uzun süre sonra harekete geçti';
+  }
 
   @override
   String get readAll => 'Tümünü Oku';
@@ -656,8 +642,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get frequent => 'Sık Gidilen';
 
   @override
-  String get noMovementData =>
-      'Henüz konum verisi yok. Uygulama konumları takip etmeye başlayınca hareket geçmişi burada görünecek.';
+  String get noMovementData => 'Henüz konum verisi yok. Uygulama konumları takip etmeye başlayınca hareket geçmişi burada görünecek.';
 
   @override
   String totalVisits(int count) {
@@ -673,8 +658,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get lastVisitLabel => 'Son ziyaret';
 
   @override
-  String get splashTagline =>
-      'Gerçek zamanlı aile güvenliği, yeniden tasarlandı.';
+  String get splashTagline => 'Gerçek zamanlı aile güvenliği, yeniden tasarlandı.';
 
   @override
   String get onboardingRealTimeGps => 'Gerçek Zamanlı GPS';

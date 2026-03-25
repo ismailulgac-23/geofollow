@@ -75,6 +75,7 @@
   "searchPlaceholder": "Aile üyelerini veya yerleri ara...",
   "searchNoResults": "Sonuç bulunamadı.",
   "welcomeToGeoFollow": "Alveron'a Hoş Geldiniz",
+  "welcomeToAlveron": "Alveron'a Hoş Geldiniz",
   "noCircleDescription": "Takip etmeye başlamak için bir grup oluşturun veya bir davet koduyla katılın.",
   "or": "VEYA",
   "circleNameExample": "Grup Adı (örn. Aile)",
@@ -284,6 +285,15 @@
   "notificationMember": "Üye Güncellemesi",
   "notificationPlace": "Yer Güncellemesi",
   "notificationMessage": "Mesaj",
+  "notificationMovement": "Hareket Güncellemesi",
+  "onTheMove": "{name} uzun süre sonra harekete geçti",
+  "@onTheMove": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "readAll": "Tümünü Oku",
   "placeEntered": "{name}, {place} yerine giriş yaptı",
   "@placeEntered": {

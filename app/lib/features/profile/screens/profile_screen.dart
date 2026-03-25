@@ -4,7 +4,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tracker_app/core/services/api_client.dart';
 import 'package:tracker_app/core/providers/auth_provider.dart';
 import 'package:tracker_app/core/providers/providers.dart';
 import 'package:tracker_app/core/theme/app_theme.dart';
@@ -486,26 +485,19 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                               TextButton(
                                 onPressed: () async {
                                   Navigator.pop(context);
-                                  try {
-                                    await ApiClient.deleteAccount();
-                                    await ref
-                                        .read(authProvider.notifier)
-                                        .logout();
-                                    if (context.mounted) {
-                                      context.go('/auth');
-                                    }
-                                  } catch (e) {
-                                    if (context.mounted) {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            'Failed to delete account: $e',
-                                          ),
+                                  final success = await ref
+                                      .read(authProvider.notifier)
+                                      .deleteAccount();
+                                  if (success && context.mounted) {
+                                    context.go('/auth');
+                                  } else if (!success && context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          'Failed to delete account',
                                         ),
-                                      );
-                                    }
+                                      ),
+                                    );
                                   }
                                 },
                                 child: Text(

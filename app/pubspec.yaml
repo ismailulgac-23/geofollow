@@ -54,6 +54,7 @@ dependencies:
   flutter_background_service: ^5.0.0
   purchases_flutter: ^8.8.0
   flutter_local_notifications: ^18.0.1
+  facebook_app_events: ^0.26.0
   
   # Localization
   flutter_localizations:

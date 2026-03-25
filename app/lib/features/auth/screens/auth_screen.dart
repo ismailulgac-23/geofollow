@@ -487,7 +487,7 @@ class _GoFollowWordmark extends StatelessWidget {
       text: TextSpan(
         children: [
           TextSpan(
-            text: 'Geo',
+            text: 'Alveron',
             style: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.w800,
@@ -496,15 +496,6 @@ class _GoFollowWordmark extends StatelessWidget {
                 ..shader = const LinearGradient(
                   colors: [Color(0xFFA29BFE), Color(0xFF6C5CE7)],
                 ).createShader(Rect.fromLTWH(0, 0, fontSize * 2, fontSize)),
-            ),
-          ),
-          TextSpan(
-            text: 'Follow',
-            style: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.w300,
-              letterSpacing: -1.5,
-              color: Colors.white,
             ),
           ),
         ],

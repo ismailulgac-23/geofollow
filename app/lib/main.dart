@@ -13,6 +13,8 @@ import 'package:tracker_app/core/providers/locale_provider.dart';
 import 'package:tracker_app/l10n/app_localizations.dart';
 
 import 'package:tracker_app/core/services/background_location_service.dart';
+import 'package:tracker_app/core/services/facebook_analytics_service.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,6 +48,9 @@ Future<void> main() async {
       systemNavigationBarIconBrightness: Brightness.light,
     ),
   );
+
+  // Log app activation
+  FacebookAnalyticsService.logAppActivated();
 
   runApp(const ProviderScope(child: TrackerApp()));
 }
